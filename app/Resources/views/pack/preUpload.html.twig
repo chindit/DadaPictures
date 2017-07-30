@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Your Pack: {{ pack.name }}</h1>
+
+    <h3>File list:</h3>
+    {% for file in files %}
+        <p class="{{ file.status }}"><i>{{ file.name }}</i> : {{ file.message }}</p>
+    {% endfor %}
+
+    <form method="post">
+        <input type="hidden" value="{{ pack.id }}" />
+        <input type="submit" value="Validate" />
+    </form>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+form {
+    margin: auto;
+    display: block;
+    text-align: center;
+    border: 1px solid darkgrey;
+    border-radius: 7px;
+    width: 500px;
+    padding: 15px 7px;
+
+}
+
+form label {
+    display: block;
+    margin-top: 15px;
+}
+
+form input {
+    margin-top: 3px;
+    width: 450px;
+}
+form input:not([type="submit"]) {
+    border-radius: 3px;
+    border: 1px solid darkgray;
+}
+
+form input[type="submit"] {
+    margin-top: 25px;
+}
