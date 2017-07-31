@@ -8,5 +8,5 @@ use Symfony\Component\HttpFoundation\File\File;
 
 interface ArchiveHandler
 {
-    public function extractArchive(File $file) : string;
+    public function extractArchive(File $file, string $extractPath) : bool;
 }

@@ -31,3 +31,4 @@ services:
 
     AppBundle\Service\UploadManager:
         public: true
+        arguments: ['@doctrine.orm.entity_manager', '%allowedPictureType%', '%kernel.root_dir%']

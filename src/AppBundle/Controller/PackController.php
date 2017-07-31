@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Pack;
 use AppBundle\Service\UploadManager;
-use AppBundle\Service\ZipReader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -46,11 +45,15 @@ class PackController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $storagePath = $this->get(UploadManager::class)->prepareUpload($pack->getFile());
-            $pack->setStoragePath($storagePath);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($pack);
-            $em->flush();
+            $uploadManager = $this->get(UploadManager::class);
+            if (!$uploadManager->prepareUpload($pack->getFile())) {
+                $this->get('session')->getFlashBag()->add('danger', 'Unable to handle file upload');
+            } else {
+                $pack->setStoragePath($uploadManager->getPath());
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($pack);
+                $em->flush();
+            }
 
             return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
         }

@@ -7,11 +7,20 @@ use AppBundle\Interfaces\ArchiveHandler;
 use Symfony\Component\HttpFoundation\File\File;
 use ZipArchive;
 
+/**
+ * Class ZipReader
+ * @package AppBundle\Service\ArchiveHandler
+ */
 class ZipReader implements ArchiveHandler
 {
     /** @var File */
     private $file;
 
+    /**
+     * Return the list of files content in the archive
+     * @param File $file
+     * @return array
+     */
     public function getContent(File $file) : array
     {
         $this->file = $file;
@@ -27,17 +36,20 @@ class ZipReader implements ArchiveHandler
         return [];
     }
 
-    public function extractArchive(File $file) : string
+    /**
+     * Extract archive in given path
+     * @param File $file
+     * @param string $extractPath
+     * @return bool
+     */
+    public function extractArchive(File $file, string $extractPath) : bool
     {
         $zip = new ZipArchive;
+        $result = false;
         if ($zip->open($file->getPathname()) === true) {
-            $path = '/srv/http/DadaPictures/web/pictures/temp/';
-            $dirName = uniqid('temp_');
-            mkdir($path . $dirName);
-            $zip->extractTo($path . $dirName);
+            $result = $zip->extractTo($extractPath);
             $zip->close();
-            return $path . $dirName;
         }
-        return '';
+        return $result;
     }
 }
