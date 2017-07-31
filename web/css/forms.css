@@ -26,3 +26,10 @@ form input:not([type="submit"]) {
 form input[type="submit"] {
     margin-top: 25px;
 }
+
+label + ul li {
+    padding-left: 0;
+    margin-left: 0;
+    background: lightcoral;
+    border: 2px solid red;
+}
