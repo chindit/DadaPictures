@@ -1,5 +1,5 @@
 <?php
-// src/AppBundle/Entity/User.php
+declare(strict_types=1);
 
 namespace AppBundle\Entity;
 

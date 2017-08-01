@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace AppBundle\Entity;
 
@@ -34,7 +35,7 @@ class Tag
      *
      * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -46,7 +47,7 @@ class Tag
      *
      * @return Tag
      */
-    public function setName($name)
+    public function setName(string $name) : Tag
     {
         $this->name = $name;
 
@@ -58,7 +59,7 @@ class Tag
      *
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }

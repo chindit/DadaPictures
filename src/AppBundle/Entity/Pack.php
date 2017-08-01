@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace AppBundle\Entity;
 
@@ -46,7 +47,7 @@ class Pack
     private $status;
 
     /**
-     * @var Picture
+     * @var ArrayCollection|Picture[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="pack")
      */
@@ -89,7 +90,8 @@ class Pack
      */
     public function __construct()
     {
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pictures = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
     }
@@ -99,7 +101,7 @@ class Pack
      *
      * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -111,7 +113,7 @@ class Pack
      *
      * @return Pack
      */
-    public function setName($name)
+    public function setName(string $name) : Pack
     {
         $this->name = $name;
 
@@ -123,7 +125,7 @@ class Pack
      *
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -135,7 +137,7 @@ class Pack
      *
      * @return Pack
      */
-    public function addTag(\AppBundle\Entity\Tag $tag)
+    public function addTag(Tag $tag) : Pack
     {
         $this->tags[] = $tag;
 
@@ -146,18 +148,21 @@ class Pack
      * Remove tag
      *
      * @param \AppBundle\Entity\Tag $tag
+     * @return Pack
      */
-    public function removeTag(\AppBundle\Entity\Tag $tag)
+    public function removeTag(Tag $tag) : Pack
     {
         $this->tags->removeElement($tag);
+
+        return $this;
     }
 
     /**
      * Get tags
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection|Tag[]
      */
-    public function getTags()
+    public function getTags() : ArrayCollection
     {
         return $this->tags;
     }
@@ -169,7 +174,7 @@ class Pack
      *
      * @return Pack
      */
-    public function setCreator(\AppBundle\Entity\User $creator = null)
+    public function setCreator(User $creator = null) : Pack
     {
         $this->creator = $creator;
 
@@ -181,7 +186,7 @@ class Pack
      *
      * @return \AppBundle\Entity\User
      */
-    public function getCreator()
+    public function getCreator() : User
     {
         return $this->creator;
     }
@@ -189,7 +194,7 @@ class Pack
     /**
      * @return \DateTime
      */
-    public function getCreated()
+    public function getCreated() : \DateTime
     {
         return $this->created;
     }
@@ -198,16 +203,17 @@ class Pack
      * @param \DateTime $created
      * @return Pack
      */
-    public function setCreated($created)
+    public function setCreated(\DateTime $created) : Pack
     {
         $this->created = $created;
+
         return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getUpdated()
+    public function getUpdated() : \DateTime
     {
         return $this->updated;
     }
@@ -216,16 +222,17 @@ class Pack
      * @param \DateTime $updated
      * @return Pack
      */
-    public function setUpdated($updated)
+    public function setUpdated(\DateTime $updated)  : Pack
     {
         $this->updated = $updated;
+
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return File
      */
-    public function getFile()
+    public function getFile() : File
     {
         return $this->file;
     }
@@ -234,9 +241,10 @@ class Pack
      * @param mixed $file
      * @return Pack
      */
-    public function setFile($file)
+    public function setFile(File $file) : Pack
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -284,7 +292,7 @@ class Pack
      *
      * @return Pack
      */
-    public function setPictures(\AppBundle\Entity\Picture $pictures = null)
+    public function setPictures(\AppBundle\Entity\Picture $pictures = null) : Pack
     {
         $this->pictures = $pictures;
 
@@ -294,9 +302,9 @@ class Pack
     /**
      * Get pictures
      *
-     * @return \AppBundle\Entity\Picture
+     * @return ArrayCollection|\AppBundle\Entity\Picture[]
      */
-    public function getPictures()
+    public function getPictures() : ArrayCollection
     {
         return $this->pictures;
     }
@@ -308,7 +316,7 @@ class Pack
      *
      * @return Pack
      */
-    public function addPicture(\AppBundle\Entity\Picture $picture)
+    public function addPicture(\AppBundle\Entity\Picture $picture) : Pack
     {
         $this->pictures[] = $picture;
 
@@ -319,9 +327,12 @@ class Pack
      * Remove picture
      *
      * @param \AppBundle\Entity\Picture $picture
+     * @return Pack
      */
-    public function removePicture(\AppBundle\Entity\Picture $picture)
+    public function removePicture(\AppBundle\Entity\Picture $picture) : Pack
     {
         $this->pictures->removeElement($picture);
+
+        return $this;
     }
 }

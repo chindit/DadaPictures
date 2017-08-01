@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace AppBundle\Entity;
 
@@ -156,7 +157,7 @@ class Picture
      *
      * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -168,7 +169,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setName($name)
+    public function setName(string $name) : Picture
     {
         $this->name = $name;
 
@@ -180,7 +181,7 @@ class Picture
      *
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -192,7 +193,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename) : Picture
     {
         $this->filename = $filename;
 
@@ -204,7 +205,7 @@ class Picture
      *
      * @return string
      */
-    public function getFilename()
+    public function getFilename() : string
     {
         return $this->filename;
     }
@@ -216,7 +217,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setHeight($height)
+    public function setHeight(int $height) : Picture
     {
         $this->height = $height;
 
@@ -228,7 +229,7 @@ class Picture
      *
      * @return int
      */
-    public function getHeight()
+    public function getHeight() : int
     {
         return $this->height;
     }
@@ -240,7 +241,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setWidth($width)
+    public function setWidth(int $width) : Picture
     {
         $this->width = $width;
 
@@ -252,7 +253,7 @@ class Picture
      *
      * @return int
      */
-    public function getWidth()
+    public function getWidth() : int
     {
         return $this->width;
     }
@@ -264,7 +265,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setWeight($weight)
+    public function setWeight(int $weight) : Picture
     {
         $this->weight = $weight;
 
@@ -276,7 +277,7 @@ class Picture
      *
      * @return int
      */
-    public function getWeight()
+    public function getWeight() : int
     {
         return $this->weight;
     }
@@ -288,7 +289,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setMime($mime)
+    public function setMime(string $mime) : Picture
     {
         $this->mime = $mime;
 
@@ -300,7 +301,7 @@ class Picture
      *
      * @return string
      */
-    public function getMime()
+    public function getMime() : string
     {
         return $this->mime;
     }
@@ -312,7 +313,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setProperties($properties)
+    public function setProperties(array $properties) : Picture
     {
         $this->properties = $properties;
 
@@ -324,7 +325,7 @@ class Picture
      *
      * @return array
      */
-    public function getProperties()
+    public function getProperties() : array
     {
         return $this->properties;
     }
@@ -336,7 +337,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setCreator(\AppBundle\Entity\User $creator = null)
+    public function setCreator(User $creator = null) : Picture
     {
         $this->creator = $creator;
 
@@ -348,7 +349,7 @@ class Picture
      *
      * @return \AppBundle\Entity\User
      */
-    public function getCreator()
+    public function getCreator() : User
     {
         return $this->creator;
     }
@@ -360,7 +361,7 @@ class Picture
      *
      * @return Picture
      */
-    public function addTag(\AppBundle\Entity\Tag $tag)
+    public function addTag(Tag $tag) : Picture
     {
         $this->tags[] = $tag;
 
@@ -372,17 +373,19 @@ class Picture
      *
      * @param \AppBundle\Entity\Tag $tag
      */
-    public function removeTag(\AppBundle\Entity\Tag $tag)
+    public function removeTag(Tag $tag) : Picture
     {
         $this->tags->removeElement($tag);
+
+        return $this;
     }
 
     /**
      * Get tags
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
-    public function getTags()
+    public function getTags() : ArrayCollection
     {
         return $this->tags;
     }
@@ -390,7 +393,7 @@ class Picture
     /**
      * @return \DateTime
      */
-    public function getCreated()
+    public function getCreated() : \DateTime
     {
         return $this->created;
     }
@@ -399,7 +402,7 @@ class Picture
      * @param \DateTime $created
      * @return Picture
      */
-    public function setCreated($created)
+    public function setCreated(\DateTime $created) : Picture
     {
         $this->created = $created;
         return $this;
@@ -408,7 +411,7 @@ class Picture
     /**
      * @return \DateTime
      */
-    public function getUpdated()
+    public function getUpdated() : \DateTime
     {
         return $this->updated;
     }
@@ -417,9 +420,10 @@ class Picture
      * @param \DateTime $updated
      * @return Picture
      */
-    public function setUpdated($updated)
+    public function setUpdated(\DateTime $updated) : Picture
     {
         $this->updated = $updated;
+
         return $this;
     }
 
@@ -503,7 +507,7 @@ class Picture
      *
      * @return Picture
      */
-    public function setPack(\AppBundle\Entity\Pack $pack)
+    public function setPack(Pack $pack) : Picture
     {
         $this->pack = $pack;
 
@@ -515,7 +519,7 @@ class Picture
      *
      * @return \AppBundle\Entity\Pack
      */
-    public function getPack()
+    public function getPack() : Pack
     {
         return $this->pack;
     }
