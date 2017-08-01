@@ -4,13 +4,19 @@
     <h1>Your Pack: {{ pack.name }}</h1>
 
     <h3>File list:</h3>
-    {% for file in files %}
+    {#{% for file in files %}
         <p class="{{ file.status }}"><i>{{ file.name }}</i> : {{ file.message }}</p>
-    {% endfor %}
+    {% endfor %}#}
 
-    <form method="post">
-        <input type="hidden" value="{{ pack.id }}" />
-        <input type="submit" value="Validate" />
-    </form>
+    {% form_theme form _self %}
+    {{ form_start(form) }}
+    {% block choice_widget %}
+        <div class="form_checkbox">
+            {#{{  form_row(form) }}#}
+            {{ form_widget(form) }}
+        </div>
+        {% endblock %}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
 
 {% endblock %}

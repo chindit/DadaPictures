@@ -3,12 +3,13 @@ declare(strict_type=1);
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\Picture;
+use AppBundle\Entity\Pack;
 use AppBundle\Factory\ArchiveFactory;
-use AppBundle\Interfaces\ArchiveHandler;
+use AppBundle\Model\Status;
+use AppBundle\Service\ArchiveHandler\ArchiveHandler;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /**
  * Class UploadManager
@@ -22,11 +23,11 @@ class UploadManager
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var string */
-    private $path;
+    /** @var TokenStorage */
+    private $tokenStorage;
 
-    /** @var array */
-    private $allowedPictureType;
+    /** @var FileManager */
+    private $fileManager;
 
     /** @var string */
     private $kernelRootDir;
@@ -37,86 +38,44 @@ class UploadManager
      * @param array $allowedPictureType
      * @param string $kernelRootDir
      */
-    public function __construct(EntityManagerInterface $entityManager, array $allowedPictureType, string $kernelRootDir)
+    public function __construct(EntityManagerInterface $entityManager, TokenStorage $tokenStorage, FileManager $fileManager, string $kernelRootDir)
     {
         $this->entityManager = $entityManager;
-        $this->allowedPictureType = $allowedPictureType;
+        $this->tokenStorage = $tokenStorage;
+        $this->fileManager = $fileManager;
         $this->kernelRootDir = $kernelRootDir;
     }
 
     /**
-     * Handle upload, extract and first check for files
-     * @param File $file
-     * @return string
+     * Upload a pack and extract it
+     * @param Pack $pack
+     * @return Pack
      */
-    public function prepareUpload(File $file) : bool
+    public function upload(Pack $pack) : Pack
     {
-        $this->handler = ArchiveFactory::getHandler($file);
-        if (!$this->handler) {
-            return false;
-        }
-        $this->createTempUploadDirectory();
-        $this->handler->extractArchive($file, $this->path);
-        return true;
+        $this->handler = ArchiveFactory::getHandler($pack->getFile());
+        $pack->setStoragePath($this->createTempUploadDirectory());
+        $this->handler->extractArchive($pack->getFile(), $pack->getStoragePath());
+        $pack->setStatus(Status::TEMPORARY);
+        $this->entityManager->persist($pack);
+        $this->uploadFiles($pack);
+        $this->entityManager->flush();
+
+        return $pack;
     }
 
     /**
-     * Return pack extraction path
-     * @return string
+     * Upload files contained in pack
+     * @param Pack $pack
      */
-    public function getPath()
+    public function uploadFiles(Pack $pack) : void
     {
-        return $this->path;
-    }
-
-    /**
-     * Fast check to see if files are valid or not
-     * @param string $dir
-     * @return array
-     */
-    public function checkFiles(string $dir) : array
-    {
-        $fileList = $this->getFilesFromDir($dir);
-        $pictureRepository = $this->entityManager->getRepository(Picture::class);
-
-        $response = [];
+        $fileList = $this->getFilesFromDir($pack->getStoragePath());
         foreach ($fileList as $file) {
-            $sha1 = sha1_file($file);
-            $md5 = md5_file($file);
-
-            $currentFile = [];
-            $currentFile['name'] = basename($file);
-
-            $duplicate = $pictureRepository->findDuplicates($md5, $sha1);
-
-            if ($duplicate) {
-                $currentFile['status'] = 'danger';
-                $currentFile['message'] = 'Duplicate of «' . $duplicate->getFilename() . '»';
-                $response[] = $currentFile;
-                continue;
-            }
-
-            $imageType = exif_imagetype($file);
-            if ($imageType === false) {
-                $currentFile['status'] = 'danger';
-                $currentFile['message'] = 'Not a valid picture';
-                $response[] = $currentFile;
-                continue;
-            }
-
-            if (!in_array($imageType, $this->allowedPictureType)) {
-                $currentFile['status'] = 'danger';
-                $currentFile['message'] = 'Unsupported picture type';
-                $response[] = $currentFile;
-                continue;
-            }
-
-            $currentFile['message'] = 'OK';
-            $currentFile['status'] = 'success';
-            $response[] = $currentFile;
+            $picture = $this->fileManager->hydrateFileFromPath($file);
+            $picture->setPack($pack);
+            $this->entityManager->persist($picture);
         }
-
-        return $response;
     }
 
     /**
@@ -153,8 +112,6 @@ class UploadManager
         $dirName = uniqid('temp_');
         mkdir($path . $dirName);
 
-        $this->path = $path . $dirName;
-
-        return $this->path;
+        return $path . $dirName;
     }
 }

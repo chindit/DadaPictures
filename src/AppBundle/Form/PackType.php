@@ -37,6 +37,4 @@ class PackType extends AbstractType
     {
         return 'appbundle_pack';
     }
-
-
 }

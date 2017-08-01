@@ -39,6 +39,20 @@ class Pack
     private $storagePath;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status;
+
+    /**
+     * @var Picture
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="pack")
+     */
+    private $pictures;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Tag")
@@ -242,5 +256,72 @@ class Pack
     {
         $this->storagePath = $storagePath;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     * @return Pack
+     */
+    public function setStatus(int $status): Pack
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+
+    /**
+     * Set pictures
+     *
+     * @param \AppBundle\Entity\Picture $pictures
+     *
+     * @return Pack
+     */
+    public function setPictures(\AppBundle\Entity\Picture $pictures = null)
+    {
+        $this->pictures = $pictures;
+
+        return $this;
+    }
+
+    /**
+     * Get pictures
+     *
+     * @return \AppBundle\Entity\Picture
+     */
+    public function getPictures()
+    {
+        return $this->pictures;
+    }
+
+    /**
+     * Add picture
+     *
+     * @param \AppBundle\Entity\Picture $picture
+     *
+     * @return Pack
+     */
+    public function addPicture(\AppBundle\Entity\Picture $picture)
+    {
+        $this->pictures[] = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Remove picture
+     *
+     * @param \AppBundle\Entity\Picture $picture
+     */
+    public function removePicture(\AppBundle\Entity\Picture $picture)
+    {
+        $this->pictures->removeElement($picture);
     }
 }

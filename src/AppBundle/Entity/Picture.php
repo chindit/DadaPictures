@@ -14,6 +14,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Picture
 {
+    const STATUS_OK = 1;
+    const STATUS_TEMP = 2;
+    const STATUS_ERROR = 3;
+
     /**
      * @var int
      *
@@ -54,7 +58,7 @@ class Picture
     /**
      * @var int
      *
-     * @ORM\Column(name="weight", type="integer")
+     * @ORM\Column(name="weight", type="integer", nullable=true)
      */
     private $weight;
 
@@ -68,14 +72,14 @@ class Picture
     /**
      * @var string
      *
-     * @ORM\Column(name="sha1", type="string", length=40)
+     * @ORM\Column(name="sha1", type="string", length=40, nullable=true)
      */
     private $sha1sum;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="md5", type="string", length=32)
+     * @ORM\Column(name="md5", type="string", length=32, nullable=true)
      */
     private $md5sum;
 
@@ -85,6 +89,20 @@ class Picture
      * @ORM\Column(name="properties", type="array", nullable=true)
      */
     private $properties;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="statusInfo", type="string", length=150)
+     */
+    private $statusInfo;
 
     /**
      * @var User
@@ -116,7 +134,8 @@ class Picture
     /**
      * @var Pack
      *
-     * @ORM\ManyToOne(targetEntity="Pack")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pack")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $pack;
 
@@ -129,6 +148,7 @@ class Picture
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
+        $this->mime = 'error';
     }
 
     /**
@@ -368,30 +388,6 @@ class Picture
     }
 
     /**
-     * Set pack
-     *
-     * @param \AppBundle\Entity\Pack $pack
-     *
-     * @return Picture
-     */
-    public function setPack(\AppBundle\Entity\Pack $pack = null)
-    {
-        $this->pack = $pack;
-
-        return $this;
-    }
-
-    /**
-     * Get pack
-     *
-     * @return \AppBundle\Entity\Pack
-     */
-    public function getPack()
-    {
-        return $this->pack;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getCreated()
@@ -463,4 +459,64 @@ class Picture
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     * @return Picture
+     */
+    public function setStatus(int $status): Picture
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusInfo(): string
+    {
+        return $this->statusInfo;
+    }
+
+    /**
+     * @param string $statusInfo
+     * @return Picture
+     */
+    public function setStatusInfo(string $statusInfo): Picture
+    {
+        $this->statusInfo = $statusInfo;
+        return $this;
+    }
+
+
+    /**
+     * Set pack
+     *
+     * @param \AppBundle\Entity\Pack $pack
+     *
+     * @return Picture
+     */
+    public function setPack(\AppBundle\Entity\Pack $pack)
+    {
+        $this->pack = $pack;
+
+        return $this;
+    }
+
+    /**
+     * Get pack
+     *
+     * @return \AppBundle\Entity\Pack
+     */
+    public function getPack()
+    {
+        return $this->pack;
+    }
 }

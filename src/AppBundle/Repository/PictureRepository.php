@@ -8,8 +8,11 @@ use AppBundle\Entity\Picture;
 
 class PictureRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findDuplicates(string $md5, string $sha1) : ?Picture
+    public function findDuplicates(Picture $picture) : ?Picture
     {
+        $md5 = $picture->getMd5sum();
+        $sha1 = $picture->getSha1sum();
+
         return $this->createQueryBuilder('p')
             ->where('p.md5sum = :md5')
             ->orWhere('p.sha1sum = :sha1')

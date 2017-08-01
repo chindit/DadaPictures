@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace AppBundle\Service\ArchiveHandler;
 
-use AppBundle\Interfaces\ArchiveHandler;
 use Symfony\Component\HttpFoundation\File\File;
 use ZipArchive;
 

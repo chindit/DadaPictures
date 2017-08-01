@@ -14,13 +14,25 @@ form label {
     margin-top: 15px;
 }
 
-form input {
+.form_checkbox label, .form_checkbox input {
+    display: inline-block;
+}
+
+.form_checkbox input {
+    margin-left: 10px;
+}
+
+form input:not([type="checkbox"]) {
     margin-top: 3px;
     width: 450px;
 }
 form input:not([type="submit"]) {
     border-radius: 3px;
     border: 1px solid darkgray;
+}
+
+form input[type="checkbox"] {
+    display: inline;
 }
 
 form input[type="submit"] {

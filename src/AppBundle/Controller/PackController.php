@@ -3,10 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Pack;
+use AppBundle\Form\PreShowType;
 use AppBundle\Service\UploadManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Pack controller.
@@ -46,16 +48,13 @@ class PackController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $uploadManager = $this->get(UploadManager::class);
-            if (!$uploadManager->prepareUpload($pack->getFile())) {
+            try {
+                $pack = $uploadManager->upload($pack);
+                return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
+            } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('danger', 'Unable to handle file upload');
-            } else {
-                $pack->setStoragePath($uploadManager->getPath());
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($pack);
-                $em->flush();
+                $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
             }
-
-            return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
         }
 
         return $this->render('pack/new.html.twig', array(
@@ -77,12 +76,13 @@ class PackController extends Controller
      */
     public function preShowAction(Pack $pack, Request $request)
     {
-        if ($request->getRealMethod() === 'POST') {
+        /*if ($request->getRealMethod() === 'POST') {
             $this->get(UploadManager::class)->upload($pack);
-        }
-        $files = $this->get(UploadManager::class)->checkFiles($pack->getStoragePath());
+        }*/
 
-        return $this->render('pack/preUpload.html.twig', ['pack' => $pack, 'files' => $files]);
+        $form = $this->createForm(PreShowType::class, null, ['pack' => $pack]);
+
+        return $this->render('pack/preUpload.html.twig', ['pack' => $pack, 'form' => $form->createView()]);
     }
 
     /**
