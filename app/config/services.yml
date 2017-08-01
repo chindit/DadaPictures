@@ -32,6 +32,3 @@ services:
     AppBundle\Service\UploadManager:
         public: true
         arguments: ['@doctrine.orm.entity_manager', '@security.token_storage', '@AppBundle\Service\FileManager', '%kernel.root_dir%']
-
-    AppBundle\Service\FileManager:
-        arguments: ['@doctrine.orm.entity_manager', '@security.token_storage']
