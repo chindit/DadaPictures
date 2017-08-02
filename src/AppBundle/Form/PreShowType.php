@@ -8,6 +8,7 @@ use AppBundle\Entity\Picture;
 use AppBundle\Model\Status;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,12 +28,21 @@ class PreShowType extends AbstractType
                     return $picture->getName() . ' : ' . $picture->getStatusInfo();
                 },
                 'choice_attr' => function($picture, $key, $index) {
-                    return ['class' => 'alert alert-' . Status::toBootstrap($picture->getStatus())];
+                    /** @var $picture Picture */
+                    $attr = [];
+                    $attr['class'] = 'alert alert-' . Status::toBootstrap($picture->getStatus());
+                    if ($picture->getStatus() !== Status::OK && $picture->getStatus() !== Status::TEMPORARY) {
+                        $attr['disabled'] = 'disabled';
+                    } else {
+                        $attr['checked'] = 'checked';
+                    }
+
+                    return $attr;
                 },
-                'attr' => ['class' => 'salut'],
                 'expanded' => true,
                 'multiple' => true
-            ]);
+            ])
+            ->add('submit', SubmitType::class, ['attr' => ['value' => 'Submit', 'class' => 'btn btn-bg btn-primary']]);
     }
 
     /**

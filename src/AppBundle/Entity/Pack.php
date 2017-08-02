@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -47,14 +48,14 @@ class Pack
     private $status;
 
     /**
-     * @var ArrayCollection|Picture[]
+     * @var PersistentCollection|Picture[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="pack")
      */
     private $pictures;
 
     /**
-     * @var ArrayCollection
+     * @var PersistentCollection|Tag[]
      *
      * @ORM\ManyToMany(targetEntity="Tag")
      */
@@ -90,6 +91,7 @@ class Pack
      */
     public function __construct()
     {
+        $this->name = '';
         $this->pictures = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->created = new \DateTime();
@@ -160,9 +162,9 @@ class Pack
     /**
      * Get tags
      *
-     * @return ArrayCollection|Tag[]
+     * @return PersistentCollection|Tag[]
      */
-    public function getTags() : ArrayCollection
+    public function getTags() : PersistentCollection
     {
         return $this->tags;
     }
@@ -232,7 +234,7 @@ class Pack
     /**
      * @return File
      */
-    public function getFile() : File
+    public function getFile() : ?File
     {
         return $this->file;
     }
@@ -292,7 +294,7 @@ class Pack
      *
      * @return Pack
      */
-    public function setPictures(\AppBundle\Entity\Picture $pictures = null) : Pack
+    public function setPictures(Picture $pictures = null) : Pack
     {
         $this->pictures = $pictures;
 
@@ -302,9 +304,9 @@ class Pack
     /**
      * Get pictures
      *
-     * @return ArrayCollection|\AppBundle\Entity\Picture[]
+     * @return PersistentCollection|\AppBundle\Entity\Picture[]
      */
-    public function getPictures() : ArrayCollection
+    public function getPictures() : PersistentCollection
     {
         return $this->pictures;
     }
@@ -316,7 +318,7 @@ class Pack
      *
      * @return Pack
      */
-    public function addPicture(\AppBundle\Entity\Picture $picture) : Pack
+    public function addPicture(Picture $picture) : Pack
     {
         $this->pictures[] = $picture;
 
@@ -329,7 +331,7 @@ class Pack
      * @param \AppBundle\Entity\Picture $picture
      * @return Pack
      */
-    public function removePicture(\AppBundle\Entity\Picture $picture) : Pack
+    public function removePicture(Picture $picture) : Pack
     {
         $this->pictures->removeElement($picture);
 

@@ -76,11 +76,12 @@ class PackController extends Controller
      */
     public function preShowAction(Pack $pack, Request $request)
     {
-        /*if ($request->getRealMethod() === 'POST') {
-            $this->get(UploadManager::class)->upload($pack);
-        }*/
-
         $form = $this->createForm(PreShowType::class, null, ['pack' => $pack]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->get(UploadManager::class)->validateUpload($pack, $form->get('files')->getData());
+        }
 
         return $this->render('pack/preUpload.html.twig', ['pack' => $pack, 'form' => $form->createView()]);
     }

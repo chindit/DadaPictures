@@ -4,9 +4,11 @@ declare(strict_type=1);
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Pack;
+use AppBundle\Entity\Picture;
 use AppBundle\Factory\ArchiveFactory;
 use AppBundle\Model\Status;
 use AppBundle\Service\ArchiveHandler\ArchiveHandler;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -29,8 +31,11 @@ class UploadManager
     /** @var FileManager */
     private $fileManager;
 
-    /** @var string */
-    private $kernelRootDir;
+    /** @var PackManager */
+    private $packManager;
+
+    /** @var PictureManager */
+    private $pictureManager;
 
     /**
      * UploadManager constructor.
@@ -38,12 +43,18 @@ class UploadManager
      * @param array $allowedPictureType
      * @param string $kernelRootDir
      */
-    public function __construct(EntityManagerInterface $entityManager, TokenStorage $tokenStorage, FileManager $fileManager, string $kernelRootDir)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TokenStorage $tokenStorage,
+        FileManager $fileManager,
+        PackManager $packManager,
+        PictureManager $pictureManager)
     {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
         $this->fileManager = $fileManager;
-        $this->kernelRootDir = $kernelRootDir;
+        $this->packManager = $packManager;
+        $this->pictureManager = $pictureManager;
     }
 
     /**
@@ -51,14 +62,16 @@ class UploadManager
      * @param Pack $pack
      * @return Pack
      */
-    public function upload(Pack $pack) : Pack
+    public function upload(Pack $pack): Pack
     {
         $this->handler = ArchiveFactory::getHandler($pack->getFile());
-        $pack->setStoragePath($this->createTempUploadDirectory());
+        $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
         $this->handler->extractArchive($pack->getFile(), $pack->getStoragePath());
         $pack->setStatus(Status::TEMPORARY);
         $this->entityManager->persist($pack);
         $this->uploadFiles($pack);
+        $pack = $this->packManager->checkPackStatus($pack);
+        $pack->setCreator($this->tokenStorage->getToken()->getUser());
         $this->entityManager->flush();
 
         return $pack;
@@ -68,9 +81,9 @@ class UploadManager
      * Upload files contained in pack
      * @param Pack $pack
      */
-    public function uploadFiles(Pack $pack) : void
+    public function uploadFiles(Pack $pack): void
     {
-        $fileList = $this->getFilesFromDir($pack->getStoragePath());
+        $fileList = $this->fileManager->getFilesFromDir($pack->getStoragePath());
         foreach ($fileList as $file) {
             $picture = $this->fileManager->hydrateFileFromPath($file);
             $picture->setPack($pack);
@@ -79,39 +92,54 @@ class UploadManager
     }
 
     /**
-     * List uploaded files
-     * @param string $dir
-     * @return array
+     * Validate upload and transfer files
+     * @param Pack $pack
+     * @param ArrayCollection $pictures
+     * @return bool
      */
-    private function getFilesFromDir(string $dir) : array
+    public function validateUpload(Pack $pack, ArrayCollection $pictures) : bool
     {
-        $iterator = new \DirectoryIterator($dir);
+        $newStoragePath = $this->fileManager->prepareDestinationDir();
 
-        $files = [];
-
-        foreach ($iterator as $file) {
-            if (is_dir($file->getPathname())) {
-                if(strpos($file, '.') !== 0) {
-                    $files = array_merge($this->getFilesFromDir($file->getPathname()), $files);
-                }
-            } else {
-                $files[] = $file->getPathname();
+        foreach ($pictures as $picture) {
+            /** @var $picture Picture */
+            if ($picture->getStatus() !== Status::OK && $picture->getStatus() !== Status::TEMPORARY) {
+                return false;
             }
+
+            $picture = $this->fileManager->getPictureHashes($picture);
+
+            if ($this->fileManager->findDuplicates($picture)) {
+                return false;
+            }
+
+            list($width, $height) = getimagesize($picture->getFilename());
+            $picture->setWidth($width);
+            $picture->setHeight($height);
+            $picture->setWeight(filesize($picture->getFilename()));
+
+            $picture->setStatus(Status::OK);
+            $picture->setStatusInfo('OK');
+
+            if (in_array($picture->getMime(), ['image/png', 'image/jpeg'])) {
+                $exif = exif_read_data($picture->getFilename(), 'COMPUTED,IFD0,COMMENT,EXIF');
+                if ($exif !== false) {
+                    $picture->setProperties($exif);
+                }
+            }
+
+            $picture = $this->fileManager->moveFileToPack($picture, $newStoragePath);
+
+            $this->entityManager->persist($picture);
         }
 
-        return $files;
-    }
+        $this->fileManager->cleanStorage($pack->getStoragePath());
+        $this->packManager->removeObsoletePictures($pack);
 
-    /**
-     * Create a temporary upload directory
-     * @return string
-     */
-    private function createTempUploadDirectory() : string
-    {
-        $path = $this->kernelRootDir . '/../web/pictures/temp/';
-        $dirName = uniqid('temp_');
-        mkdir($path . $dirName);
+        $pack->setStatus(Status::OK);
+        $pack->setStoragePath($newStoragePath);
+        $this->entityManager->flush();
 
-        return $path . $dirName;
+        return true;
     }
 }

@@ -325,7 +325,7 @@ class Picture
      *
      * @return array
      */
-    public function getProperties() : array
+    public function getProperties() : ?array
     {
         return $this->properties;
     }

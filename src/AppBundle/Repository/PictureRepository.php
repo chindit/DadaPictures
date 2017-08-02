@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 
 
 use AppBundle\Entity\Picture;
+use AppBundle\Model\Status;
 
 class PictureRepository extends \Doctrine\ORM\EntityRepository
 {
@@ -14,10 +15,11 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
         $sha1 = $picture->getSha1sum();
 
         return $this->createQueryBuilder('p')
-            ->where('p.md5sum = :md5')
-            ->orWhere('p.sha1sum = :sha1')
+            ->where('(p.md5sum = :md5 OR p.sha1sum = :sha1)')
+            ->andWhere('p.status = :status')
             ->setParameter('md5', $md5)
             ->setParameter('sha1', $sha1)
+            ->setParameter('status', Status::OK)
             ->getQuery()
             ->getOneOrNullResult();
     }

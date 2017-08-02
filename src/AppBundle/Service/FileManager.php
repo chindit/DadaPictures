@@ -10,6 +10,7 @@ use AppBundle\Model\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class FileManager
@@ -20,14 +21,22 @@ class FileManager
     /** @var TokenStorage */
     private $tokenStorage;
 
+    /** @var PictureManager */
+    private $pictureManager;
+
     /** @var array */
     private $allowedPictureType;
 
-    public function __construct(EntityManagerInterface $entityManager, TokenStorage $tokenStorage)
+    /** @var string */
+    private $kernelRootDir;
+
+    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, PictureManager $pictureManager, string $kernelRootDir)
     {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
+        $this->pictureManager = $pictureManager;
         $this->allowedPictureType = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_JPEG2000, IMAGETYPE_PNG, IMAGETYPE_WEBP];
+        $this->kernelRootDir = $kernelRootDir;
     }
 
     /**
@@ -74,9 +83,11 @@ class FileManager
             return $picture;
         }
 
-        $picture->setMd5sum(md5_file($path));
-        $picture->setSha1sum(sha1_file($path));
-        if ($duplicate = $this->entityManager->getRepository(Picture::class)->findDuplicates($picture)) {
+        $picture->setMime(mime_content_type($path));
+
+        $picture = $this->getPictureHashes($picture);
+
+        if ($duplicate = $this->findDuplicates($picture)) {
             $picture->setStatus(Status::ERROR);
             $picture->setStatusInfo('Picture is a duplicate of «' . $duplicate->getFilename() . '» from pack «'
             . $duplicate->getPack()->getName() . '»');
@@ -88,6 +99,126 @@ class FileManager
         $picture->setStatusInfo('OK');
 
         return $picture;
+    }
+
+    /**
+     * List uploaded files
+     * @param string $dir
+     * @return array
+     */
+    public function getFilesFromDir(string $dir) : array
+    {
+        $iterator = new \DirectoryIterator($dir);
+
+        $files = [];
+
+        foreach ($iterator as $file) {
+            if (is_dir($file->getPathname())) {
+                if(strpos($file, '.') !== 0) {
+                    $files = array_merge($this->getFilesFromDir($file->getPathname()), $files);
+                }
+            } else {
+                $files[] = $file->getPathname();
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Create a temporary upload directory
+     * @return string
+     */
+    public function createTempUploadDirectory() : string
+    {
+        $path = $this->kernelRootDir . '/../web/pictures/temp/';
+        $dirName = uniqid('temp_');
+        mkdir($path . $dirName);
+
+        return $path . $dirName;
+    }
+
+    public function prepareDestinationDir() : string
+    {
+        $path = $this->kernelRootDir . '/../web/pictures/';
+        $dirName = uniqid();
+
+        mkdir($path . $dirName);
+
+        return $path . $dirName;
+    }
+
+    /**
+     * Return duplicate of given picture if it exists
+     * @param Picture $picture
+     * @return Picture|null
+     */
+    public function findDuplicates(Picture $picture) : ?Picture
+    {
+        return $this->entityManager->getRepository(Picture::class)->findDuplicates($picture);
+    }
+
+    /**
+     * Hydrate hashes for given picture
+     * @param Picture $picture
+     * @return Picture
+     */
+    public function getPictureHashes(Picture $picture) : Picture
+    {
+        list($md5, $sha1) = $this->pictureManager->getHashes($picture->getFilename());
+        $picture->setMd5sum($md5);
+        $picture->setSha1sum($sha1);
+
+        return $picture;
+    }
+
+    /**
+     * Move picture to a new destination
+     * @param Picture $picture
+     * @param string $destinationPath
+     * @return Picture
+     */
+    public function moveFileToPack(Picture $picture, string $destinationPath) : Picture
+    {
+        if (!is_file($picture->getFilename())) {
+            throw new FileNotFoundException($picture->getFilename());
+        }
+
+        if (!rename($picture->getFilename(), $destinationPath . '/' . basename($picture->getFilename()))) {
+            throw new \RuntimeException("Unable to move file «" . $picture->getFilename() . '»');
+        }
+
+        $picture->setFilename($destinationPath . '/' . basename($picture->getFilename()));
+
+        return $picture;
+    }
+
+    /**
+     * Clean temporary storage
+     * @param string $storagePath
+     * @return bool
+     */
+    public function cleanStorage(string $storagePath) : bool
+    {
+        $files = $this->getFilesFromDir($storagePath);
+
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+
+        $files = $this->getFilesFromDir($storagePath);
+
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                rmdir($file);
+            }
+        }
+
+        rmdir($storagePath);
+
+        return true;
     }
 
     /**

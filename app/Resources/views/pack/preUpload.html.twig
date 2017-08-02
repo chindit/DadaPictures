@@ -3,19 +3,25 @@
 {% block body %}
     <h1>Your Pack: {{ pack.name }}</h1>
 
-    <h3>File list:</h3>
-    {#{% for file in files %}
-        <p class="{{ file.status }}"><i>{{ file.name }}</i> : {{ file.message }}</p>
-    {% endfor %}#}
+    {% if pack.status == 4 %}
+        <div class="alert alert-danger">Pack cannot be submitted due to critical errors</div>
+    {% elseif pack.status == 3 %}
+        <div class="alert alert-warning">Pack can be submitted but has warnings</div>
+    {% else %}
+        <div class="alert alert-info">Pack is valid</div>
+    {% endif %}
 
-    {% form_theme form _self %}
+    <h3>File list:</h3>
+
     {{ form_start(form) }}
-    {% block choice_widget %}
-        <div class="form_checkbox">
-            {#{{  form_row(form) }}#}
-            {{ form_widget(form) }}
-        </div>
-        {% endblock %}
+    <div class="form_checkbox">
+        {% for choice in form.children.files.children %}
+            <div class="{{ choice.vars.attr.class }}">
+                {{ form_widget(choice) }}
+                {{ form_label(choice) }}
+            </div>
+        {% endfor %}
+    </div>
     {{ form_rest(form) }}
     {{ form_end(form) }}
 
