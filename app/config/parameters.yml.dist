@@ -16,7 +16,10 @@ parameters:
     mailer_password: ~
 
     # A secret key that's used to generate certain security-related tokens
-    secret: ThisTokenIsNotSoSecretChangeIt
+    secret: b8Sz%NQ9@nMA!__Eq4tk@G=b$cVKE@7MNb?XkzL
+
+    # Session
+    session.name: DadaPictures
 
     # FOS
     mailer_email: admin@yoursite.com

@@ -135,7 +135,7 @@ class Picture
     /**
      * @var Pack
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pack")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pack", inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false)
      */
     private $pack;
