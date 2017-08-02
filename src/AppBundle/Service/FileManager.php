@@ -205,10 +205,10 @@ class FileManager
 
             foreach ($files as $file) {
                 if ($file !== '.' && $file !== '..') {
-                    if (is_dir($file)) {
-                        $this->cleanStorage($file);
+                    if (is_dir($storagePath . '/' . $file)) {
+                        $this->cleanStorage($storagePath . '/' . $file);
                     } else {
-                        unlink($file);
+                        unlink($storagePath . '/' . $file);
                     }
                 }
             }

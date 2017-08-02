@@ -29,7 +29,7 @@
                 <td>{% if pack.updated %}{{ pack.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ pack.creator.username }}</td>
                 <td>{{ pack.pictures|length }}</td>
-                <td><button class="btn btn-bg"><i class="glyphicon glyphicon-picture"></i>Pictures</button></td>
+                <td><a class="btn btn-bg" href="{{ path('pack_view_pictures', {'id': pack.id}) }}"><i class="glyphicon glyphicon-picture"></i>Pictures</a></td>
                 <td>
                     <ul class="no-bullets">
                         <li>
