@@ -3,7 +3,7 @@
 {% block body %}
     <h1>Pack</h1>
 
-    <table>
+    <table class="table-bordered">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -20,6 +20,14 @@
             <tr>
                 <th>Updated</th>
                 <td>{% if pack.updated %}{{ pack.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        <tr>
+            <th>Creator</th>
+            <td>{{ pack.creator.username }}</td>
+        </tr>
+            <tr>
+                <th>Number of pictures</th>
+                <td>{{ pack.pictures|length }}</td>
             </tr>
         </tbody>
     </table>

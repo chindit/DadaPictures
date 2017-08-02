@@ -3,13 +3,20 @@
 {% block body %}
     <h1>Packs list</h1>
 
-    <table>
+    <div>
+        <button class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">Create a new pack</button>
+    </div>
+
+    <table class="table-bordered">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Created</th>
                 <th>Updated</th>
+                <th>Author</th>
+                <th>Number of pictures</th>
+                <th>View</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -20,13 +27,16 @@
                 <td>{{ pack.name }}</td>
                 <td>{% if pack.created %}{{ pack.created|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if pack.updated %}{{ pack.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ pack.creator.username }}</td>
+                <td>{{ pack.pictures|length }}</td>
+                <td><button class="btn btn-bg"><i class="glyphicon glyphicon-picture"></i>Pictures</button></td>
                 <td>
-                    <ul>
+                    <ul class="no-bullets">
                         <li>
-                            <a href="{{ path('pack_show', { 'id': pack.id }) }}">show</a>
+                            <a href="{{ path('pack_show', { 'id': pack.id }) }}"><i class="glyphicon glyphicon-search"></i>Show</a>
                         </li>
                         <li>
-                            <a href="{{ path('pack_edit', { 'id': pack.id }) }}">edit</a>
+                            <a href="{{ path('pack_edit', { 'id': pack.id }) }}"><i class="glyphicon glyphicon-pencil"></i>Edit</a>
                         </li>
                     </ul>
                 </td>
@@ -34,10 +44,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('pack_new') }}">Create a new pack</a>
-        </li>
-    </ul>
 {% endblock %}

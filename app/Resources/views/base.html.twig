@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/forms.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}" />
     <script src="{{ asset('js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
 </head>
@@ -68,7 +69,9 @@
     {% endfor %}
 {% endif %}
 <!-- End flashbags -->
-{% block body %}{% endblock %}
-{% block javascripts %}{% endblock %}
+<section id="container">
+    {% block body %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+</section>
 </body>
 </html>
