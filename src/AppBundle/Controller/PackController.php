@@ -3,7 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Pack;
-use AppBundle\Form\PreShowType;
+use AppBundle\Form\Type\PreShowType;
+use AppBundle\Form\Type\PackType;
 use AppBundle\Service\UploadManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -43,7 +44,7 @@ class PackController extends Controller
     public function newAction(Request $request)
     {
         $pack = new Pack();
-        $form = $this->createForm('AppBundle\Form\PackType', $pack);
+        $form = $this->createForm(PackType::class, $pack);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Form;
+namespace AppBundle\Form\Type;
 
 
 use AppBundle\Entity\Picture;
@@ -23,11 +23,11 @@ class PreShowType extends AbstractType
             ->add('files', EntityType::class, [
                 'class' => Picture::class,
                 'choices' => $options['pack']->getPictures(),
-                'choice_label' => function($picture, $key, $index) {
+                'choice_label' => function(Picture $picture, $key, $index) {
                     /** @var $picture Picture */
                     return $picture->getName() . ' : ' . $picture->getStatusInfo();
                 },
-                'choice_attr' => function($picture, $key, $index) {
+                'choice_attr' => function(Picture $picture, $key, $index) {
                     /** @var $picture Picture */
                     $attr = [];
                     $attr['class'] = 'alert alert-' . Status::toBootstrap($picture->getStatus());

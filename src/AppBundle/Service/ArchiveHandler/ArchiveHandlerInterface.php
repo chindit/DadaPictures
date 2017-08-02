@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\File;
  *
  * @package AppBundle\Service\ArchiveHandler
  */
-interface ArchiveHandler
+interface ArchiveHandlerInterface
 {
     public function extractArchive(File $file, string $extractPath) : bool;
 }

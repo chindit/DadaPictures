@@ -10,11 +10,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
  */
 class PictureManager
 {
-    public function hasDuplicates()
-    {
-
-    }
-
     /**
      * Return an array with hashes with MD5 first and SHA1 second
      * @param string $path

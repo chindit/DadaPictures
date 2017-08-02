@@ -1,5 +1,6 @@
 {
     "name": "david/dadapictures",
+    "description": "A small project to upload packs of pictures",
     "license": "proprietary",
     "type": "project",
     "autoload": {

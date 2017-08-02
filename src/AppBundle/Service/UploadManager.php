@@ -7,7 +7,7 @@ use AppBundle\Entity\Pack;
 use AppBundle\Entity\Picture;
 use AppBundle\Factory\ArchiveFactory;
 use AppBundle\Model\Status;
-use AppBundle\Service\ArchiveHandler\ArchiveHandler;
+use AppBundle\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
  */
 class UploadManager
 {
-    /** @var ArchiveHandler */
+    /** @var ArchiveHandlerInterface */
     private $handler;
 
     /** @var EntityManager */
@@ -34,9 +34,6 @@ class UploadManager
     /** @var PackManager */
     private $packManager;
 
-    /** @var PictureManager */
-    private $pictureManager;
-
     /**
      * UploadManager constructor.
      * @param EntityManagerInterface $entityManager
@@ -47,14 +44,12 @@ class UploadManager
         EntityManagerInterface $entityManager,
         TokenStorage $tokenStorage,
         FileManager $fileManager,
-        PackManager $packManager,
-        PictureManager $pictureManager)
+        PackManager $packManager)
     {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
         $this->fileManager = $fileManager;
         $this->packManager = $packManager;
-        $this->pictureManager = $pictureManager;
     }
 
     /**

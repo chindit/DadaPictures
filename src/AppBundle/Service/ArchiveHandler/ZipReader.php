@@ -10,11 +10,8 @@ use ZipArchive;
  * Class ZipReader
  * @package AppBundle\Service\ArchiveHandler
  */
-class ZipReader implements ArchiveHandler
+class ZipReader implements ArchiveHandlerInterface
 {
-    /** @var File */
-    private $file;
-
     /**
      * Return the list of files content in the archive
      * @param File $file
@@ -22,7 +19,6 @@ class ZipReader implements ArchiveHandler
      */
     public function getContent(File $file) : array
     {
-        $this->file = $file;
         $zip = new ZipArchive;
         $return = [];
         if ($zip->open($file->getPathname()) === true) {
