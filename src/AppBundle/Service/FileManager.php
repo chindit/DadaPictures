@@ -114,7 +114,7 @@ class FileManager
 
         foreach ($iterator as $file) {
             if (is_dir($file->getPathname())) {
-                if(strpos($file, '.') !== 0) {
+                if(strpos(basename($file->getPathname()), '.') !== 0) {
                     $files = array_merge($this->getFilesFromDir($file->getPathname()), $files);
                 }
             } else {
@@ -198,27 +198,22 @@ class FileManager
      * @param string $storagePath
      * @return bool
      */
-    public function cleanStorage(string $storagePath) : bool
+    public function cleanStorage(string $storagePath) : void
     {
-        $files = $this->getFilesFromDir($storagePath);
+        if (is_dir($storagePath)) {
+            $files = scandir($storagePath);
 
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
+            foreach ($files as $file) {
+                if ($file !== '.' && $file !== '..') {
+                    if (is_dir($file)) {
+                        $this->cleanStorage($file);
+                    } else {
+                        unlink($file);
+                    }
+                }
             }
+            rmdir($storagePath);
         }
-
-        $files = $this->getFilesFromDir($storagePath);
-
-        foreach ($files as $file) {
-            if (is_dir($file)) {
-                rmdir($file);
-            }
-        }
-
-        rmdir($storagePath);
-
-        return true;
     }
 
     /**

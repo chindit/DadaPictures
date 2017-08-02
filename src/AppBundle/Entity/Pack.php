@@ -164,7 +164,7 @@ class Pack
      *
      * @return PersistentCollection|Tag[]
      */
-    public function getTags() : PersistentCollection
+    public function getTags()
     {
         return $this->tags;
     }
@@ -306,7 +306,7 @@ class Pack
      *
      * @return PersistentCollection|\AppBundle\Entity\Picture[]
      */
-    public function getPictures() : PersistentCollection
+    public function getPictures()
     {
         return $this->pictures;
     }
