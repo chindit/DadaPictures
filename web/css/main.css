@@ -24,3 +24,11 @@ ul.no-bullets li {
     margin-top: 5px;
     margin-bottom: 25px;
 }
+.picture {
+    margin-left: auto;
+    margin-right: auto;
+}
+.picture img {
+    display: block;
+    margin: auto;
+}

@@ -385,7 +385,7 @@ class Picture
      *
      * @return ArrayCollection
      */
-    public function getTags() : ArrayCollection
+    public function getTags()
     {
         return $this->tags;
     }

@@ -23,4 +23,17 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function getPictureWithoutTags()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.tags', 't')
+            ->where('t.id IS NULL')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', Status::OK)
+            ->orderBy('p.id', 'desc')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult();
+    }
 }

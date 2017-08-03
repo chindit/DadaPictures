@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tag a picture</h1>
+
+    <div class="picture">
+        <img src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}" />
+    </div>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+{% endblock %}
