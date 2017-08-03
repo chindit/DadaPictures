@@ -112,7 +112,7 @@ class PackController extends Controller
     public function editAction(Request $request, Pack $pack)
     {
         $deleteForm = $this->createDeleteForm($pack);
-        $editForm = $this->createForm('AppBundle\Form\PackType', $pack);
+        $editForm = $this->createForm('AppBundle\Form\Type\PackType', $pack);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

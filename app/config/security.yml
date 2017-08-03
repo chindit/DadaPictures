@@ -32,3 +32,4 @@ security:
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/pack/, role: ROLE_USER }
         - { path: ^/picture, role: ROLE_USER }
+        - { path: ^/tag, role: ROLE_USER }
