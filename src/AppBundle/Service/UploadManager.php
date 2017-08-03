@@ -94,7 +94,7 @@ class UploadManager
      */
     public function validateUpload(Pack $pack, ArrayCollection $pictures) : bool
     {
-        $newStoragePath = $this->fileManager->prepareDestinationDir();
+        $newStoragePath = $this->fileManager->prepareDestinationDir($pack);
 
         foreach ($pictures as $picture) {
             /** @var $picture Picture */
