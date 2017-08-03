@@ -11,7 +11,7 @@ use AppBundle\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class UploadManager
@@ -25,7 +25,7 @@ class UploadManager
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var TokenStorage */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
 
     /** @var FileManager */
@@ -42,7 +42,7 @@ class UploadManager
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        TokenStorage $tokenStorage,
+        TokenStorageInterface $tokenStorage,
         FileManager $fileManager,
         PackManager $packManager)
     {
@@ -124,6 +124,8 @@ class UploadManager
             }
 
             $picture = $this->fileManager->moveFileToPack($picture, $newStoragePath);
+
+            $picture->setFilename(substr($newStoragePath, strrpos($newStoragePath, '/')+1) . '/' . basename($picture->getFilename()));
 
             $this->entityManager->persist($picture);
         }

@@ -14,7 +14,7 @@
 <body>
 <h1><a href="{{ path('pack_show', {'id':pack.id}) }}">Return to pack</a></h1>
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="pswp" tabindex="-1" role="dialog">
 
     <!-- Background of PhotoSwipe.
         It's a separate element as animating opacity is faster than rgba(). -->
@@ -85,7 +85,7 @@
     // build items array
     var items = [
         {% for picture in pack.pictures %}
-            { src: {{ picture.filename }}, w:{{ picture.width }}, h: {{ picture.height }}},
+            { src: '{{ asset('pictures/' ~ picture.filename) }}', w:{{ picture.width }}, h: {{ picture.height }}},
         {% endfor %}
         ];
 
