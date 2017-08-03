@@ -32,7 +32,7 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
             ->where('t.id IS NULL')
             ->andWhere('p.status = :status')
             ->setParameter('status', Status::OK)
-            ->orderBy('p.id', 'rand')
+            ->orderBy('RAND()')
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
