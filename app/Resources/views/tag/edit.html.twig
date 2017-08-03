@@ -3,19 +3,22 @@
 {% block body %}
     <h1>Tag edit</h1>
 
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+    <div class="button-margin">
+        <a href="{{ path('tag_index') }}" class="btn btn-bg btn-primary">Back to the list</a>
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('tag_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-            <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <div class="form-float">
+        {{ form_start(edit_form) }}
+        <h3>Edit</h3>
+        {{ form_widget(edit_form) }}
+        <input class="btn btn-primary" type="submit" value="Edit" />
+        {{ form_end(edit_form) }}
+    </div>
+
+    <div class="form-float">
+        {{ form_start(delete_form) }}
+        <input class="btn btn-danger" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+    </div>
+
 {% endblock %}

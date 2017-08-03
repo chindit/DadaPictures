@@ -17,3 +17,10 @@ ul.no-bullets {
 ul.no-bullets li {
     padding:0;
 }
+.form-float {
+    display: inline-block;
+}
+.button-margin {
+    margin-top: 5px;
+    margin-bottom: 25px;
+}
