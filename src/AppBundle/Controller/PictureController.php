@@ -6,6 +6,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Pack;
 use AppBundle\Entity\Picture;
+use AppBundle\Entity\Tag;
 use AppBundle\Form\Type\PictureTagType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -52,5 +53,20 @@ class PictureController extends Controller
         }
 
         return $this->render('picture/addTags.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
+    }
+
+    /**
+     * View pictures ordered randomly by tag
+     * @param Tag $tag
+     * @return Response
+     *
+     * @Route("/tag/{id}/pictures", name="tag_pictures", defaults={"id" = null})
+     * @Method("GET")
+     */
+    public function viewRandomPicturesByTagAction(Tag $tag)
+    {
+        $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandomByTag($tag);
+
+        return $this->render('picture/diaporama.html.twig', ['pictures' => $pictures, 'tag' => $tag]);
     }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +29,13 @@ class Tag
      * @ORM\Column(name="name", type="string", length=150, unique=true)
      */
     private $name;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="tags")
+     */
+    private $pictures;
 
     /**
      * Tag constructor.
@@ -70,5 +78,38 @@ class Tag
     {
         return $this->name;
     }
-}
 
+    /**
+     * Add picture
+     *
+     * @param \AppBundle\Entity\Picture $picture
+     *
+     * @return Tag
+     */
+    public function addPicture(\AppBundle\Entity\Picture $picture)
+    {
+        $this->pictures[] = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Remove picture
+     *
+     * @param \AppBundle\Entity\Picture $picture
+     */
+    public function removePicture(\AppBundle\Entity\Picture $picture)
+    {
+        $this->pictures->removeElement($picture);
+    }
+
+    /**
+     * Get pictures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPictures()
+    {
+        return $this->pictures;
+    }
+}

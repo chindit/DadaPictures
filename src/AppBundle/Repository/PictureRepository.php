@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 
 
 use AppBundle\Entity\Picture;
+use AppBundle\Entity\Tag;
 use AppBundle\Model\Status;
 
 class PictureRepository extends \Doctrine\ORM\EntityRepository
@@ -35,5 +36,13 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
+    }
+
+    public function findRandomByTag(Tag $tag)
+    {
+        $query = $this->createQueryBuilder('p');
+        $query->join('p.tags', 't')
+            ->where($query->expr()->eq('t.id', $tag->getId()));
+        return $query->getQuery()->getResult();
     }
 }

@@ -128,7 +128,7 @@ class Picture
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="pictures")
      */
     private $tags;
 
