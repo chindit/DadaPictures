@@ -148,7 +148,8 @@ class FileManager
     {
         $path = $this->kernelRootDir . '/../web/pictures/';
         $dirName = preg_replace("/[^a-zA-Z0-9]+/", "",
-            transliterator_transliterate('Any-Latin;Latin-ASCII;', $pack->getName()));
+            transliterator_transliterate('Any-Latin;Latin-ASCII;',
+                str_replace(' ', '_', $pack->getName())));
 
         if (is_dir($path . $dirName)) {
             $dirName .= '_' . uniqid();
