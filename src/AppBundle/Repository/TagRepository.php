@@ -2,8 +2,6 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Tag;
-
 /**
  * TagRepository
  *
@@ -12,10 +10,5 @@ use AppBundle\Entity\Tag;
  */
 class TagRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getPictureCount(Tag $tag)
-    {
-        $query = $this->_em->createQuery('SELECT COUNT(p.id) FROM Picture p WHERE ?1 MEMBER OF p.tags');
-        $query->setParameter(1, $tag->getId());
-        return $query->getSingleScalarResult();
-    }
+
 }

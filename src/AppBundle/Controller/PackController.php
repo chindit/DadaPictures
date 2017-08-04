@@ -51,6 +51,7 @@ class PackController extends Controller
             $uploadManager = $this->get(UploadManager::class);
             try {
                 $pack = $uploadManager->upload($pack);
+
                 return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('danger', 'Unable to handle file upload');
@@ -82,6 +83,8 @@ class PackController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->get(UploadManager::class)->validateUpload($pack, $form->get('files')->getData());
+
+            return $this->redirectToRoute('pack_index');
         }
 
         return $this->render('pack/preUpload.html.twig', ['pack' => $pack, 'form' => $form->createView()]);

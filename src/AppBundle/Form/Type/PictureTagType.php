@@ -10,6 +10,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class PictureTagType
+ * @package AppBundle\Form\Type
+ */
 class PictureTagType extends AbstractType
 {
     /**

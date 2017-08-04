@@ -8,8 +8,17 @@ use AppBundle\Entity\Picture;
 use AppBundle\Entity\Tag;
 use AppBundle\Model\Status;
 
+/**
+ * Class PictureRepository
+ * @package AppBundle\Repository
+ */
 class PictureRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Find duplicates for given picture
+     * @param Picture $picture
+     * @return Picture|null
+     */
     public function findDuplicates(Picture $picture) : ?Picture
     {
         $md5 = $picture->getMd5sum();
@@ -25,7 +34,11 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
             ->getOneOrNullResult();
     }
 
-    public function getPictureWithoutTags()
+    /**
+     * Return a picture without tag
+     * @return Picture|null
+     */
+    public function getPictureWithoutTags() : ?Picture
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.tags', 't')
@@ -35,14 +48,33 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('p.id', 'desc')
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
     }
 
-    public function findRandomByTag(Tag $tag)
+    /**
+     * Return all pictures belonging to this tag
+     * @param Tag $tag
+     * @return array
+     */
+    public function findRandomByTag(Tag $tag) : array
     {
         $query = $this->createQueryBuilder('p');
         $query->join('p.tags', 't')
-            ->where($query->expr()->eq('t.id', $tag->getId()));
+            ->where($query->expr()->eq('t.id', $tag->getId()))
+            ->setMaxResults(50);
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Return 50 random pictures
+     * @return array
+     */
+    public function findRandom() : array
+    {
+        $query = $this->createQueryBuilder('p')
+            ->orderBy('rand')
+            ->setMaxResults(50);
+
         return $query->getQuery()->getResult();
     }
 }

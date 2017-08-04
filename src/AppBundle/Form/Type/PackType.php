@@ -10,6 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class PackType
+ * @package AppBundle\Form\Type
+ */
 class PackType extends AbstractType
 {
     /**
@@ -24,7 +28,8 @@ class PackType extends AbstractType
                 'class' => Tag::class,
                 'choice_label' => 'name',
                 'expanded' => false,
-                'multiple' => true
+                'multiple' => true,
+                'required' => false
             ]);
     }
     

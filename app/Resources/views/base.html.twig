@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DadaPictures {% block title %}{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
@@ -9,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/forms.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/mobile.css') }}" />
     <script src="{{ asset('js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
 </head>
@@ -50,6 +52,7 @@
                         </li>
 
                         <li><a href="{{ path('pictures_tag') }}">Add tags to a picture</a></li>
+                        <li><a href="{{ path('pictures_random') }}">View 50 random</a></li>
                     {% endif %}
                 </ul>
 

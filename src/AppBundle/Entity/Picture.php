@@ -150,6 +150,7 @@ class Picture
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
         $this->mime = 'error';
+        $this->filename = '';
     }
 
     /**
