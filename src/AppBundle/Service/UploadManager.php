@@ -1,5 +1,5 @@
 <?php
-declare(strict_type=1);
+declare(strict_types=1);
 
 namespace AppBundle\Service;
 
@@ -94,7 +94,7 @@ class UploadManager
      */
     public function validateUpload(Pack $pack, ArrayCollection $pictures) : bool
     {
-        $newStoragePath = $this->fileManager->prepareDestinationDir();
+        $newStoragePath = $this->fileManager->prepareDestinationDir($pack);
 
         foreach ($pictures as $picture) {
             /** @var $picture Picture */

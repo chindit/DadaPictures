@@ -19,7 +19,7 @@ class ArchiveFactory
             case 'application/zip':
                 return new ZipReader();
                 break;
-            case 'application/rar':
+            case 'application/x-rar':
                 return new RarReader();
             default:
                 throw new \InvalidArgumentException("Type «" . $file->getMimeType() . "» is not supported");

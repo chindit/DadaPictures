@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AppBundle\Service;
 
 
+use AppBundle\Entity\Pack;
 use AppBundle\Entity\Picture;
 use AppBundle\Entity\User;
 use AppBundle\Model\Status;
@@ -138,10 +139,21 @@ class FileManager
         return $path . $dirName;
     }
 
-    public function prepareDestinationDir() : string
+    /**
+     * Create destination directory
+     * @param Pack $pack
+     * @return string
+     */
+    public function prepareDestinationDir(Pack $pack) : string
     {
         $path = $this->kernelRootDir . '/../web/pictures/';
-        $dirName = uniqid();
+        $dirName = preg_replace("/[^a-zA-Z0-9]+/", "",
+            transliterator_transliterate('Any-Latin;Latin-ASCII;',
+                str_replace(' ', '_', $pack->getName())));
+
+        if (is_dir($path . $dirName)) {
+            $dirName .= '_' . uniqid();
+        }
 
         mkdir($path . $dirName);
 
@@ -196,7 +208,6 @@ class FileManager
     /**
      * Clean temporary storage
      * @param string $storagePath
-     * @return bool
      */
     public function cleanStorage(string $storagePath) : void
     {
