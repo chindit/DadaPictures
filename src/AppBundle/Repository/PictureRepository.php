@@ -72,7 +72,7 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
     public function findRandom() : array
     {
         $query = $this->createQueryBuilder('p')
-            ->orderBy('rand')
+            ->orderBy('RAND()')
             ->setMaxResults(50);
 
         return $query->getQuery()->getResult();
