@@ -36,3 +36,7 @@ ul.no-bullets li {
 #tagged-picture {
     max-width: 100%;
 }
+
+.spacing {
+    margin: 15px;
+}

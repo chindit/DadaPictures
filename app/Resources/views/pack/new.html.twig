@@ -1,11 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="breadcrumb"><a href="{{ path('homepage') }}">Home</a>&nbsp;&gt;&nbsp;<a href="{{ path('pack_index') }}">Pack</a></div>
+    <div class="breadcrumb"><a href="{{ path('homepage') }}">Home</a>&nbsp;&gt;&nbsp;<a href="{{ path('pack_index') }}">Pack</a>
+    </div>
     <h1>Pack creation</h1>
 
+    {% if is_granted("ROLE_USER") %}
+        <div class="spacing">
+            <a href="{{ path('file_list') }}" class="btn btn-primary">By FTP</a>
+        </div>
+    {% endif %}
+
     {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input class="btn btn-bg btn-primary" type="submit" value="Create" />
+    {{ form_widget(form) }}
+    <input class="btn btn-bg btn-primary" type="submit" value="Create"/>
     {{ form_end(form) }}
 {% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="breadcrumb">
+        <a href="{{ path('homepage') }}">Home</a>&nbsp;&gt;&nbsp;
+        <a href="{{ path('pack_index') }}">Pack</a>&nbsp;&gt;&nbsp;
+        <a href="{{ path('pack_new') }}">Create</a></div>
+    <h1>FTP Files</h1>
+
+
+    <table class="table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Upload</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pack in packs %}
+            <tr>
+                <td>{{ pack.name }}</td>
+                <td>{{ pack.size }}</td>
+                <td><a class="btn btn-success" href="{{ path('file_list', {'name':pack.name}) }}">Upload</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No packs detected</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
