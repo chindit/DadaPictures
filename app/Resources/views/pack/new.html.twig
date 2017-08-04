@@ -1,16 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="breadcrumb"><a href="{{ path('homepage') }}">Home</a>&nbsp;&gt;&nbsp;<a href="{{ path('pack_index') }}">Pack</a></div>
     <h1>Pack creation</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
         <input class="btn btn-bg btn-primary" type="submit" value="Create" />
     {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('pack_index') }}">Back to the list</a>
-        </li>
-    </ul>
 {% endblock %}

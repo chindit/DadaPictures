@@ -7,9 +7,8 @@
         <div>No picture without tag!</div>
     {% else %}
         <div class="picture">
-            <img src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}"/>
+            <img id="tagged-picture" src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}" />
         </div>
-        {% form_theme form 'bootstrap_3_layout.html.twig' %}
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <input type="submit" class="btn btn-bg btn-primary" value="Create"/>

@@ -12,10 +12,6 @@ form label {
     display: block;
 }
 
-form select {
-    width: 100%;
-}
-
 .form_checkbox div{
     display: inline-block;
 }
@@ -50,4 +46,18 @@ label + ul li {
     margin-left: 0;
     background: lightcoral;
     border: 2px solid red;
+}
+
+.form-group label, .form-group input, .form-group select {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    float: left;
+    width: 19%;
+}
+
+.form-group input, .form-group select {
+    max-width: 80%;
 }
