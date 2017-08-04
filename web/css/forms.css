@@ -4,13 +4,20 @@ form {
     text-align: center;
     border: 1px solid darkgrey;
     border-radius: 7px;
-    width: 500px;
     padding: 15px 7px;
 
 }
 
 form label {
     display: block;
+}
+
+form select {
+    width: 100%;
+}
+
+.form_checkbox div{
+    display: inline-block;
 }
 
 .form_checkbox label, .form_checkbox input {
@@ -23,7 +30,7 @@ form label {
 
 form input:not([type="checkbox"]) {
     margin-top: 3px;
-    width: 450px;
+    width: 100%;
 }
 form input:not([type="submit"]) {
     border-radius: 3px;

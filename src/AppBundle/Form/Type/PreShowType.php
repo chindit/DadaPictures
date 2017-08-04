@@ -12,6 +12,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class PreShowType
+ * @package AppBundle\Form\Type
+ */
 class PreShowType extends AbstractType
 {
     /**

@@ -3,12 +3,16 @@
 {% block body %}
     <h1>Tag a picture</h1>
 
-    <div class="picture">
-        <img src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}" />
-    </div>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
+    {% if picture.filename == '' %}
+        <div>No picture without tag!</div>
+    {% else %}
+        <div class="picture">
+            <img src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}"/>
+        </div>
+        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" class="btn btn-bg btn-primary" value="Create"/>
+        {{ form_end(form) }}
+    {% endif %}
 {% endblock %}

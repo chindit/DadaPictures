@@ -147,9 +147,7 @@ class FileManager
     public function prepareDestinationDir(Pack $pack) : string
     {
         $path = $this->kernelRootDir . '/../web/pictures/';
-        $dirName = preg_replace("/[^a-zA-Z0-9]+/", "",
-            transliterator_transliterate('Any-Latin;Latin-ASCII;',
-                str_replace(' ', '_', $pack->getName())));
+        $dirName = $this->cleanName($pack->getName());
 
         if (is_dir($path . $dirName)) {
             $dirName .= '_' . uniqid();
@@ -200,7 +198,7 @@ class FileManager
             throw new \RuntimeException("Unable to move file «" . $picture->getFilename() . '»');
         }
 
-        $picture->setFilename($destinationPath . '/' . basename($picture->getFilename()));
+        $picture->setFilename($destinationPath . '/' . $this->cleanName($picture->getFilename()));
 
         return $picture;
     }
@@ -235,6 +233,18 @@ class FileManager
     private function isNameAllowed(string $path) : bool
     {
         return !(strpos(basename($path), '.') === 0);
+    }
+
+    /**
+     * Remove all non-alphanumeric characters from a string
+     * @param string $filename
+     * @return string
+     */
+    private function cleanName(string $filename) : string
+    {
+        return preg_replace("/[^a-zA-Z0-9_-]+/", "",
+            transliterator_transliterate('Any-Latin;Latin-ASCII;',
+                str_replace(' ', '_', $filename)));
     }
 
 }

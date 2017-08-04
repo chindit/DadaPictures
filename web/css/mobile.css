@@ -1,0 +1,13 @@
+@media only screen and (max-device-width: 768px) {
+    body {
+        line-height: 200%;
+    }
+    form div.checkbox {
+        background:aliceblue;
+        display: inline-block;
+        margin: 4px 10px;
+        padding: 1px 4px;
+        border: 1px solid blueviolet;
+        border-radius: 3px;
+    }
+}

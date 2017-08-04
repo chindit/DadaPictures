@@ -14,6 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class PictureController
+ * @package AppBundle\Controller
+ *
+ * @Route("pictures")
+ */
 class PictureController extends Controller
 {
 
@@ -22,7 +28,7 @@ class PictureController extends Controller
      * @param Pack $pack
      * @return Response
      *
-     * @Route("/pictures/pack/{id}", name="pack_view_pictures")
+     * @Route("/pack/{id}", name="pack_view_pictures")
      * @Method("GET")
      */
     public function viewPackPicturesAction(Pack $pack) : Response
@@ -35,13 +41,15 @@ class PictureController extends Controller
      * @param Pack $pack
      * @return Response
      *
-     * @Route("/pictures/tag/{id}", name="pictures_tag", defaults={"id" = null})
+     * @Route("/tag/{id}", name="pictures_tag", defaults={"id" = null})
      * @Method({"GET", "POST"})
      */
-    public function pictureAddTagesAction(Picture $picture = null, Request $request) : Response
+    public function pictureAddTagsAction(Picture $picture = null, Request $request) : Response
     {
         if (!$picture) {
-            $picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags();
+            $picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags()
+                ?? new Picture();
+
         }
         $form = $this->createForm(PictureTagType::class, $picture);
 
@@ -49,7 +57,8 @@ class PictureController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags();
+
+            return $this->redirectToRoute('pictures_tag');
         }
 
         return $this->render('picture/addTags.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
@@ -63,10 +72,23 @@ class PictureController extends Controller
      * @Route("/tag/{id}/pictures", name="tag_pictures", defaults={"id" = null})
      * @Method("GET")
      */
-    public function viewRandomPicturesByTagAction(Tag $tag)
+    public function viewRandomPicturesByTagAction(Tag $tag) : Response
     {
         $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandomByTag($tag);
 
         return $this->render('picture/diaporama.html.twig', ['pictures' => $pictures, 'tag' => $tag]);
+    }
+
+    /**
+     * Return 50 random pictures
+     * @return Response
+     *
+     * @Route("/random", name="pictures_random")
+     */
+    public function viewRandomAction() : Response
+    {
+        $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandom();
+
+        return $this->render('picture/diaporama.html.twig', ['pictures' => $pictures]);
     }
 }
