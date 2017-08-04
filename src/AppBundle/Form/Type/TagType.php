@@ -21,7 +21,7 @@ class TagType extends AbstractType
         $builder
             ->add('name', TextType::class, ['required' => true, 'constraints' => [
                 new NotBlank(),
-                new Length(['min' => 5, 'max' => 150])
+                new Length(['min' => 3, 'max' => 150])
             ]]);
     }
 
