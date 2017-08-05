@@ -27,7 +27,7 @@ class FileController extends Controller
      */
     public function newAction(string $name = ""): Response
     {
-        $tmpDir = $this->getParameter('ftp_dir');
+        $tmpDir = $this->getParameter('kernel.root_dir') . '/../web/pictures/ftp/';
         // Read files from first level in temp dir
         $detectedFiles = (is_dir($tmpDir)) ? scandir($tmpDir) : [];
 

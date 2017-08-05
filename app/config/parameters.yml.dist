@@ -25,6 +25,3 @@ parameters:
     mailer_email: admin@yoursite.com
     mailer_user: Admin
     locale: en
-
-    # FTP dir
-    ftp_dir: /tmp/dadapictures
