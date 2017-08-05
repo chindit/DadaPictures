@@ -78,10 +78,16 @@ class FileManager
         }
 
         if (!in_array($pictureType, $this->allowedPictureType, true)) {
-            $picture->setStatus(Status::ERROR);
-            $picture->setStatusInfo('Picture type is not allowed');
+            // Try to convert picture
+            $newPicturePath = PictureConverter::convertPicture($picture->getFilename());
+            if (empty($newPicturePath)) {
+                $picture->setStatus(Status::ERROR);
+                $picture->setStatusInfo('Picture type is not allowed and can\'t be converted');
 
-            return $picture;
+                return $picture;
+            } else {
+                $picture->setFilename($newPicturePath);
+            }
         }
 
         $picture->setMime(mime_content_type($path));
