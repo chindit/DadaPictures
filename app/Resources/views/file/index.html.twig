@@ -20,7 +20,7 @@
         {% for pack in packs %}
             <tr>
                 <td>{{ pack.name }}</td>
-                <td>{{ pack.size }}</td>
+                <td>{{ pack.size }} Mo</td>
                 <td><a class="btn btn-success" href="{{ path('file_list', {'name':pack.name}) }}">Upload</a></td>
             </tr>
         {% else %}

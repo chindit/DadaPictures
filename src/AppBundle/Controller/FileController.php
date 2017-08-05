@@ -62,7 +62,7 @@ class FileController extends Controller
             }
             $pack = [];
             $pack['name'] = $file;
-            $pack['size'] = filesize($tmpDir . '/' . $file) / 1024 / 1024; // Mo
+            $pack['size'] = round(filesize($tmpDir . '/' . $file) / 1024 / 1024, 2); // Mo
             $packs[] = $pack;
         }
 
