@@ -40,10 +40,18 @@ class FileController extends Controller
                 $pack->setStoragePath($tmpDir . '/');
                 $file = new File($tmpDir . '/' . $name);
                 $pack->setFile($file);
+                /** @var UploadManager $uploadManager */
                 $uploadManager = $this->get(UploadManager::class);
-                $pack = $uploadManager->upload($pack);
+                try {
+                    $pack = $uploadManager->upload($pack);
 
-                return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
+                    $uploadManager->deleteFTPFile($pack->getFile());
+
+                    return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
+                } catch (\Exception $e) {
+                    $this->get('session')->getFlashBag()->add('danger', 'Unable to handle file upload');
+                    $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+                }
             }
         }
 

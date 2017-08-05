@@ -11,6 +11,7 @@ use AppBundle\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -37,8 +38,11 @@ class UploadManager
     /**
      * UploadManager constructor.
      * @param EntityManagerInterface $entityManager
-     * @param array $allowedPictureType
-     * @param string $kernelRootDir
+     * @param TokenStorageInterface $tokenStorage
+     * @param FileManager $fileManager
+     * @param PackManager $packManager
+     * @internal param array $allowedPictureType
+     * @internal param string $kernelRootDir
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -84,6 +88,16 @@ class UploadManager
             $picture->setPack($pack);
             $this->entityManager->persist($picture);
         }
+    }
+
+    /**
+     * Remove uploaded pack once it is extracted
+     * @param File $file
+     * @return bool
+     */
+    public function deleteFTPFile(File $file) : bool
+    {
+        return unlink($file->getFilename());
     }
 
     /**

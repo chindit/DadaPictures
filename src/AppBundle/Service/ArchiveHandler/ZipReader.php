@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Service\ArchiveHandler;
 
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\File\File;
 use ZipArchive;
 
@@ -26,9 +27,11 @@ class ZipReader implements ArchiveHandlerInterface
                 $return[] = $zip->getNameIndex($i);
             }
             $zip->close();
+
             return $return;
+        } else {
+            throw new IOException('Unable to open file «' . $file->getFilename() . '»');
         }
-        return [];
     }
 
     /**
@@ -40,11 +43,14 @@ class ZipReader implements ArchiveHandlerInterface
     public function extractArchive(File $file, string $extractPath) : bool
     {
         $zip = new ZipArchive;
-        $result = false;
+
         if ($zip->open($file->getPathname()) === true) {
             $result = $zip->extractTo($extractPath);
             $zip->close();
+
+            return $result;
+        } else {
+            throw new IOException('Unable to open file «' . $file->getFilename() . '»');
         }
-        return $result;
     }
 }
