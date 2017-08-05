@@ -194,11 +194,12 @@ class FileManager
             throw new FileNotFoundException($picture->getFilename());
         }
 
-        if (!rename($picture->getFilename(), $destinationPath . '/' . basename($picture->getFilename()))) {
+        $newName = $this->cleanName(basename($picture->getFilename()));
+        if (!rename($picture->getFilename(), $destinationPath . '/' . $newName)) {
             throw new \RuntimeException("Unable to move file «" . $picture->getFilename() . '»');
         }
 
-        $picture->setFilename($destinationPath . '/' . $this->cleanName(basename($picture->getFilename())));
+        $picture->setFilename($destinationPath . '/' . $newName);
 
         return $picture;
     }
