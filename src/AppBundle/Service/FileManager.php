@@ -198,7 +198,7 @@ class FileManager
             throw new \RuntimeException("Unable to move file «" . $picture->getFilename() . '»');
         }
 
-        $picture->setFilename($destinationPath . '/' . $this->cleanName($picture->getFilename()));
+        $picture->setFilename($destinationPath . '/' . $this->cleanName(basename($picture->getFilename())));
 
         return $picture;
     }
