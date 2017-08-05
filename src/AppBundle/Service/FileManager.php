@@ -241,7 +241,7 @@ class FileManager
      * @return string
      */
     private function cleanName(string $filename) : string
-    {dump($filename);
+    {
         return preg_replace("/[^.a-zA-Z0-9_-]+/", "",
             transliterator_transliterate('Any-Latin;Latin-ASCII;',
                 str_replace(' ', '_', $filename)));

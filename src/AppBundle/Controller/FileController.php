@@ -38,6 +38,7 @@ class FileController extends Controller
                 $pack = new Pack();
                 $pack->setCreator($this->getUser());
                 $pack->setStoragePath($tmpDir . '/');
+                $pack->setName($name);
                 $file = new File($tmpDir . '/' . $name);
                 $pack->setFile($file);
                 /** @var UploadManager $uploadManager */
