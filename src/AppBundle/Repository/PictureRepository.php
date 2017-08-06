@@ -41,8 +41,7 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
     public function getPictureWithoutTags() : ?Picture
     {
         return $this->createQueryBuilder('p')
-            ->leftJoin('p.tags', 't')
-            ->where('t.id IS NULL')
+            ->where('p.tags is empty')
             ->andWhere('p.status = :status')
             ->setParameter('status', Status::OK)
             ->orderBy('RAND()')

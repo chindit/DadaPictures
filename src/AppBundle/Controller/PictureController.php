@@ -38,19 +38,25 @@ class PictureController extends Controller
 
     /**
      * Add tags for a random picture
-     * @param Pack $pack
+     * @param Picture|null $picture
+     * @param Request $request
      * @return Response
-     *
+     * @internal param Pack $pack
      * @Route("/tag/{id}", name="pictures_tag", defaults={"id" = null})
      * @Method({"GET", "POST"})
      */
     public function pictureAddTagsAction(Picture $picture = null, Request $request) : Response
     {
         if (!$picture) {
-            $picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags()
-                ?? new Picture();
-
+            $picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags();
         }
+
+        if (!$picture) {
+            $this->get('session')->getFlashBag()->add('info', 'All pictures are tagged');
+
+            return $this->redirectToRoute('pack_index');
+        }
+
         $form = $this->createForm(PictureTagType::class, $picture);
 
         $form->handleRequest($request);
