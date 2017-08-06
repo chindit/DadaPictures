@@ -87,6 +87,7 @@ class FileManager
                 return $picture;
             } else {
                 $picture->setFilename($newPicturePath);
+                $picture->setName(basename($newPicturePath)); // To get correct extension
             }
         }
 
