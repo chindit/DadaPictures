@@ -19,7 +19,7 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
      * @param Picture $picture
      * @return Picture|null
      */
-    public function findDuplicates(Picture $picture) : ?Picture
+    public function findDuplicates(Picture $picture): ?Picture
     {
         $md5 = $picture->getMd5sum();
         $sha1 = $picture->getSha1sum();
@@ -38,7 +38,7 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
      * Return a picture without tag
      * @return Picture|null
      */
-    public function getPictureWithoutTags() : ?Picture
+    public function getPictureWithoutTags(): ?Picture
     {
         return $this->createQueryBuilder('p')
             ->where('p.tags is empty')
@@ -55,20 +55,22 @@ class PictureRepository extends \Doctrine\ORM\EntityRepository
      * @param Tag $tag
      * @return array
      */
-    public function findRandomByTag(Tag $tag) : array
+    public function findRandomByTag(Tag $tag): array
     {
-        $query = $this->createQueryBuilder('p');
-        $query->join('p.tags', 't')
-            ->where($query->expr()->eq('t.id', $tag->getId()))
-            ->setMaxResults(50);
-        return $query->getQuery()->getResult();
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.tags', 't')
+            ->where('t.id = :id')
+            ->setParameter('id', $tag->getId())
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
      * Return 50 random pictures
      * @return array
      */
-    public function findRandom() : array
+    public function findRandom(): array
     {
         $query = $this->createQueryBuilder('p')
             ->orderBy('RAND()')
