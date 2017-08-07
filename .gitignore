@@ -1,8 +1,5 @@
-# Cache and logs (Symfony2)
-/app/cache/*
-/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
+# Vendors
+/vendor
 
 # Email spool folder
 /app/spool/*
@@ -26,5 +23,7 @@
 !bin/console
 !bin/symfony_requirements
 
-# PHPStorm
-.idea
+# Specific to project
+/web/pictures/*
+/web/pictures/temp/*
+!/web/pictures/temp
