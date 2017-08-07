@@ -137,7 +137,7 @@ class UploadManager
                 }
             }
 
-            $picture = $this->fileManager->moveFileToPack($picture, $newStoragePath);
+            $picture = $this->fileManager->moveFileToPack($picture, $pack, $newStoragePath);
 
             $picture->setFilename(substr($newStoragePath, strrpos($newStoragePath, '/')+1) . '/' . basename($picture->getFilename()));
 

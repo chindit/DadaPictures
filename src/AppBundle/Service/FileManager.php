@@ -195,13 +195,13 @@ class FileManager
      * @param string $destinationPath
      * @return Picture
      */
-    public function moveFileToPack(Picture $picture, string $destinationPath) : Picture
+    public function moveFileToPack(Picture $picture, Pack $pack, string $destinationPath) : Picture
     {
         if (!is_file($picture->getFilename())) {
             throw new FileNotFoundException($picture->getFilename());
         }
 
-        $newName = $this->cleanName(basename($picture->getFilename()));
+        $newName = $this->cleanName($picture->getFilename(), $pack->getStoragePath());
         if (!rename($picture->getFilename(), $destinationPath . '/' . $newName)) {
             throw new \RuntimeException("Unable to move file «" . $picture->getFilename() . '»');
         }
@@ -246,13 +246,17 @@ class FileManager
     /**
      * Remove all non-alphanumeric characters from a string
      * @param string $filename
+     * @param string $storagePath
      * @return string
      */
-    private function cleanName(string $filename) : string
+    private function cleanName(string $filename, string $storagePath = null) : string
     {
+        $subDir = ($storagePath) ? substr($filename, strlen($storagePath)) : '';
+        $prefix = (strlen($subDir) > 1) ? (str_replace('/', '_', $subDir) . ($subDir[-1] !== '/') ? '_' : '') : '';
+
         return preg_replace("/[^.a-zA-Z0-9_-]+/", "",
             transliterator_transliterate('Any-Latin;Latin-ASCII;',
-                str_replace(' ', '_', $filename)));
+                str_replace(' ', '_', $prefix . $filename)));
     }
 
 }
