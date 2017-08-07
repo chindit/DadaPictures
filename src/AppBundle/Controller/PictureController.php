@@ -31,43 +31,52 @@ class PictureController extends Controller
      * @Route("/pack/{id}", name="pack_view_pictures")
      * @Method("GET")
      */
-    public function viewPackPicturesAction(Pack $pack) : Response
+    public function viewPackPicturesAction(Pack $pack): Response
     {
         return $this->render('picture/diaporama.html.twig', ['pack' => $pack]);
     }
 
     /**
      * Add tags for a random picture
-     * @param Picture|null $picture
-     * @param Request $request
      * @return Response
-     * @internal param Pack $pack
-     * @Route("/tag/{id}", name="pictures_tag", defaults={"id" = null})
-     * @Method({"GET", "POST"})
+     *
+     * @Route("/tag/random", name="pictures_tag")
+     * @Method("GET")
      */
-    public function pictureAddTagsAction(Picture $picture = null, Request $request) : Response
+    public function pictureAddTagsAction(): Response
     {
-        if (!$picture) {
-            $picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags();
-        }
-
-        if (!$picture) {
+        if (!$picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags()) {
             $this->get('session')->getFlashBag()->add('info', 'All pictures are tagged');
 
             return $this->redirectToRoute('pack_index');
         }
 
+        $form = $this->createForm(PictureTagType::class, $picture, ['action' => $this->generateUrl('pictures_add_tag', ['id' => $picture->getId()])]);
+
+        return $this->render('picture/addTags.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
+    }
+
+    /**
+     * @param Picture $picture
+     * @param Request $request
+     * @return Response
+     *
+     * @Route("/tag/{id}/add", name="pictures_add_tag")
+     * @Method("POST")
+     */
+    public function addTagsToPictureAction(Picture $picture, Request $request): Response
+    {
         $form = $this->createForm(PictureTagType::class, $picture);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('pictures_tag');
+        } else {
+            $this->get('session')->getFlashBag()->add('warning', 'An error has occurred during form submission');
         }
 
-        return $this->render('picture/addTags.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
+        return $this->forward('AppBundle:Picture:pictureAddTags');
     }
 
     /**
@@ -78,7 +87,7 @@ class PictureController extends Controller
      * @Route("/tag/{id}/pictures", name="tag_pictures", defaults={"id" = null})
      * @Method("GET")
      */
-    public function viewRandomPicturesByTagAction(Tag $tag) : Response
+    public function viewRandomPicturesByTagAction(Tag $tag): Response
     {
         $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandomByTag($tag);
 
@@ -91,7 +100,7 @@ class PictureController extends Controller
      *
      * @Route("/random", name="pictures_random")
      */
-    public function viewRandomAction() : Response
+    public function viewRandomAction(): Response
     {
         $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandom();
 

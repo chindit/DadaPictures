@@ -17,6 +17,7 @@
                 <th>Author</th>
                 <th>Number of pictures</th>
                 <th>View</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -31,7 +32,21 @@
                 <td>{{ pack.pictures|length }}</td>
                 <td><a class="btn btn-bg" href="{{ path('pack_view_pictures', {'id': pack.id}) }}"><i class="glyphicon glyphicon-picture"></i>Pictures</a></td>
                 <td>
+                    {% if pack.status == 1 %}
+                        <i class="glyphicon glyphicon-check"></i>
+                    {% elseif pack.status == 2 %}
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                    {% else %}
+                        <i class="glyphicon glyphicon-exclamation-sign"></i>
+                    {% endif %}
+                </td>
+                <td>
                     <ul class="no-bullets">
+                        {% if pack.status == 2 %}
+                            <li>
+                                <a href="{{ path('pack_pre_show', { 'id': pack.id }) }}"><i class="glyphicon glyphicon-eye-open"></i>Validate</a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href="{{ path('pack_show', { 'id': pack.id }) }}"><i class="glyphicon glyphicon-search"></i>Show</a>
                         </li>

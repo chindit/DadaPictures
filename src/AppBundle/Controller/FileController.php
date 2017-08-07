@@ -22,8 +22,10 @@ class FileController extends Controller
     /**
      * List current packs in temporary directory
      *
-     * @Route("/new/{name}", name="file_list", defaults={"name": ""})
+     * @Route("/new/{name}", name="ftp_pack_list", defaults={"name": ""})
      * @Method("GET")
+     * @param string $name
+     * @return Response
      */
     public function newAction(string $name = ""): Response
     {

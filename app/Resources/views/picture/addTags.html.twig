@@ -3,15 +3,11 @@
 {% block body %}
     <h1>Tag a picture</h1>
 
-    {% if picture.filename == '' %}
-        <div>No picture without tag!</div>
-    {% else %}
-        <div class="picture">
-            <img id="tagged-picture" src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}" />
-        </div>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" class="btn btn-bg btn-primary" value="Create"/>
-        {{ form_end(form) }}
-    {% endif %}
+    <div class="picture">
+        <img id="tagged-picture" src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}"/>
+    </div>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" class="btn btn-bg btn-primary" value="Create"/>
+    {{ form_end(form) }}
 {% endblock %}
