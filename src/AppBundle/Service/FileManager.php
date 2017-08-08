@@ -252,11 +252,19 @@ class FileManager
     private function cleanName(string $filename, string $storagePath = null) : string
     {
         $subDir = ($storagePath) ? substr($filename, strlen($storagePath)) : '';
-        $prefix = (strlen($subDir) > 1) ? (str_replace('/', '_', $subDir) . ($subDir[-1] !== '/') ? '_' : '') : '';
+        $subDir = (strlen($subDir) > 0 && $subDir[0] === '/') ? substr($subDir, 1) : $subDir;
+        // Remove file
+        if (strrpos($subDir, '/') !== false) {
+            $subDir = substr($subDir, 0, strrpos($subDir, '/'));
+        }
+        $prefix = (strlen($subDir) > 1) ? str_replace('/', '_', $subDir) : '';
+        if (strlen($prefix) > 1) {
+            $prefix .= (($prefix[-1] !== '_') ? '_' : '');
+        }
 
         return preg_replace("/[^.a-zA-Z0-9_-]+/", "",
             transliterator_transliterate('Any-Latin;Latin-ASCII;',
-                str_replace(' ', '_', $prefix . $filename)));
+                str_replace(' ', '_', $prefix . basename($filename))));
     }
 
 }
