@@ -1,0 +1,11 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <h3>Deleting picture <i>{{ picture.filename }}</i></h3>
+    <p>You're about to delete picture «{{ picture.filename }}».</p>
+    <p>Are you sure you want to continue ?</p>
+    {{ form_start(form) }}
+    <input type="submit" class="btn btn-bg btn-danger" value="Delete" />
+    <a href="{{ path('pack_index') }}" class="form-button btn btn-bg btn-success">No, bring me back home</a>
+    {{ form_end(form) }}
+{% endblock %}

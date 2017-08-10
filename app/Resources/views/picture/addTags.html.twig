@@ -9,5 +9,8 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <input type="submit" class="btn btn-bg btn-primary" value="Create"/>
+    {% if is_granted("ROLE_USER") %}
+        <a href="{{ path('picture_delete', {'id': picture.id}) }}" class="form-button btn btn-danger">Delete</a>
+    {% endif %}
     {{ form_end(form) }}
 {% endblock %}

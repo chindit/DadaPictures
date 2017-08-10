@@ -40,6 +40,8 @@ class PackController extends Controller
      *
      * @Route("/new", name="pack_new")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
     {
@@ -50,6 +52,7 @@ class PackController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $uploadManager = $this->get(UploadManager::class);
             try {
+                /** @var Pack $pack */
                 $pack = $uploadManager->upload($pack);
 
                 return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
@@ -131,11 +134,15 @@ class PackController extends Controller
         ));
     }
 
+
     /**
      * Deletes a pack entity.
      *
      * @Route("/{id}", name="pack_delete")
      * @Method("DELETE")
+     * @param Request $request
+     * @param Pack $pack
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Pack $pack)
     {

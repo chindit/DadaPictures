@@ -14,6 +14,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Class FileManager
+ * @package AppBundle\Service
+ */
 class FileManager
 {
     /** @var EntityManagerInterface */
@@ -230,6 +234,17 @@ class FileManager
                 }
             }
             rmdir($storagePath);
+        }
+    }
+
+    /**
+     * Delete physically a picture
+     * @param Picture $picture
+     */
+    public function deletePicture(Picture $picture) : void
+    {
+        if (is_file($this->kernelRootDir) . '/../web/pictures/' . $picture->getFilename()) {
+            unlink($this->kernelRootDir . '/../web/pictures/' . $picture->getFilename());
         }
     }
 

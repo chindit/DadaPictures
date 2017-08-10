@@ -8,6 +8,7 @@ use AppBundle\Entity\Pack;
 use AppBundle\Entity\Picture;
 use AppBundle\Entity\Tag;
 use AppBundle\Form\Type\PictureTagType;
+use AppBundle\Service\FileManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,5 +106,39 @@ class PictureController extends Controller
         $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandom();
 
         return $this->render('picture/diaporama.html.twig', ['pictures' => $pictures]);
+    }
+
+    /**
+     * Deletes a pack entity.
+     *
+     * @Route("/{id}/delete", name="picture_delete")
+     * @Method({"GET", "DELETE"})
+     * @param Request $request
+     * @param Pack|Picture $picture
+     * @return Response
+     */
+    public function deleteAction(Request $request, Picture $picture): Response
+    {
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('picture_delete', array('id' => $picture->getId())))
+            ->setMethod('DELETE')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($picture);
+
+            $this->get(FileManager::class)->deletePicture($picture);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('info', 'File «' . $picture->getFilename() . '» has
+            been correctly removed');
+
+            return $this->redirectToRoute('pack_index');
+        }
+
+        return $this->render('picture/delete.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
     }
 }
