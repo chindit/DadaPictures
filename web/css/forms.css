@@ -24,7 +24,7 @@ form label {
     margin-left: 10px;
 }
 
-form input:not([type="checkbox"]) {
+form input:not([type="checkbox"]), .form-button {
     margin-top: 3px;
     width: 100%;
 }

@@ -34,3 +34,4 @@ services:
 
     AppBundle\Service\FileManager:
         arguments: ['@doctrine.orm.entity_manager', '@security.token_storage', '@AppBundle\Service\PictureManager', '%kernel.root_dir%']
+        public: true
