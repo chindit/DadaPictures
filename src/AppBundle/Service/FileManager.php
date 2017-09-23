@@ -276,7 +276,6 @@ class FileManager
         if (strlen($prefix) > 1) {
             $prefix .= (($prefix[-1] !== '_') ? '_' : '');
         }
-
         return preg_replace("/[^.a-zA-Z0-9_-]+/", "",
             transliterator_transliterate('Any-Latin;Latin-ASCII;',
                 str_replace(' ', '_', $prefix . basename($filename))));
