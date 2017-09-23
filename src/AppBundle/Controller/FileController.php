@@ -29,7 +29,7 @@ class FileController extends Controller
      */
     public function newAction(string $name = ""): Response
     {
-        $tmpDir = $this->getParameter('kernel.root_dir') . '/../web/pictures/ftp/';
+        $tmpDir = $this->getParameter('kernel.root_dir') . '/../web/pictures/ftp';
         // Read files from first level in temp dir
         $detectedFiles = (is_dir($tmpDir)) ? scandir($tmpDir) : [];
 
@@ -41,14 +41,19 @@ class FileController extends Controller
                 $pack->setCreator($this->getUser());
                 $pack->setStoragePath($tmpDir . '/');
                 $pack->setName(pathinfo($name)['filename']);
-                $file = new File($tmpDir . '/' . $name);
-                $pack->setFile($file);
                 /** @var UploadManager $uploadManager */
                 $uploadManager = $this->get(UploadManager::class);
                 try {
-                    $pack = $uploadManager->upload($pack);
+                    if (is_dir($tmpDir . '/' . $name)) {
+                        $pack = $uploadManager->uploadFileDir($tmpDir . '/' . $name, $pack);
+                    } else {
+                        $file = new File($tmpDir . '/' . $name);
+                        $pack->setFile($file);
 
-                    $uploadManager->deleteFTPFile($pack->getFile());
+                        $pack = $uploadManager->upload($pack);
+
+                        $uploadManager->deleteFTPFile($pack->getFile());
+                    }
 
                     return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
                 } catch (\Exception $e) {

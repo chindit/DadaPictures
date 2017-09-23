@@ -11,6 +11,8 @@ use AppBundle\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use const Grpc\STATUS_ALREADY_EXISTS;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -77,6 +79,28 @@ class UploadManager
     }
 
     /**
+     * Upload a directory of files
+     * @param string $fileDir
+     * @return Pack
+     */
+    public function uploadFileDir(string $fileDir, Pack $pack): Pack
+    {
+        if (!is_dir($fileDir)) {
+            throw new FileNotFoundException($fileDir);
+        }
+        $pack->setStoragePath($fileDir);
+        $pack->setStatus(Status::TEMPORARY);
+        $this->uploadFiles($pack);
+        $pack = $this->packManager->checkPackStatus($pack);
+        $pack->setCreator($this->tokenStorage->getToken()->getUser());
+        $this->entityManager->persist($pack);
+        $this->entityManager->flush();
+
+        return $pack;
+
+    }
+
+    /**
      * Upload files contained in pack
      * @param Pack $pack
      */
@@ -130,7 +154,7 @@ class UploadManager
             $picture->setStatus(Status::OK);
             $picture->setStatusInfo('OK');
 
-            if (in_array($picture->getMime(), ['image/png', 'image/jpeg'])) {
+            if (in_array($picture->getMime(), ['image/tiff', 'image/jpeg'])) {
                 $exif = exif_read_data($picture->getFilename(), 'COMPUTED,IFD0,COMMENT,EXIF');
                 if ($exif !== false) {
                     $picture->setProperties($exif);
