@@ -84,10 +84,14 @@ class PackController extends Controller
         $form = $this->createForm(PreShowType::class, null, ['pack' => $pack]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->get(UploadManager::class)->validateUpload($pack, $form->get('files')->getData());
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                $this->get('session')->getFlashBag()->add('danger', $form->getErrors()[0]->getMessage());
+            } else {
+                $this->get(UploadManager::class)->validateUpload($pack, $form->get('files')->getData());
 
-            return $this->redirectToRoute('pack_index');
+                return $this->redirectToRoute('pack_index');
+            }
         }
 
         return $this->render('pack/preUpload.html.twig', ['pack' => $pack, 'form' => $form->createView()]);
