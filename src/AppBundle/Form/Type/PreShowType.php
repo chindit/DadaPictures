@@ -55,7 +55,8 @@ class PreShowType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'pack' => 'AppBundle\Entity\Pack'
+            'pack' => 'AppBundle\Entity\Pack',
+            'csrf_protection' => false
         ));
     }
 
