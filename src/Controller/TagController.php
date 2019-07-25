@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Controller;
+namespace App\Controller;
 
 
-use AppBundle\Entity\Tag;
-use AppBundle\Form\Type\TagType;
+use App\Entity\Tag;
+use App\Form\Type\TagType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +29,7 @@ class TagController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $tags = $em->getRepository('AppBundle:Tag')->findAll();
+        $tags = $em->getRepository('App:Tag')->findAll();
 
         return $this->render('tag/index.html.twig', array(
             'tags' => $tags,
@@ -77,7 +77,7 @@ class TagController extends Controller
             ->setAction($this->generateUrl('tag_delete', array('id' => $tag->getId())))
             ->setMethod('DELETE')
             ->getForm();
-        $editForm = $this->createForm('AppBundle\Form\Type\TagType', $tag);
+        $editForm = $this->createForm('App\Form\Type\TagType', $tag);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

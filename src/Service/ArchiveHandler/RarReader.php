@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service\ArchiveHandler;
+namespace App\Service\ArchiveHandler;
 
 
 use RarArchive;
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class RarReader
- * @package AppBundle\Service\ArchiveHandler
+ * @package App\Service\ArchiveHandler
  */
 class RarReader implements ArchiveHandlerInterface
 {

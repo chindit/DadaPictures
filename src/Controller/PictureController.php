@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Controller;
+namespace App\Controller;
 
 
-use AppBundle\Entity\Pack;
-use AppBundle\Entity\Picture;
-use AppBundle\Entity\Tag;
-use AppBundle\Form\Type\PictureTagType;
-use AppBundle\Service\FileManager;
+use App\Entity\Pack;
+use App\Entity\Picture;
+use App\Entity\Tag;
+use App\Form\Type\PictureTagType;
+use App\Service\FileManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class PictureController
- * @package AppBundle\Controller
+ * @package App\Controller
  *
  * @Route("pictures")
  */
@@ -77,7 +77,7 @@ class PictureController extends Controller
             $this->get('session')->getFlashBag()->add('warning', 'An error has occurred during form submission');
         }
 
-        return $this->forward('AppBundle:Picture:pictureAddTags');
+        return $this->forward('App:Picture:pictureAddTags');
     }
 
     /**

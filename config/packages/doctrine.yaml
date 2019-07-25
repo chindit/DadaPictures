@@ -18,8 +18,8 @@ doctrine:
                 is_bundle: false
                 type: annotation
                 dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'AppBundle\Entity'
-                alias: AppBundle
+                prefix: 'App\Entity'
+                alias: App
         dql:
             numeric_functions:
                 rand: DoctrineExtensions\Query\Mysql\Rand

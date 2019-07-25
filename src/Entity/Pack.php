@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * Pack
  *
  * @ORM\Table(name="pack")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PackRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PackRepository")
  */
 class Pack
 {
@@ -50,7 +50,7 @@ class Pack
     /**
      * @var PersistentCollection|Picture[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="pack")
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="pack")
      */
     private $pictures;
 
@@ -135,7 +135,7 @@ class Pack
     /**
      * Add tag
      *
-     * @param \AppBundle\Entity\Tag $tag
+     * @param \App\Entity\Tag $tag
      *
      * @return Pack
      */
@@ -149,7 +149,7 @@ class Pack
     /**
      * Remove tag
      *
-     * @param \AppBundle\Entity\Tag $tag
+     * @param \App\Entity\Tag $tag
      * @return Pack
      */
     public function removeTag(Tag $tag) : Pack
@@ -172,7 +172,7 @@ class Pack
     /**
      * Set creator
      *
-     * @param \AppBundle\Entity\User $creator
+     * @param \App\Entity\User $creator
      *
      * @return Pack
      */
@@ -186,7 +186,7 @@ class Pack
     /**
      * Get creator
      *
-     * @return \AppBundle\Entity\User
+     * @return \App\Entity\User
      */
     public function getCreator() : User
     {
@@ -290,7 +290,7 @@ class Pack
     /**
      * Set pictures
      *
-     * @param \AppBundle\Entity\Picture $pictures
+     * @param \App\Entity\Picture $pictures
      *
      * @return Pack
      */
@@ -304,7 +304,7 @@ class Pack
     /**
      * Get pictures
      *
-     * @return PersistentCollection|\AppBundle\Entity\Picture[]
+     * @return PersistentCollection|\App\Entity\Picture[]
      */
     public function getPictures()
     {
@@ -314,7 +314,7 @@ class Pack
     /**
      * Add picture
      *
-     * @param \AppBundle\Entity\Picture $picture
+     * @param \App\Entity\Picture $picture
      *
      * @return Pack
      */
@@ -328,7 +328,7 @@ class Pack
     /**
      * Remove picture
      *
-     * @param \AppBundle\Entity\Picture $picture
+     * @param \App\Entity\Picture $picture
      * @return Pack
      */
     public function removePicture(Picture $picture) : Pack

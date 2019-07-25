@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service;
+namespace App\Service;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 /**
  * Class PictureManager
- * @package AppBundle\Service
+ * @package App\Service
  */
 class PictureManager
 {

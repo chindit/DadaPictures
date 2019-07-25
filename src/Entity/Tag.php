@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tag
  *
  * @ORM\Table(name="tag")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TagRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
  */
 class Tag
 {
@@ -33,7 +33,7 @@ class Tag
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="tags")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Picture", mappedBy="tags")
      */
     private $pictures;
 
@@ -82,11 +82,11 @@ class Tag
     /**
      * Add picture
      *
-     * @param \AppBundle\Entity\Picture $picture
+     * @param \App\Entity\Picture $picture
      *
      * @return Tag
      */
-    public function addPicture(\AppBundle\Entity\Picture $picture)
+    public function addPicture(\App\Entity\Picture $picture)
     {
         $this->pictures[] = $picture;
 
@@ -96,9 +96,9 @@ class Tag
     /**
      * Remove picture
      *
-     * @param \AppBundle\Entity\Picture $picture
+     * @param \App\Entity\Picture $picture
      */
-    public function removePicture(\AppBundle\Entity\Picture $picture)
+    public function removePicture(\App\Entity\Picture $picture)
     {
         $this->pictures->removeElement($picture);
     }

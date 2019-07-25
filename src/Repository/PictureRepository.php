@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Repository;
+namespace App\Repository;
 
 
-use AppBundle\Entity\Picture;
-use AppBundle\Entity\Tag;
-use AppBundle\Model\Status;
+use App\Entity\Picture;
+use App\Entity\Tag;
+use App\Model\Status;
 
 /**
  * Class PictureRepository
- * @package AppBundle\Repository
+ * @package App\Repository
  */
 class PictureRepository extends \Doctrine\ORM\EntityRepository
 {

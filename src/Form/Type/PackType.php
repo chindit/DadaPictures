@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Form\Type;
+namespace App\Form\Type;
 
-use AppBundle\Entity\Tag;
+use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class PackType
- * @package AppBundle\Form\Type
+ * @package App\Form\Type
  */
 class PackType extends AbstractType
 {
@@ -39,7 +39,7 @@ class PackType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Pack'
+            'data_class' => 'App\Entity\Pack'
         ));
     }
 
@@ -48,6 +48,6 @@ class PackType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_pack';
+        return 'App_pack';
     }
 }

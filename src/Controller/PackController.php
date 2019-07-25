@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace App\Controller;
 
-use AppBundle\Entity\Pack;
-use AppBundle\Form\Type\PreShowType;
-use AppBundle\Form\Type\PackType;
-use AppBundle\Service\UploadManager;
+use App\Entity\Pack;
+use App\Form\Type\PreShowType;
+use App\Form\Type\PackType;
+use App\Service\UploadManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -28,7 +28,7 @@ class PackController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $packs = $em->getRepository('AppBundle:Pack')->findAll();
+        $packs = $em->getRepository('App:Pack')->findAll();
 
         return $this->render('pack/index.html.twig', array(
             'packs' => $packs,
@@ -122,7 +122,7 @@ class PackController extends Controller
     public function editAction(Request $request, Pack $pack)
     {
         $deleteForm = $this->createDeleteForm($pack);
-        $editForm = $this->createForm('AppBundle\Form\Type\PackType', $pack);
+        $editForm = $this->createForm('App\Form\Type\PackType', $pack);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

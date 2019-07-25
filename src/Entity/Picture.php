@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Picture
  *
  * @ORM\Table(name="picture")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PictureRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
  */
 class Picture
 {
@@ -135,7 +135,7 @@ class Picture
     /**
      * @var Pack
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pack", inversedBy="pictures")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Pack", inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false)
      */
     private $pack;
@@ -334,7 +334,7 @@ class Picture
     /**
      * Set creator
      *
-     * @param \AppBundle\Entity\User $creator
+     * @param \App\Entity\User $creator
      *
      * @return Picture
      */
@@ -348,7 +348,7 @@ class Picture
     /**
      * Get creator
      *
-     * @return \AppBundle\Entity\User
+     * @return \App\Entity\User
      */
     public function getCreator() : User
     {
@@ -358,7 +358,7 @@ class Picture
     /**
      * Add tag
      *
-     * @param \AppBundle\Entity\Tag $tag
+     * @param \App\Entity\Tag $tag
      *
      * @return Picture
      */
@@ -372,7 +372,7 @@ class Picture
     /**
      * Remove tag
      *
-     * @param \AppBundle\Entity\Tag $tag
+     * @param \App\Entity\Tag $tag
      */
     public function removeTag(Tag $tag) : Picture
     {
@@ -504,7 +504,7 @@ class Picture
     /**
      * Set pack
      *
-     * @param \AppBundle\Entity\Pack $pack
+     * @param \App\Entity\Pack $pack
      *
      * @return Picture
      */
@@ -518,7 +518,7 @@ class Picture
     /**
      * Get pack
      *
-     * @return \AppBundle\Entity\Pack
+     * @return \App\Entity\Pack
      */
     public function getPack() : Pack
     {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Form\Type;
+namespace App\Form\Type;
 
 
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class TagType
- * @package AppBundle\Form\Type
+ * @package App\Form\Type
  */
 class TagType extends AbstractType
 {
@@ -35,7 +35,7 @@ class TagType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Tag'
+            'data_class' => 'App\Entity\Tag'
         ));
     }
 
@@ -44,6 +44,6 @@ class TagType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_type';
+        return 'App_type';
     }
 }

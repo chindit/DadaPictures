@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Form\Type;
+namespace App\Form\Type;
 
 
-use AppBundle\Entity\Picture;
-use AppBundle\Model\Status;
+use App\Entity\Picture;
+use App\Model\Status;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -14,7 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class PreShowType
- * @package AppBundle\Form\Type
+ * @package App\Form\Type
  */
 class PreShowType extends AbstractType
 {
@@ -55,7 +55,7 @@ class PreShowType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'pack' => 'AppBundle\Entity\Pack',
+            'pack' => 'App\Entity\Pack',
             'csrf_protection' => false
         ));
     }
@@ -65,6 +65,6 @@ class PreShowType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_pre_show';
+        return 'App_pre_show';
     }
 }

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service;
+namespace App\Service;
 
 
-use AppBundle\Entity\Pack;
-use AppBundle\Model\Status;
+use App\Entity\Pack;
+use App\Model\Status;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PackManager

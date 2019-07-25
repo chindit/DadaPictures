@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Factory;
+namespace App\Factory;
 
-use AppBundle\Service\ArchiveHandler\RarReader;
-use AppBundle\Service\ArchiveHandler\ZipReader;
+use App\Service\ArchiveHandler\RarReader;
+use App\Service\ArchiveHandler\ZipReader;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class ArchiveFactory
- * @package AppBundle\Factory
+ * @package App\Factory
  */
 class ArchiveFactory
 {

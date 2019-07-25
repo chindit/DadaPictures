@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service\ArchiveHandler;
+namespace App\Service\ArchiveHandler;
 
 
 use Symfony\Component\HttpFoundation\File\File;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * Interface ArchiveHandler
  * Interface for all archive handers
  *
- * @package AppBundle\Service\ArchiveHandler
+ * @package App\Service\ArchiveHandler
  */
 interface ArchiveHandlerInterface
 {

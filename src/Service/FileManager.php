@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service;
+namespace App\Service;
 
 
-use AppBundle\Entity\Pack;
-use AppBundle\Entity\Picture;
-use AppBundle\Entity\User;
-use AppBundle\Model\Status;
+use App\Entity\Pack;
+use App\Entity\Picture;
+use App\Entity\User;
+use App\Model\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class FileManager
- * @package AppBundle\Service
+ * @package App\Service
  */
 class FileManager
 {

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Form\Type;
+namespace App\Form\Type;
 
 
-use AppBundle\Entity\Tag;
+use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class PictureTagType
- * @package AppBundle\Form\Type
+ * @package App\Form\Type
  */
 class PictureTagType extends AbstractType
 {
@@ -36,7 +36,7 @@ class PictureTagType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Picture'
+            'data_class' => 'App\Entity\Picture'
         ));
     }
 
@@ -45,6 +45,6 @@ class PictureTagType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_picture_tag';
+        return 'App_picture_tag';
     }
 }

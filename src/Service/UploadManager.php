@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service;
+namespace App\Service;
 
-use AppBundle\Entity\Pack;
-use AppBundle\Entity\Picture;
-use AppBundle\Factory\ArchiveFactory;
-use AppBundle\Model\Status;
-use AppBundle\Service\ArchiveHandler\ArchiveHandlerInterface;
+use App\Entity\Pack;
+use App\Entity\Picture;
+use App\Factory\ArchiveFactory;
+use App\Model\Status;
+use App\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 /**
  * Class UploadManager
- * @package AppBundle\Service
+ * @package App\Service
  */
 class UploadManager
 {

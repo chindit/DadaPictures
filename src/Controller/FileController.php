@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Controller;
+namespace App\Controller;
 
 
-use AppBundle\Entity\Pack;
-use AppBundle\Service\UploadManager;
+use App\Entity\Pack;
+use App\Service\UploadManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\File;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class FileController
- * @package AppBundle\Controller
+ * @package App\Controller
  * @Route("file")
  */
 class FileController extends Controller

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Model;
+namespace App\Model;
 /**
  * Static Class Status
  * Constants used for status

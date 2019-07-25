@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service\ArchiveHandler;
+namespace App\Service\ArchiveHandler;
 
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -9,7 +9,7 @@ use ZipArchive;
 
 /**
  * Class ZipReader
- * @package AppBundle\Service\ArchiveHandler
+ * @package App\Service\ArchiveHandler
  */
 class ZipReader implements ArchiveHandlerInterface
 {

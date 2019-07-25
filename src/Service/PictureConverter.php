@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace AppBundle\Service;
+namespace App\Service;
 
 /**
  * Class PictureConverter
- * @package AppBundle\Service
+ * @package App\Service
  */
 class PictureConverter
 {
