@@ -9,8 +9,7 @@ use App\Entity\Picture;
 use App\Entity\Tag;
 use App\Form\Type\PictureTagType;
 use App\Service\FileManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("pictures")
  */
-class PictureController extends Controller
+class PictureController extends AbstractController
 {
 
     /**
@@ -29,8 +28,7 @@ class PictureController extends Controller
      * @param Pack $pack
      * @return Response
      *
-     * @Route("/pack/{id}", name="pack_view_pictures")
-     * @Method("GET")
+     * @Route("/pack/{id}", name="pack_view_pictures", methods={"GET"})
      */
     public function viewPackPicturesAction(Pack $pack): Response
     {
@@ -41,8 +39,7 @@ class PictureController extends Controller
      * Add tags for a random picture
      * @return Response
      *
-     * @Route("/tag/random", name="pictures_tag")
-     * @Method("GET")
+     * @Route("/tag/random", name="pictures_tag", methods={"GET"})
      */
     public function pictureAddTagsAction(): Response
     {
@@ -62,8 +59,7 @@ class PictureController extends Controller
      * @param Request $request
      * @return Response
      *
-     * @Route("/tag/{id}/add", name="pictures_add_tag")
-     * @Method("POST")
+     * @Route("/tag/{id}/add", name="pictures_add_tag", methods={"POST"})
      */
     public function addTagsToPictureAction(Picture $picture, Request $request): Response
     {
@@ -85,8 +81,7 @@ class PictureController extends Controller
      * @param Tag $tag
      * @return Response
      *
-     * @Route("/tag/{id}/pictures", name="tag_pictures", defaults={"id" = null})
-     * @Method("GET")
+     * @Route("/tag/{id}/pictures", name="tag_pictures", defaults={"id" = null}, methods={"GET"})
      */
     public function viewRandomPicturesByTagAction(Tag $tag): Response
     {
@@ -99,7 +94,7 @@ class PictureController extends Controller
      * Return 50 random pictures
      * @return Response
      *
-     * @Route("/random", name="pictures_random")
+     * @Route("/random", name="pictures_random", methods={"GET"})
      */
     public function viewRandomAction(): Response
     {
@@ -111,8 +106,7 @@ class PictureController extends Controller
     /**
      * Deletes a pack entity.
      *
-     * @Route("/{id}/delete", name="picture_delete")
-     * @Method({"GET", "DELETE"})
+     * @Route("/{id}/delete", name="picture_delete", methods={"GET", "DELETE"})
      * @param Request $request
      * @param Pack|Picture $picture
      * @return Response

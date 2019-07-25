@@ -6,8 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Tag;
 use App\Form\Type\TagType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,13 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("tag")
  */
-class TagController extends Controller
+class TagController extends AbstractController
 {
     /**
      * Lists all tag entities.
      *
-     * @Route("/", name="tag_index")
-     * @Method("GET")
+     * @Route("/", name="tag_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -47,8 +45,7 @@ class TagController extends Controller
     /**
      * Creates a new tag entity.
      *
-     * @Route("/new", name="tag_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="tag_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -68,8 +65,7 @@ class TagController extends Controller
     /**
      * Displays a form to edit an existing tag entity.
      *
-     * @Route("/{id}/edit", name="tag_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="tag_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Tag $tag)
     {
@@ -96,8 +92,7 @@ class TagController extends Controller
     /**
      * Deletes a tag entity.
      *
-     * @Route("/{id}", name="tag_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="tag_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, Tag $tag)
     {

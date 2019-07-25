@@ -6,8 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Pack;
 use App\Service\UploadManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,13 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller
  * @Route("file")
  */
-class FileController extends Controller
+class FileController extends AbstractController
 {
     /**
      * List current packs in temporary directory
      *
-     * @Route("/new/{name}", name="ftp_pack_list", defaults={"name": ""})
-     * @Method("GET")
+     * @Route("/new/{name}", name="ftp_pack_list", defaults={"name": ""}, methods={"GET"})
      * @param string $name
      * @return Response
      */

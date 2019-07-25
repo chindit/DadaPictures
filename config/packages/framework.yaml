@@ -9,6 +9,7 @@ framework:
         handler_id: ~
         cookie_secure: auto
         cookie_samesite: lax
+        name: 'dada_pictures_session'
 
     #esi: true
     #fragments: true

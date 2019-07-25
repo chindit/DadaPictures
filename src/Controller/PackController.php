@@ -6,25 +6,25 @@ use App\Entity\Pack;
 use App\Form\Type\PreShowType;
 use App\Form\Type\PackType;
 use App\Service\UploadManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Pack controller.
  *
  * @Route("pack")
  */
-class PackController extends Controller
+class PackController extends AbstractController
 {
     /**
      * Lists all pack entities.
      *
-     * @Route("/", name="pack_index")
-     * @Method("GET")
+     * @Route("/", name="pack_index", methods={"GET"})
      */
-    public function indexAction()
+    public function indexAction(): Response
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -38,12 +38,11 @@ class PackController extends Controller
     /**
      * Creates a new pack entity.
      *
-     * @Route("/new", name="pack_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="pack_new", methods={"GET", "POST"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request): Response
     {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
@@ -76,10 +75,9 @@ class PackController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @internal param array $files
      *
-     * @Route("/uploadConfirm/{id}", name="pack_pre_show")
-     * @Method({"GET", "POST"})
+     * @Route("/uploadConfirm/{id}", name="pack_pre_show", methods={"GET", "POST"})
      */
-    public function preShowAction(Pack $pack, Request $request)
+    public function preShowAction(Pack $pack, Request $request): Response
     {
         $form = $this->createForm(PreShowType::class, null, ['pack' => $pack]);
         $form->handleRequest($request);
@@ -100,10 +98,9 @@ class PackController extends Controller
     /**
      * Finds and displays a pack entity.
      *
-     * @Route("/{id}", name="pack_show")
-     * @Method("GET")
+     * @Route("/{id}", name="pack_show", methods={"GET"})
      */
-    public function showAction(Pack $pack)
+    public function showAction(Pack $pack): Response
     {
         $deleteForm = $this->createDeleteForm($pack);
 
@@ -116,10 +113,9 @@ class PackController extends Controller
     /**
      * Displays a form to edit an existing pack entity.
      *
-     * @Route("/{id}/edit", name="pack_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="pack_edit", methods={"GET", "POST"})
      */
-    public function editAction(Request $request, Pack $pack)
+    public function editAction(Request $request, Pack $pack): Response
     {
         $deleteForm = $this->createDeleteForm($pack);
         $editForm = $this->createForm('App\Form\Type\PackType', $pack);
@@ -142,13 +138,12 @@ class PackController extends Controller
     /**
      * Deletes a pack entity.
      *
-     * @Route("/{id}", name="pack_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="pack_delete", methods={"DELETE"})
      * @param Request $request
      * @param Pack $pack
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, Pack $pack)
+    public function deleteAction(Request $request, Pack $pack): Response
     {
         $form = $this->createDeleteForm($pack);
         $form->handleRequest($request);
@@ -164,12 +159,8 @@ class PackController extends Controller
 
     /**
      * Creates a form to delete a pack entity.
-     *
-     * @param Pack $pack The pack entity
-     *
-     * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Pack $pack)
+    private function createDeleteForm(Pack $pack): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('pack_delete', array('id' => $pack->getId())))
