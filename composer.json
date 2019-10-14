@@ -14,8 +14,8 @@
         }
     },
     "require": {
-        "php": ">=7.1.0",
-        "beberlei/DoctrineExtensions": "^1.2",
+        "php": ">=7.2.0",
+        "beberlei/doctrineextensions": "^1.2",
         "doctrine/doctrine-bundle": "^1.11",
         "doctrine/orm": "^2.6",
         "friendsofsymfony/user-bundle": "^2.1",
@@ -32,10 +32,14 @@
         "symfony/translation": "^4.3",
         "symfony/twig-bundle": "^4.3",
         "symfony/validator": "^4.3",
-        "vich/uploader-bundle": "^1.10"
+        "vich/uploader-bundle": "^1.10",
+        "ext-imagick": "*",
+        "ext-rar": "*",
+        "ext-exif": "*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.2",
+	  	"phpstan/phpstan": "^0.11",
         "symfony/dotenv": "^4.3",
         "symfony/maker-bundle": "^1.12",
         "symfony/phpunit-bridge": "^4.3",

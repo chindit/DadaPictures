@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Imagick;
+
 /**
  * Class PictureConverter
+ *
  * @package App\Service
  */
 class PictureConverter
@@ -17,7 +20,7 @@ class PictureConverter
     public static function convertPicture(string $path): string
     {
         try {
-            $picture = new \Imagick(realpath($path));
+            $picture = new Imagick(realpath($path));
             $picture->setFormat('png');
             $pathInfo = pathinfo($path);
             $newFileName = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.png';
