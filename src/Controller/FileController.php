@@ -27,7 +27,7 @@ class FileController extends AbstractController
      */
     public function newAction(string $name = ""): Response
     {
-        $tmpDir = $this->getParameter('kernel.root_dir') . '/../web/pictures/ftp';
+        $tmpDir = $this->getParameter('kernel.project_dir') . '/../web/pictures/ftp';
         // Read files from first level in temp dir
         $detectedFiles = (is_dir($tmpDir)) ? scandir($tmpDir) : [];
 
