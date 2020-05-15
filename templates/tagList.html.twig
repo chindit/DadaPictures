@@ -1,5 +1,5 @@
-<ul class="dropdown-menu">
+<div class="dropdown-menu" aria-labelledby="navbarDropdownTags">
     {% for tag in tags %}
-        <li><a href="{{ path('tag_pictures', {'id':tag.id}) }}">{{ tag.name }}</a></li>
+        <a class="dropdown-item" href="{{ path('tag_pictures', {'id':tag.id}) }}">{{ tag.name }}</a>
     {% endfor %}
-</ul>
+</div>

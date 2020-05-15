@@ -42,14 +42,13 @@ class PackController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request): Response
+    public function newAction(Request $request, UploadManager $uploadManager): Response
     {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $uploadManager = $this->get(UploadManager::class);
             try {
                 /** @var Pack $pack */
                 $pack = $uploadManager->upload($pack);

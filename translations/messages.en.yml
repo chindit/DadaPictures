@@ -1,0 +1,10 @@
+global:
+    welcome: 'Welcome to'
+    registration: 'This website is not accessible without registration.'
+    register: 'Register'
+    login: 'Login'
+    please: 'Please'
+    or: 'or'
+pack:
+    plural:
+        name: Packs

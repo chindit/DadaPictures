@@ -3,13 +3,52 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="d-flex container h-100 justify-content-center">
+        <div class="d-flex justify-content-center align-middle h-100">
+            <div class="user_card">
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container">
+                        <img src="{{ asset('/images/icon.png') }}" class="brand_logo" alt="Logo">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center form_container">
+                    {{ form_start(registrationForm) }}
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form_widget(registrationForm.username, { 'attr': {'class':'form-control input_user', 'placeholder':'Username'}}) }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            {{ form_widget(registrationForm.plainPassword, { 'attr': {'class':'form-control input_pass', 'placeholder':'Password'}}) }}
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class':'custom-control-input', 'id':'agreeTerms', 'required':'required'}}) }}
+                                <label class="custom-control-label" for="agreeTerms">Agree terms</label>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3 login_container">
+                            <button type="button" name="button" class="btn login_btn">Register</button>
+                        </div>
+                    {{ form_end(registrationForm) }}
+                </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+                <div class="mt-4">
+                    <div class="d-flex justify-content-center links">
+                        Already have an account? <a href="{{ path('app_login') }}" class="ml-2">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+{% block stylesheets %}
+    {{ parent() }}
+
+    {{ encore_entry_link_tags('login') }}
 {% endblock %}

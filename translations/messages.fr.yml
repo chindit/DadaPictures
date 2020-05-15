@@ -1,0 +1,10 @@
+global:
+    welcome: 'Bienvenue sur'
+    registration: 'Ce site n''est pas accessible sans inscription'
+    register: 'Vous inscrire'
+    login: 'Vous connecter'
+    please: 'Merci de'
+    or: 'ou'
+pack:
+    plural:
+        name: Packs
