@@ -18,21 +18,30 @@
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
                             {{ form_widget(registrationForm.username, { 'attr': {'class':'form-control input_user', 'placeholder':'Username'}}) }}
+                            <span class="invalid-feedback">
+                                {{ form_errors(registrationForm.username) }}
+                            </span>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
                             {{ form_widget(registrationForm.plainPassword, { 'attr': {'class':'form-control input_pass', 'placeholder':'Password'}}) }}
+                            <span class="invalid-feedback">
+                                {{ form_errors(registrationForm.plainPassword) }}
+                            </span>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class':'custom-control-input', 'id':'agreeTerms', 'required':'required'}}) }}
-                                <label class="custom-control-label" for="agreeTerms">Agree terms</label>
+                                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class':'custom-control-input form-control', 'required':'required'}}) }}
+                                <label class="custom-control-label" for="registration_form_agreeTerms"><a href="{{ path('terms_and_conditions') }}">Agree terms</a></label>
+                                <span class="invalid-feedback">
+                                    {{ form_errors(registrationForm.agreeTerms) }}
+                                </span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3 login_container">
-                            <button type="button" name="button" class="btn login_btn">Register</button>
+                            <button type="submit" name="button" class="btn login_btn">Register</button>
                         </div>
                     {{ form_end(registrationForm) }}
                 </div>

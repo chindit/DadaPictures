@@ -14,8 +14,14 @@ class IndexController extends AbstractController
      */
     public function indexAction(): Response
     {
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);
+        return $this->render('default/index.html.twig');
+    }
+
+	/**
+	 * @Route("/terms", name="terms_and_conditions", methods={"GET"})
+	 */
+    public function termsAndConditions(): Response
+    {
+    	return $this->render('default/terms.html.twig');
     }
 }
