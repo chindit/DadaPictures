@@ -48,11 +48,11 @@
             </ul>
             <ul class="navbar-nav">
                 {% if not is_granted("ROLE_USER") %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">{% trans %}login.title{% endtrans %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">{% trans %}register.title{% endtrans %}</a></li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="#">My account</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">{% trans %}global.logout{% endtrans %}</a></li>
                 {% endif %}
             </ul>
         </div>

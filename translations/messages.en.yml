@@ -5,6 +5,20 @@ global:
     login: 'Login'
     please: 'Please'
     or: 'or'
+    username: 'Username'
+    password: 'Password'
+    logout: 'Logout'
 pack:
     plural:
         name: Packs
+login:
+    title: 'Login'
+    remember: 'Remember me'
+    login: 'Login'
+    no_account: 'Don''t have an account ?'
+    signup: 'Sign up'
+register:
+    title: 'Register'
+    terms: 'Agree terms'
+    register: 'Register'
+    account: 'Already have an account ?'

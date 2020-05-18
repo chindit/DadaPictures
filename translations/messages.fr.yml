@@ -5,6 +5,20 @@ global:
     login: 'Vous connecter'
     please: 'Merci de'
     or: 'ou'
+    username: 'Pseudo'
+    password: 'Mot de passe'
+    logout: 'Déconnexion'
 pack:
     plural:
         name: Packs
+login:
+    title: 'Connexion'
+    remember: 'Se souvenir de moi'
+    login: 'Connexion'
+    no_account: 'Pas encore de compte ?'
+    signup: 'S''enregistrer'
+register:
+    title: 'Créer un compte'
+    terms: 'Accepter les conditions générales'
+    register: 'Créer un compte'
+    account: 'Vous avez déjà un compte ?'

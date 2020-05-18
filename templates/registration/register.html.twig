@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}{% trans %}register.title{% endtrans %}{% endblock %}
 
 {% block body %}
     <div class="d-flex container h-100 justify-content-center">
@@ -17,7 +17,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            {{ form_widget(registrationForm.username, { 'attr': {'class':'form-control input_user', 'placeholder':'Username'}}) }}
+                            {{ form_widget(registrationForm.username, { 'attr': {'class':'form-control input_user', 'placeholder':'global.username'}}) }}
                             <span class="invalid-feedback">
                                 {{ form_errors(registrationForm.username) }}
                             </span>
@@ -26,7 +26,7 @@
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            {{ form_widget(registrationForm.plainPassword, { 'attr': {'class':'form-control input_pass', 'placeholder':'Password'}}) }}
+                            {{ form_widget(registrationForm.plainPassword, { 'attr': {'class':'form-control input_pass', 'placeholder':'global.password'}}) }}
                             <span class="invalid-feedback">
                                 {{ form_errors(registrationForm.plainPassword) }}
                             </span>
@@ -34,21 +34,21 @@
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
                                 {{ form_widget(registrationForm.agreeTerms, {'attr': {'class':'custom-control-input form-control', 'required':'required'}}) }}
-                                <label class="custom-control-label" for="registration_form_agreeTerms"><a href="{{ path('terms_and_conditions') }}">Agree terms</a></label>
+                                <label class="custom-control-label" for="registration_form_agreeTerms"><a href="{{ path('terms_and_conditions') }}">{% trans %}register.terms{% endtrans %}</a></label>
                                 <span class="invalid-feedback">
                                     {{ form_errors(registrationForm.agreeTerms) }}
                                 </span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3 login_container">
-                            <button type="submit" name="button" class="btn login_btn">Register</button>
+                            <button type="submit" name="button" class="btn login_btn">{% trans %}register.register{% endtrans %}</button>
                         </div>
                     {{ form_end(registrationForm) }}
                 </div>
 
                 <div class="mt-4">
                     <div class="d-flex justify-content-center links">
-                        Already have an account? <a href="{{ path('app_login') }}" class="ml-2">Sign In</a>
+                        {% trans %}register.account{% endtrans %} <a href="{{ path('app_login') }}" class="ml-2">{% trans %}login.login{% endtrans %}</a>
                     </div>
                 </div>
             </div>
