@@ -8,9 +8,6 @@ global:
     username: 'Pseudo'
     password: 'Mot de passe'
     logout: 'Déconnexion'
-pack:
-    plural:
-        name: Packs
 login:
     title: 'Connexion'
     remember: 'Se souvenir de moi'
@@ -22,3 +19,12 @@ register:
     terms: 'Accepter les conditions générales'
     register: 'Créer un compte'
     account: 'Vous avez déjà un compte ?'
+pictures:
+    random: 'Voir 50 images aléatoires'
+tags:
+    name: 'Tags'
+    add: 'Ajouter des tags sur une image'
+pack:
+    plural:
+        name: Galeries
+    submit: 'Envoyer des images'

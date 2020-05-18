@@ -8,9 +8,6 @@ global:
     username: 'Username'
     password: 'Password'
     logout: 'Logout'
-pack:
-    plural:
-        name: Packs
 login:
     title: 'Login'
     remember: 'Remember me'
@@ -22,3 +19,12 @@ register:
     terms: 'Agree terms'
     register: 'Register'
     account: 'Already have an account ?'
+pictures:
+    random: 'View 50 random'
+tags:
+    name: 'Tags'
+    add: 'Add tags to a picture'
+pack:
+    plural:
+        name: Gallery
+    submit: 'Send pictures'
