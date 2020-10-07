@@ -2,6 +2,7 @@
 
 namespace App\Form\Type;
 
+use App\Entity\Pack;
 use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -22,24 +23,25 @@ class PackType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['required' => true])
-            ->add('file', FileType::class)
+            ->add('name', TextType::class, ['required' => true, 'label' => 'pack.form.name'])
+            ->add('file', FileType::class, ['label' => 'pack.form.archive'])
             ->add('tags', EntityType::class, [
                 'class' => Tag::class,
                 'choice_label' => 'name',
                 'expanded' => false,
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'label' => 'pack.form.tags'
             ]);
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Pack'
+            'data_class' => Pack::class
         ));
     }
 

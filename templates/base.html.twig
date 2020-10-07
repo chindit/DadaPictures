@@ -58,6 +58,9 @@
         </div>
     </nav>
 </header>
+<!-- Breadcrumb -->
+{% block breadcrumb %}
+{% endblock %}
 <!-- Flashbags -->
 {% if app.request.hasPreviousSession %}
     {% for type, messages in app.session.flashbag.all() %}

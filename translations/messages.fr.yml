@@ -28,3 +28,14 @@ pack:
     plural:
         name: Galeries
     submit: 'Envoyer des images'
+    create: 'Créer une nouvelle gallerie'
+    form:
+        name: 'Titre de votre galerie'
+        archive: '.zip ou .rar contenant vos images'
+        tags: 'Tags s''appliquant à votre galerie'
+        create: 'Créer'
+    created: 'Votre galerie a été créée avec succès'
+    processing: 'Les images de votre galerie sont en cours de traitement.  Cette opération peut prendre plusieurs minutes'
+    upload_error: 'Une erreur est survenue durant la création de votre galerie.  Veuillez réessayer'
+routes:
+    home: 'Home'

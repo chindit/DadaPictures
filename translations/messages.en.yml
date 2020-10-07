@@ -26,5 +26,16 @@ tags:
     add: 'Add tags to a picture'
 pack:
     plural:
-        name: Gallery
+        name: Galleries
     submit: 'Send pictures'
+    create: 'Create a new gallery'
+    form:
+        name: 'Name of your gallery'
+        archive: '.zip or .rar containing your pictures'
+        tags: 'Tags applying to your pack'
+        create: 'Create'
+    created: 'Gallery successfully created'
+    processing: 'Pictures of your gallery are processing.  This can take a few minutes.'
+    upload_error: 'An error has occurred while creating your gallery.  Please try again.'
+routes:
+    home: 'Home'

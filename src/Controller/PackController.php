@@ -5,12 +5,17 @@ namespace App\Controller;
 use App\Entity\Pack;
 use App\Form\Type\PreShowType;
 use App\Form\Type\PackType;
+use App\Message\PackMessage;
 use App\Service\UploadManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Pack controller.
@@ -42,7 +47,7 @@ class PackController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request, UploadManager $uploadManager): Response
+    public function newAction(Request $request, UploadManager $uploadManager, MessageBusInterface $messageBus, TranslatorInterface $translator): Response
     {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
@@ -50,13 +55,14 @@ class PackController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                /** @var Pack $pack */
-                $pack = $uploadManager->upload($pack);
+                $fileName = $uploadManager->moveUploadFileToTempStorage($pack->getFile());
+                $messageBus->dispatch(new PackMessage($fileName));
 
-                return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
+	            $this->addFlash('success', $translator->trans('pack.created'));
+	            $this->addFlash('warning', $translator->trans('pack.processing'));
             } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('danger', 'Unable to handle file upload');
-                $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+	            $this->addFlash('danger', 'Unable to handle file upload');
+	            $this->addFlash('danger', $e->getMessage());
             }
         }
 

@@ -11,6 +11,8 @@ use App\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\UnreadableFileException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -36,7 +38,9 @@ class UploadManager
     /** @var PackManager */
     private $packManager;
 
-    /**
+	private FilesystemInterface $temporaryStorage;
+
+	/**
      * UploadManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param TokenStorageInterface $tokenStorage
@@ -49,12 +53,29 @@ class UploadManager
         EntityManagerInterface $entityManager,
         TokenStorageInterface $tokenStorage,
         FileManager $fileManager,
-        PackManager $packManager)
+        PackManager $packManager,
+		FilesystemInterface $temporaryStorage)
     {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
         $this->fileManager = $fileManager;
         $this->packManager = $packManager;
+	    $this->temporaryStorage = $temporaryStorage;
+    }
+
+    public function moveUploadFileToTempStorage(File $file): string
+    {
+    	if (!$file->isReadable())
+	    {
+		    throw new UnreadableFileException(sprintf('Unable to read %s file', $file->getRealPath()));
+	    }
+
+        $stream = fopen($file->getRealPath(), 'rb+');
+        $newFileName = uniqid('temp_upload_', true);
+        $this->temporaryStorage->writeStream($newFileName, $stream);
+        fclose($stream);
+
+    	return $newFileName;
     }
 
     /**
@@ -64,6 +85,7 @@ class UploadManager
      */
     public function upload(Pack $pack): Pack
     {
+    	$this->moveUploadFileToTempStorage($pack->getFile());
         $this->handler = ArchiveFactory::getHandler($pack->getFile());
         $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
         $this->handler->extractArchive($pack->getFile(), $pack->getStoragePath());
@@ -145,7 +167,7 @@ class UploadManager
                 return false;
             }
 
-            list($width, $height) = getimagesize($picture->getFilename());
+            [$width, $height] = getimagesize($picture->getFilename());
             $picture->setWidth($width);
             $picture->setHeight($height);
             $picture->setWeight(filesize($picture->getFilename()));

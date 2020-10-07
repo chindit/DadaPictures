@@ -141,6 +141,22 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.3"
     },
+    "league/flysystem": {
+        "version": "1.0.69"
+    },
+    "league/flysystem-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "8ad3ded1f39fedce098e43259741f42092a1010e"
+        },
+        "files": [
+            "config/packages/flysystem.yaml",
+            "var/storage/.gitignore"
+        ]
+    },
     "monolog/monolog": {
         "version": "1.24.0"
     },
@@ -361,6 +377,18 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
+    },
+    "symfony/messenger": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "8a2675c061737658bed85102e9241c752620e575"
+        },
+        "files": [
+            "config/packages/messenger.yaml"
+        ]
     },
     "symfony/mime": {
         "version": "v4.3.2"

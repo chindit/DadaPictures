@@ -1,18 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="breadcrumb"><a href="{{ path('homepage') }}">Home</a>&nbsp;&gt;&nbsp;<a href="{{ path('pack_index') }}">Pack</a>
-    </div>
-    <h1>Pack creation</h1>
+    <h1>{% trans %}pack.create{% endtrans %}</h1>
 
-    {% if is_granted("ROLE_USER") %}
+    {% if is_granted("ROLE_ADMIN") %}
         <div class="spacing">
             <a href="{{ path('ftp_pack_list') }}" class="btn btn-primary">By FTP</a>
         </div>
     {% endif %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input class="btn btn-bg btn-primary" type="submit" value="Create"/>
-    {{ form_end(form) }}
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input class="btn btn-lg btn-success float-right" type="submit" value="{% trans %}pack.form.create{% endtrans %}"/>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb">
+    <a href="{{ path('homepage') }}">{% trans %}routes.home{% endtrans %}</a>
+    &nbsp;&gt;&nbsp;
+    <a href="{{ path('pack_index') }}">{% trans %}pack.plural.name{% endtrans %}</a>
+</div>
 {% endblock %}

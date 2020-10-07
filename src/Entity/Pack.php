@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Pack
@@ -30,6 +31,7 @@ class Pack
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=150)
+     * @Assert\Length(min="2", max="150")
      */
     private $name;
 
@@ -83,6 +85,7 @@ class Pack
 
     /**
      * @var File
+     * @Assert\File(mimeTypes={"application/zip", "application/x-rar-compressed"})
      */
     private $file;
 
