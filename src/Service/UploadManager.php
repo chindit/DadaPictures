@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnreadableFileException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -38,7 +39,7 @@ class UploadManager
     /** @var PackManager */
     private $packManager;
 
-	private FilesystemInterface $temporaryStorage;
+	private FilesystemOperator $temporaryStorage;
 
 	/**
      * UploadManager constructor.
@@ -54,7 +55,7 @@ class UploadManager
         TokenStorageInterface $tokenStorage,
         FileManager $fileManager,
         PackManager $packManager,
-		FilesystemInterface $temporaryStorage)
+		FilesystemOperator $temporaryStorage)
     {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
