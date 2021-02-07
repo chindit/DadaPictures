@@ -29,9 +29,9 @@ class ZipReader implements ArchiveHandlerInterface
             $zip->close();
 
             return $return;
-        } else {
-            throw new IOException('Unable to open file «' . $file->getFilename() . '»');
         }
+
+        throw new IOException('Unable to open file «' . $file->getFilename() . '»');
     }
 
     /**
@@ -49,8 +49,9 @@ class ZipReader implements ArchiveHandlerInterface
             $zip->close();
 
             return $result;
-        } else {
-            throw new IOException('Unable to open file «' . $file->getFilename() . '»');
         }
+
+        throw new IOException('Unable to open file «' . $file->getFilename() . '»');
+
     }
 }

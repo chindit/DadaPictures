@@ -143,8 +143,8 @@ class FileManager
      */
     public function createTempUploadDirectory() : string
     {
-        $path = $this->kernelRootDir . '/../web/pictures/temp/';
-        $dirName = uniqid('temp_');
+        $path = '/home/picobabe/pictures/temp/';
+        $dirName = uniqid('temp_', true);
         mkdir($path . $dirName);
 
         return $path . $dirName;
@@ -161,7 +161,7 @@ class FileManager
         $dirName = $this->cleanName($pack->getName());
 
         if (is_dir($path . $dirName)) {
-            $dirName .= '_' . uniqid();
+            $dirName .= '_' . uniqid('');
         }
 
         mkdir($path . $dirName);
