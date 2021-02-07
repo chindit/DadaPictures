@@ -144,7 +144,7 @@ class FileManager
      */
     public function prepareDestinationDir(Pack $pack) : string
     {
-        $path = $this->storagePath . '//pictures/';
+        $path = $this->storagePath . '/pictures/';
         $dirName = $this->cleanName($pack->getName());
 
         if (is_dir($path . $dirName)) {

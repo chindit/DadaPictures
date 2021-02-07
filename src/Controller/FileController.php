@@ -15,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class FileController extends AbstractController
 {
     #[Route('/new/{name}', name:'ftp_pack_list', defaults: ['name' => ''], methods:['GET'])]
-    public function newAction(string $name = ""): Response
+    public function newAction(string $name, string $storagePath): Response
     {
-        $tmpDir = $this->getParameter('kernel.project_dir') . '/../web/pictures/ftp';
+        $tmpDir = $storagePath . '/pictures/ftp';
         // Read files from first level in temp dir
         $detectedFiles = (is_dir($tmpDir)) ? scandir($tmpDir) : [];
 
