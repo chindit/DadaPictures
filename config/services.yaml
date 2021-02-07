@@ -33,5 +33,5 @@ services:
         public: true
 
     App\Service\FileManager:
-        arguments: ['@doctrine.orm.entity_manager', '@security.token_storage', '@App\Service\PictureManager', '%kernel.project_dir%']
+        arguments: ['@doctrine.orm.entity_manager', '@security.token_storage', '@App\Service\PictureManager']
         public: true
