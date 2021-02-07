@@ -4,12 +4,12 @@
     <h1>{% trans %}pack.create{% endtrans %}</h1>
 
     {% if is_granted("ROLE_ADMIN") %}
-        <div class="spacing">
+        <div class="mb-3">
             <a href="{{ path('ftp_pack_list') }}" class="btn btn-primary">By FTP</a>
         </div>
     {% endif %}
 
-    <div class="card">
+    <div class="card mb-5">
         <div class="card-body">
             {{ form_start(form) }}
             {{ form_widget(form) }}

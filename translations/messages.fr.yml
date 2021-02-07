@@ -8,6 +8,12 @@ global:
     username: 'Pseudo'
     password: 'Mot de passe'
     logout: 'Déconnexion'
+    created_at: 'Créé à'
+    author: 'Auteur'
+    actions: 'Actions'
+    view: 'Voir'
+account:
+    my: 'Mon compte'
 login:
     title: 'Connexion'
     remember: 'Se souvenir de moi'
@@ -24,11 +30,16 @@ pictures:
 tags:
     name: 'Tags'
     add: 'Ajouter des tags sur une image'
+    view: 'Voir les tags'
+    create: 'Créer un tag'
 pack:
     plural:
         name: Galeries
+    total: 'Nombre de galeries disponibles'
+    image_count: 'Nombre d''images'
     submit: 'Envoyer des images'
-    create: 'Créer une nouvelle gallerie'
+    create: 'Créer une nouvelle galerie'
+    view: 'Voir les galeries'
     form:
         name: 'Titre de votre galerie'
         archive: '.zip ou .rar contenant vos images'

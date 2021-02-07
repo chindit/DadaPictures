@@ -839,10 +839,10 @@
     "mkdirp" "^1.0.4"
     "rimraf" "^3.0.2"
 
-"@symfony/webpack-encore@^1.0.4":
-  "integrity" "sha512-7zZHzDk/ZsBTM+c2a/wA0dZY2V+ZXEQk1VuNt5RL/P5/fpzNRagnVWFqk9iSBB6GHKfjymaB6xv8n1TP4sDlBA=="
-  "resolved" "https://registry.npmjs.org/@symfony/webpack-encore/-/webpack-encore-1.0.4.tgz"
-  "version" "1.0.4"
+"@symfony/webpack-encore@^1.0.5":
+  "integrity" "sha512-HOnkVnZzS41QWhxeRvNvBMnfPOic2qOC4P/qCjZzgy9DEzeXCsL1Uu825NNBAdK4eZET6t2n/gRn3xQk9sljuw=="
+  "resolved" "https://registry.npmjs.org/@symfony/webpack-encore/-/webpack-encore-1.0.5.tgz"
+  "version" "1.0.5"
   dependencies:
     "@babel/core" "^7.7.0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0"
@@ -3661,6 +3661,11 @@
   "resolved" "https://registry.npmjs.org/map-obj/-/map-obj-1.0.1.tgz"
   "version" "1.0.1"
 
+"material-design-icons@^3.0.1":
+  "integrity" "sha1-mnHEh0chjrylHlGmbaaCA4zct78="
+  "resolved" "https://registry.npmjs.org/material-design-icons/-/material-design-icons-3.0.1.tgz"
+  "version" "3.0.1"
+
 "mdn-data@2.0.4":
   "integrity" "sha512-iV3XNKw06j5Q7mi6h+9vbx23Tv7JkjEVgKHW4pimwyDGWm0OIQntJJ+u1C6mg6mK1EaTv42XQ7w76yuzH7M2cA=="
   "resolved" "https://registry.npmjs.org/mdn-data/-/mdn-data-2.0.4.tgz"
@@ -5105,16 +5110,13 @@
     "scss-tokenizer" "^0.2.3"
     "yargs" "^13.3.2"
 
-"sass-loader@^10.1.1":
-  "integrity" "sha512-W6gVDXAd5hR/WHsPicvZdjAWHBcEJ44UahgxcIE196fW2ong0ZHMPO1kZuI5q0VlvMQZh32gpv69PLWQm70qrw=="
-  "resolved" "https://registry.npmjs.org/sass-loader/-/sass-loader-10.1.1.tgz"
-  "version" "10.1.1"
+"sass-loader@^11.0.0":
+  "integrity" "sha512-08+bTpDfYK/wTow+LQx2D3VCFQinQij4uyGJl3yRUiOTx7n0FDDiReIIbXIVU0LFX5FhjC7s99lSKT4Qnm5eFg=="
+  "resolved" "https://registry.npmjs.org/sass-loader/-/sass-loader-11.0.0.tgz"
+  "version" "11.0.0"
   dependencies:
     "klona" "^2.0.4"
-    "loader-utils" "^2.0.0"
     "neo-async" "^2.6.2"
-    "schema-utils" "^3.0.0"
-    "semver" "^7.3.2"
 
 "sax@~1.2.4":
   "integrity" "sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw=="
@@ -6084,7 +6086,7 @@
     "source-list-map" "^2.0.1"
     "source-map" "^0.6.1"
 
-"webpack@*", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.27.0 || ^5.0.0", "webpack@^4.36.0 || ^5.0.0", "webpack@^4.4.0 || ^5.0.0", "webpack@^5.1.0", "webpack@^5.12", "webpack@>=2", "webpack@>=4.44.2", "webpack@>=5.0.0", "webpack@4.x.x || 5.x.x":
+"webpack@*", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.27.0 || ^5.0.0", "webpack@^4.4.0 || ^5.0.0", "webpack@^5.0.0", "webpack@^5.1.0", "webpack@^5.12", "webpack@>=2", "webpack@>=4.44.2", "webpack@>=5.0.0", "webpack@4.x.x || 5.x.x":
   "integrity" "sha512-gGPip54KK7DznaaPHVuNGqym3LAXXL+bPkZ9SlLTCdHmmk+m5x+D4UZdhWvw32CMahYlZwZYPsioFIw36/txYQ=="
   "resolved" "https://registry.npmjs.org/webpack/-/webpack-5.20.2.tgz"
   "version" "5.20.2"

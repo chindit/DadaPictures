@@ -8,6 +8,12 @@ global:
     username: 'Username'
     password: 'Password'
     logout: 'Logout'
+    created_at: 'Created at'
+    author: 'Author'
+    actions: 'Actions'
+    view: 'View'
+account:
+    my: 'My account'
 login:
     title: 'Login'
     remember: 'Remember me'
@@ -24,11 +30,16 @@ pictures:
 tags:
     name: 'Tags'
     add: 'Add tags to a picture'
+    view: 'View tags'
+    create: 'Create a tag'
 pack:
     plural:
         name: Galleries
+    count: 'Galleries available'
+    image_count: 'Image count'
     submit: 'Send pictures'
     create: 'Create a new gallery'
+    view: 'View packs'
     form:
         name: 'Name of your gallery'
         archive: '.zip or .rar containing your pictures'

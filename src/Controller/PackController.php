@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -6,7 +7,9 @@ use App\Entity\Pack;
 use App\Form\Type\PreShowType;
 use App\Form\Type\PackType;
 use App\Message\PackMessage;
+use App\Repository\PackRepository;
 use App\Service\UploadManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,37 +20,29 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Pack controller.
- *
- * @Route("pack")
- */
+#[Route('pack')]
 class PackController extends AbstractController
 {
-    /**
-     * Lists all pack entities.
-     *
-     * @Route("/", name="pack_index", methods={"GET"})
-     */
-    public function indexAction(): Response
+    #[Route('/', name:'pack_index', methods: ['GET'])]
+    public function indexAction(
+        PackRepository $packRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $packs = $em->getRepository('App:Pack')->findAll();
+        $pagination = $paginator->paginate($packRepository->findAll(), (int)$request->query->get('page', 1), 1);
 
         return $this->render('pack/index.html.twig', array(
-            'packs' => $packs,
+            'packs' => $pagination,
         ));
     }
 
-    /**
-     * Creates a new pack entity.
-     *
-     * @Route("/new", name="pack_new", methods={"GET", "POST"})
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function newAction(Request $request, UploadManager $uploadManager, MessageBusInterface $messageBus, TranslatorInterface $translator): Response
+    #[Route('/new', name:'pack_new', methods: ['GET', 'POST'])]
+    public function newAction(
+        Request $request,
+        UploadManager $uploadManager,
+        TranslatorInterface $translator
+    ): Response
     {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
@@ -56,8 +51,8 @@ class PackController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $fileName = $uploadManager->moveUploadFileToTempStorage($pack->getFile());
-                $messageBus->dispatch(new PackMessage($fileName));
-
+                $pack->setFile($fileName);
+                $uploadManager->upload($pack);
 	            $this->addFlash('success', $translator->trans('pack.created'));
 	            $this->addFlash('warning', $translator->trans('pack.processing'));
             } catch (\Exception $e) {

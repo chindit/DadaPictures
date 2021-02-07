@@ -1,4 +1,8 @@
 <div class="dropdown-menu" aria-labelledby="navbarDropdownTags">
+        <a class="nav-link dropdown-item" href="{{ path('tag_index') }}">{% trans %}tags.view{% endtrans %}</a>
+        {% if not is_granted("ROLE_ADMIN") %}
+        <a class="nav-link dropdown-item" href="{{ path('tag_new') }}">{% trans %}tags.create{% endtrans %}</a>
+        {% endif %}
     {% for tag in tags %}
         <a class="dropdown-item" href="{{ path('tag_pictures', {'id':tag.id}) }}">{{ tag.name }}</a>
     {% endfor %}

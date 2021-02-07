@@ -1,62 +1,63 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Packs list</h1>
-
-    <div class="button-margin">
-        <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">Create a new pack</a>
+    <h1>{% trans %}pack.plural.name{% endtrans %}</h1>
+    <div class="count mb-2">
+        {% trans %}pack.total{% endtrans %}:&nbsp;{{ packs.getTotalItemCount }}
     </div>
-
-    <table class="table-bordered">
+    <table class="table table-bordered table-striped">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Created</th>
-                <th>Updated</th>
-                <th>Author</th>
-                <th>Number of pictures</th>
-                <th>View</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th scope="col">{{ knp_pagination_sortable(packs, 'Id', 'a.id') }}</th>
+            <th scope="col" {% if packs.isSorted('a.Title') %} class="sorted"{% endif %}>
+                {{ knp_pagination_sortable(packs, 'Name', 'a.name') }}</th>
+            <th scope="col">{% trans %}global.created_at{% endtrans %}</th>
+            <th scope="col">{% trans %}global.author{% endtrans %}</th>
+            <th scope="col">{% trans %}pack.image_count{% endtrans %}</th>
+            <th scope="col">{% trans %}global.view{% endtrans %}</th>
+            {% if is_granted("ROLE_ADMIN") %}
+                <th scope="col">Status</th>
+            {% endif %}
+            <th scope="col">{% trans %}global.actions{% endtrans %}</th>
+        </tr>
         </thead>
-        <tbody>
+        {# table body #}
         {% for pack in packs %}
             <tr>
                 <td><a href="{{ path('pack_show', { 'id': pack.id }) }}">{{ pack.id }}</a></td>
                 <td>{{ pack.name }}</td>
                 <td>{% if pack.created %}{{ pack.created|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if pack.updated %}{{ pack.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ pack.creator.username }}</td>
                 <td>{{ pack.pictures|length }}</td>
-                <td><a class="btn btn-bg" href="{{ path('pack_view_pictures', {'id': pack.id}) }}"><i class="glyphicon glyphicon-picture"></i>Pictures</a></td>
-                <td>
-                    {% if pack.status == 1 %}
-                        <i class="glyphicon glyphicon-check"></i>
-                    {% elseif pack.status == 2 %}
-                        <i class="glyphicon glyphicon-warning-sign"></i>
-                    {% else %}
-                        <i class="glyphicon glyphicon-exclamation-sign"></i>
-                    {% endif %}
-                </td>
-                <td>
-                    <ul class="no-bullets">
-                        {% if pack.status == 2 %}
-                            <li>
-                                <a href="{{ path('pack_pre_show', { 'id': pack.id }) }}"><i class="glyphicon glyphicon-eye-open"></i>Validate</a>
-                            </li>
+                <td><a class="btn btn-bg" href="{{ path('pack_view_pictures', {'id': pack.id}) }}"><i class="far fa-images"></i></a></td>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <td>
+                        {% if pack.status == 1 %}
+                            <i class="glyphicon glyphicon-check"></i>
+                        {% elseif pack.status == 2 %}
+                            <i class="glyphicon glyphicon-warning-sign"></i>
+                        {% else %}
+                            <i class="glyphicon glyphicon-exclamation-sign"></i>
                         {% endif %}
-                        <li>
-                            <a href="{{ path('pack_show', { 'id': pack.id }) }}"><i class="glyphicon glyphicon-search"></i>Show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('pack_edit', { 'id': pack.id }) }}"><i class="glyphicon glyphicon-pencil"></i>Edit</a>
-                        </li>
-                    </ul>
+                    </td>
+                {% endif %}
+                <td>
+                    <div class="btn-group" role="group" aria-label="Actions">
+                        {% if pack.status == 2 %}
+                            <a href="{{ path('pack_pre_show', { 'id': pack.id }) }}" class="btn btn-primary"><i class="fas fa-cogs"></i></a>
+                        {% endif %}
+                        <a href="{{ path('pack_show', { 'id': pack.id }) }}" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                        <a href="{{ path('pack_edit', { 'id': pack.id }) }}" class="btn btn-primary"><i class="far fa-edit"></i></a>
+                    </div>
                 </td>
             </tr>
         {% endfor %}
-        </tbody>
     </table>
+    {# display navigation #}
+    <div class="navigation">
+        {{ knp_pagination_render(packs) }}
+    </div>
+    <div class="button-margin">
+        <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">{% trans %}pack.create{% endtrans %}</a>
+    </div>
 {% endblock %}

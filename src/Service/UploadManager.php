@@ -9,11 +9,9 @@ use App\Factory\ArchiveFactory;
 use App\Model\Status;
 use App\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use League\Flysystem\FilesystemInterface;
 use League\Flysystem\FilesystemOperator;
-use League\Flysystem\UnreadableFileException;
+use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -24,51 +22,22 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class UploadManager
 {
-    /** @var ArchiveHandlerInterface */
-    private $handler;
+    private ArchiveHandlerInterface $handler;
 
-    /** @var EntityManager */
-    private $entityManager;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var FileManager */
-    private $fileManager;
-
-    /** @var PackManager */
-    private $packManager;
-
-	private FilesystemOperator $temporaryStorage;
-
-	/**
-     * UploadManager constructor.
-     * @param EntityManagerInterface $entityManager
-     * @param TokenStorageInterface $tokenStorage
-     * @param FileManager $fileManager
-     * @param PackManager $packManager
-     * @internal param array $allowedPictureType
-     * @internal param string $kernelRootDir
-     */
     public function __construct(
-        EntityManagerInterface $entityManager,
-        TokenStorageInterface $tokenStorage,
-        FileManager $fileManager,
-        PackManager $packManager,
-		FilesystemOperator $temporaryStorage)
+        private EntityManagerInterface $entityManager,
+        private TokenStorageInterface $tokenStorage,
+        private FileManager $fileManager,
+        private PackManager $packManager,
+		private FilesystemOperator $temporaryStorage)
     {
-        $this->entityManager = $entityManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->fileManager = $fileManager;
-        $this->packManager = $packManager;
-	    $this->temporaryStorage = $temporaryStorage;
     }
 
     public function moveUploadFileToTempStorage(File $file): string
     {
     	if (!$file->isReadable())
 	    {
-		    throw new UnreadableFileException(sprintf('Unable to read %s file', $file->getRealPath()));
+		    throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
 	    }
 
         $stream = fopen($file->getRealPath(), 'rb+');
@@ -81,8 +50,6 @@ class UploadManager
 
     /**
      * Upload a pack and extract it
-     * @param Pack $pack
-     * @return Pack
      */
     public function upload(Pack $pack): Pack
     {
@@ -102,8 +69,6 @@ class UploadManager
 
     /**
      * Upload a directory of files
-     * @param string $fileDir
-     * @return Pack
      */
     public function uploadFileDir(string $fileDir, Pack $pack): Pack
     {
@@ -124,7 +89,6 @@ class UploadManager
 
     /**
      * Upload files contained in pack
-     * @param Pack $pack
      */
     public function uploadFiles(Pack $pack): void
     {
@@ -138,8 +102,6 @@ class UploadManager
 
     /**
      * Remove uploaded pack once it is extracted
-     * @param File $file
-     * @return bool
      */
     public function deleteFTPFile(File $file) : bool
     {
@@ -148,9 +110,6 @@ class UploadManager
 
     /**
      * Validate upload and transfer files
-     * @param Pack $pack
-     * @param ArrayCollection $pictures
-     * @return bool
      */
     public function validateUpload(Pack $pack, ArrayCollection $pictures) : bool
     {

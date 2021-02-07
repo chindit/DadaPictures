@@ -11,20 +11,10 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class FileController
- * @package App\Controller
- * @Route("file")
- */
+#[Route('file')]
 class FileController extends AbstractController
 {
-    /**
-     * List current packs in temporary directory
-     *
-     * @Route("/new/{name}", name="ftp_pack_list", defaults={"name": ""}, methods={"GET"})
-     * @param string $name
-     * @return Response
-     */
+    #[Route('/new/{name}', name:'ftp_pack_list', defaults: ['name' => ''], methods:['GET'])]
     public function newAction(string $name = ""): Response
     {
         $tmpDir = $this->getParameter('kernel.project_dir') . '/../web/pictures/ftp';
@@ -72,6 +62,6 @@ class FileController extends AbstractController
             $packs[] = $pack;
         }
 
-        return $this->render(':file:index.html.twig', ['packs' => $packs]);
+        return $this->render('file/index.html.twig', ['packs' => $packs]);
     }
 }

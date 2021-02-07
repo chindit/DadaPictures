@@ -14,6 +14,7 @@
     <script src="{{ asset('PS/photoswipe.min.js') }}"></script>
     <script src="{{ asset('PS/photoswipe-ui-default.min.js') }}"></script>
     <script async defer src="https://kit.fontawesome.com/a32969d67a.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -30,10 +31,8 @@
                             {% trans %}pack.plural.name{% endtrans %}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDopdownPacks">
-                            <!--<a class="dropdown-item" href="{{ path('pack_index') }}">View packs</a>-->
+                            <a class="dropdown-item" href="{{ path('pack_index') }}">{% trans %}pack.view{% endtrans %}</a>
                             <a class="dropdown-item" href="{{ path('pack_new') }}">{% trans %}pack.submit{% endtrans %}</a>
-                            <!--<a class="dropdown-item" href="{{ path('tag_index') }}">View tags</a>-->
-                            <!--<a class="dropdown-item" href="{{ path('tag_new') }}">Create tag</a>-->
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -51,7 +50,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">{% trans %}login.title{% endtrans %}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">{% trans %}register.title{% endtrans %}</a></li>
                 {% else %}
-                    <!--<li class="nav-item"><a class="nav-link" href="#">My account</a></li>-->
+                    <li class="nav-item"><a class="nav-link" href="{{ path('my_account') }}">{% trans %}account.my{% endtrans %}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">{% trans %}global.logout{% endtrans %}</a></li>
                 {% endif %}
             </ul>
