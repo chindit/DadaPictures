@@ -20,28 +20,15 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class FileManager
 {
-    /** @var EntityManagerInterface */
-    private $entityManager;
+    private array $allowedPictureType;
 
-    /** @var TokenStorage */
-    private $tokenStorage;
-
-    /** @var PictureManager */
-    private $pictureManager;
-
-    /** @var array */
-    private $allowedPictureType;
-
-    /** @var string */
-    private $kernelRootDir;
-
-    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, PictureManager $pictureManager, string $kernelRootDir)
+    public function __construct(
+    	private EntityManagerInterface $entityManager,
+	    private TokenStorageInterface $tokenStorage,
+	    private PictureManager $pictureManager,
+	    private string $storagePath)
     {
-        $this->entityManager = $entityManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->pictureManager = $pictureManager;
         $this->allowedPictureType = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_JPEG2000, IMAGETYPE_PNG, IMAGETYPE_WEBP];
-        $this->kernelRootDir = $kernelRootDir;
     }
 
     /**
@@ -143,7 +130,7 @@ class FileManager
      */
     public function createTempUploadDirectory() : string
     {
-        $path = '/home/picobabe/pictures/temp/';
+        $path = $this->storagePath . '/pictures/temp/';
         $dirName = uniqid('temp_', true);
         mkdir($path . $dirName);
 
@@ -157,11 +144,11 @@ class FileManager
      */
     public function prepareDestinationDir(Pack $pack) : string
     {
-        $path = $this->kernelRootDir . '/../web/pictures/';
+        $path = $this->storagePath . '//pictures/';
         $dirName = $this->cleanName($pack->getName());
 
         if (is_dir($path . $dirName)) {
-            $dirName .= '_' . uniqid('');
+            $dirName .= '_' . uniqid('', true);
         }
 
         mkdir($path . $dirName);
@@ -243,8 +230,8 @@ class FileManager
      */
     public function deletePicture(Picture $picture) : void
     {
-        if (is_file($this->kernelRootDir) . '/../web/pictures/' . $picture->getFilename()) {
-            unlink($this->kernelRootDir . '/../web/pictures/' . $picture->getFilename());
+        if (is_file($this->storagePath) . '/pictures/' . $picture->getFilename()) {
+            unlink($this->storagePath . '/pictures/' . $picture->getFilename());
         }
     }
 
