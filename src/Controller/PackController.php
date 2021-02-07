@@ -50,8 +50,6 @@ class PackController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $fileName = $uploadManager->moveUploadFileToTempStorage($pack->getFile());
-                $pack->setFile($fileName);
                 $uploadManager->upload($pack);
 	            $this->addFlash('success', $translator->trans('pack.created'));
 	            $this->addFlash('warning', $translator->trans('pack.processing'));
