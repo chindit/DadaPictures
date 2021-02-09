@@ -12,6 +12,10 @@ global:
     author: 'Author'
     actions: 'Actions'
     view: 'View'
+    delete:
+        confirm: 'Are you sure you want to continue ?'
+        text: 'Delete'
+        cancel: 'No, bring me back home'
 account:
     my: 'My account'
 login:
@@ -27,6 +31,9 @@ register:
     account: 'Already have an account ?'
 pictures:
     random: 'View 50 random'
+    delete:
+        title: 'Delete picture'
+        question: 'You''re about to delete picture'
 tags:
     name: 'Tags'
     add: 'Add tags to a picture'
@@ -35,6 +42,9 @@ tags:
 pack:
     plural:
         name: Galleries
+    delete:
+        title: 'Delete pack'
+        question: 'You''re about to delete pack'
     count: 'Galleries available'
     image_count: 'Image count'
     submit: 'Send pictures'
@@ -46,6 +56,7 @@ pack:
         tags: 'Tags applying to your pack'
         create: 'Create'
     created: 'Gallery successfully created'
+    validation: 'Your pictures must be validated by an administrator.  This can take a few hours'
     processing: 'Pictures of your gallery are processing.  This can take a few minutes.'
     upload_error: 'An error has occurred while creating your gallery.  Please try again.'
 routes:

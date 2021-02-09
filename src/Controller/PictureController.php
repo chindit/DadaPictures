@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace App\Controller;
 
 
+use App\Entity\BannedPicture;
 use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Entity\Tag;
 use App\Form\Type\PictureTagType;
 use App\Service\FileManager;
+use App\Service\Path;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,29 +106,39 @@ class PictureController extends AbstractController
         return $this->render('picture/diaporama.html.twig', ['pictures' => $pictures]);
     }
 
+    #[Route('{picture}/ban', name:'picture_ban', methods: ['GET'])]
+    public function banAction(Picture $picture, EntityManagerInterface $entityManager, FileManager $fileManager): Response
+    {
+        $bannedPicture = new BannedPicture($picture->getSha1sum());
+        $entityManager->persist($bannedPicture);
+        $entityManager->remove($picture);
+        $fileManager->deletePicture($picture);
+        $entityManager->flush();
+
+        $this->get('session')->getFlashBag()->add('info', 'File «' . $picture->getFilename() . '» has
+            been correctly banned');
+
+        return $this->redirectToRoute('admin_dashboard');
+    }
+
     /**
      * Deletes a pack entity.
-     *
-     * @Route("/{id}/delete", name="picture_delete", methods={"GET", "DELETE"})
-     * @param Request $request
-     * @param Pack|Picture $picture
-     * @return Response
      */
-    public function deleteAction(Request $request, Picture $picture): Response
+    #[Route('{picture}/delete', name:'picture_delete', methods: ['GET', 'DELETE'])]
+    public function deleteAction(Request $request, Picture $picture, EntityManagerInterface $entityManager, FileManager $fileManager): Response
     {
         $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('picture_delete', array('id' => $picture->getId())))
+            ->setAction($this->generateUrl('picture_delete', array('picture' => $picture->getId())))
             ->setMethod('DELETE')
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($picture);
+            $entityManager->remove($picture);
 
-            $this->get(FileManager::class)->deletePicture($picture);
-            $em->flush();
+            $fileManager->deletePicture($picture);
+            $entityManager->flush();
 
             $this->get('session')->getFlashBag()->add('info', 'File «' . $picture->getFilename() . '» has
             been correctly removed');
@@ -134,5 +147,15 @@ class PictureController extends AbstractController
         }
 
         return $this->render('picture/delete.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
+    }
+
+    #[Route('/view/{picture}', name:'view_picture', methods: ['GET'])]
+    public function viewPicture(Picture $picture, Path $path): Response
+    {
+        return new Response(
+            file_get_contents($path->getPictureFullpath($picture)),
+            Response::HTTP_OK,
+            ['Content-Type' => $picture->getMime()]
+        );
     }
 }

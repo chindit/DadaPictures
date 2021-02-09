@@ -52,7 +52,7 @@ class Pack
     /**
      * @var PersistentCollection|Picture[]
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="pack")
+     * @ORM\ManyToMany(targetEntity="Picture")
      */
     private $pictures;
 

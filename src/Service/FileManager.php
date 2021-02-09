@@ -8,8 +8,11 @@ use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Entity\User;
 use App\Model\Status;
+use App\Repository\BannedPictureRepository;
+use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -25,23 +28,18 @@ class FileManager
     public function __construct(
     	private EntityManagerInterface $entityManager,
 	    private TokenStorageInterface $tokenStorage,
-	    private PictureManager $pictureManager,
-	    private string $storagePath)
+	    private PictureRepository $pictureRepository,
+	    private BannedPictureRepository $bannedPictureRepository,
+	    private Path $path)
     {
         $this->allowedPictureType = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_JPEG2000, IMAGETYPE_PNG, IMAGETYPE_WEBP];
     }
 
     /**
      * Hydrate a picture from path
-     * @param string $path
-     * @return Picture
      */
-    public function hydrateFileFromPath(string $path) : Picture
+    public function hydrateFileFromPath(SplFileInfo $file): Picture
     {
-        if (!is_file($path)) {
-            throw new FileNotFoundException("File «" . $path . "» doesn't exist");
-        }
-
         $picture = new Picture();
 
         if (!$this->tokenStorage->getToken() || !$this->tokenStorage->getToken()->getUser() instanceof User) {
@@ -49,17 +47,10 @@ class FileManager
         }
 
         $picture->setCreator($this->tokenStorage->getToken()->getUser());
-        $picture->setName(basename($path));
-        $picture->setFilename($path);
+        $picture->setName($file->getBasename());
+        $picture->setFilename(substr($file->getPathname(), strlen($this->path->getTempDirectory()), strlen($file->getPathname())));
 
-        if (!$this->isNameAllowed($path)) {
-            $picture->setStatus(Status::WARNING);
-            $picture->setStatusInfo("Filename is automatically skipped");
-
-            return $picture;
-        }
-
-        $pictureType = exif_imagetype($path);
+        $pictureType = exif_imagetype($file->getPathname());
 
         if ($pictureType === false) {
             $picture->setStatus(Status::ERROR);
@@ -82,14 +73,20 @@ class FileManager
             }
         }
 
-        $picture->setMime(mime_content_type($path));
+        $picture->setMime(mime_content_type($file->getPathname()));
 
         $picture = $this->getPictureHashes($picture);
 
-        if ($duplicate = $this->findDuplicates($picture)) {
+        if ($duplicate = $this->pictureRepository->findDuplicates($picture)) {
+            $picture->setStatus(Status::DUPLICATE);
+            $picture->setStatusInfo('Picture is a duplicate of «' . $duplicate->getFilename() . '»');
+
+            return $picture;
+        }
+
+        if ($banned = $this->bannedPictureRepository->isBanned($picture->getSha1sum())) {
             $picture->setStatus(Status::ERROR);
-            $picture->setStatusInfo('Picture is a duplicate of «' . $duplicate->getFilename() . '» from pack «'
-            . $duplicate->getPack()->getName() . '»');
+            $picture->setStatusInfo('Picture is banned');
 
             return $picture;
         }
@@ -101,40 +98,14 @@ class FileManager
     }
 
     /**
-     * List uploaded files
-     * @param string $dir
-     * @return array
-     */
-    public function getFilesFromDir(string $dir) : array
-    {
-        $iterator = new \DirectoryIterator($dir);
-
-        $files = [];
-
-        foreach ($iterator as $file) {
-            if (is_dir($file->getPathname())) {
-                if(strpos(basename($file->getPathname()), '.') !== 0) {
-                    $files = array_merge($this->getFilesFromDir($file->getPathname()), $files);
-                }
-            } else {
-                $files[] = $file->getPathname();
-            }
-        }
-
-        return $files;
-    }
-
-    /**
      * Create a temporary upload directory
-     * @return string
      */
     public function createTempUploadDirectory() : string
     {
-        $path = $this->storagePath . '/pictures/temp/';
         $dirName = uniqid('temp_', true);
-        mkdir($path . $dirName);
+        mkdir($this->path->getTempDirectory() . $dirName);
 
-        return $path . $dirName;
+        return $dirName;
     }
 
     /**
@@ -144,16 +115,15 @@ class FileManager
      */
     public function prepareDestinationDir(Pack $pack) : string
     {
-        $path = $this->storagePath . '/pictures/';
         $dirName = $this->cleanName($pack->getName());
 
-        if (is_dir($path . $dirName)) {
+        if (is_dir($this->path->getStorageDirectory() . $dirName)) {
             $dirName .= '_' . uniqid('', true);
         }
 
-        mkdir($path . $dirName);
+        mkdir($this->path->getStorageDirectory()  . $dirName);
 
-        return $path . $dirName;
+        return $this->path->getStorageDirectory() . $dirName;
     }
 
     /**
@@ -173,9 +143,7 @@ class FileManager
      */
     public function getPictureHashes(Picture $picture) : Picture
     {
-        list($md5, $sha1) = $this->pictureManager->getHashes($picture->getFilename());
-        $picture->setMd5sum($md5);
-        $picture->setSha1sum($sha1);
+        $picture->setSha1sum(sha1_file($this->path->getTempDirectory() . $picture->getFilename()));
 
         return $picture;
     }
@@ -226,23 +194,14 @@ class FileManager
 
     /**
      * Delete physically a picture
-     * @param Picture $picture
      */
-    public function deletePicture(Picture $picture) : void
+    public function deletePicture(Picture $picture): void
     {
-        if (is_file($this->storagePath) . '/pictures/' . $picture->getFilename()) {
-            unlink($this->storagePath . '/pictures/' . $picture->getFilename());
+        if (is_file($this->path->getTempDirectory()) . $picture->getFilename()) {
+            unlink($this->path->getTempDirectory() . $picture->getFilename());
+        } elseif (is_file($this->path->getStorageDirectory()) . $picture->getFilename()) {
+            unlink($this->path->getStorageDirectory() . $picture->getFilename());
         }
-    }
-
-    /**
-     * Check if file can be indexed or not
-     * @param string $path
-     * @return bool
-     */
-    private function isNameAllowed(string $path) : bool
-    {
-        return !(strpos(basename($path), '.') === 0);
     }
 
     /**

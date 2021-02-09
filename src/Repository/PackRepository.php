@@ -5,6 +5,7 @@ namespace App\Repository;
 
 
 use App\Entity\Pack;
+use App\Model\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,5 +14,14 @@ class PackRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Pack::class);
+    }
+
+    public function countPacksInValidation(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.status = :status')
+            ->setParameter('status', Status::TEMPORARY)
+            ->getQuery()
+            ->getResult();
     }
 }

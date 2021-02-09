@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Packs</h2><br>
+    <div class="mb-3">There are {{ packs|length }} pack to validate</div>
+    {% for pack in packs %}
+        <div class="card mb-3">
+            <h5 class="card-header">{{ pack.name }} ({{ pack.pictures|length }} pictures)</h5>
+            <div class="card-body">
+                {% for picture in pack.pictures %}
+                    <div class="card d-inline-flex mb-3{% if picture.status is constant('App\\Model\\Status::DUPLICATE') %} bg-warning{% endif %}" style="width: 150px">
+                        <img class="card-img-top" src="{{ path('view_picture', {'picture': picture.id}) }}" alt="Card image cap">
+                        <div class="card-body align-content-center m-auto">
+                            <a
+                                    href="{{ path('view_picture', {'picture': picture.id}) }}"
+                                    target="_blank"
+                                    class="btn btn-primary mt-3"
+                            >
+                                Open in a new tab
+                            </a>
+                            <a href="{{ path('picture_delete', {'picture': picture.id}) }}" class="btn btn-danger mt-3 d-block">Remove</a>
+                            <a href="#" class="btn btn-secondary mt-3">Ban picture</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" href="#">Validate pack</a>
+                <a class="btn btn-danger" href="{{ path('pack_delete', {id: pack.id}) }}">Delete pack</a>
+                <a class="btn btn-secondary" href="#">Ban pack</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

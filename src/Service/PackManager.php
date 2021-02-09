@@ -24,8 +24,6 @@ class PackManager
 
     /**
      * Update pack status based on files it contains
-     * @param Pack $pack
-     * @return Pack
      */
     public function checkPackStatus(Pack $pack) : Pack
     {

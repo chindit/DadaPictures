@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -12,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="picture")
  * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
+ *
  */
 class Picture
 {
@@ -20,360 +22,201 @@ class Picture
     const STATUS_ERROR = 3;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=150)
      */
-    private $name;
+    private string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, unique=true)
      */
-    private $filename;
+    private string $filename;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="height", type="integer", nullable=true)
      */
-    private $height;
+    private ?int $height;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="width", type="integer", nullable=true)
      */
-    private $width;
+    private ?int $width;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="weight", type="integer", nullable=true)
      */
-    private $weight;
+    private ?int $weight;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mime", type="string", length=50)
      */
-    private $mime;
+    private string $mime;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="sha1", type="string", length=40, nullable=true)
      */
-    private $sha1sum;
+    private string $sha1sum;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="md5", type="string", length=32, nullable=true)
-     */
-    private $md5sum;
-
-    /**
-     * @var array
-     *
      * @ORM\Column(name="properties", type="array", nullable=true)
      */
-    private $properties;
+    private array $properties;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private int $status;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="statusInfo", type="string", length=150)
      */
-    private $statusInfo;
+    private string $statusInfo;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      */
-    private $creator;
+    private User $creator;
 
     /**
-     * @var \DateTime
      * @ORM\Column(name="created", type="datetime")
      */
-    private $created;
+    private \DateTime $created;
 
     /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated", type="datetime")
      */
-    private $updated;
+    private \DateTime $updated;
 
     /**
-     * @var ArrayCollection
-     *
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="pictures")
      */
-    private $tags;
-
-    /**
-     * @var Pack
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Pack", inversedBy="pictures")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $pack;
+    private Collection $tags;
 
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
         $this->mime = 'error';
         $this->filename = '';
     }
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
     public function getId() : int
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Picture
-     */
-    public function setName(string $name) : Picture
+    public function setName(string $name): Picture
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set filename
-     *
-     * @param string $filename
-     *
-     * @return Picture
-     */
-    public function setFilename(string $filename) : Picture
+    public function setFilename(string $filename): Picture
     {
         $this->filename = $filename;
 
         return $this;
     }
 
-    /**
-     * Get filename
-     *
-     * @return string
-     */
-    public function getFilename() : string
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
-    /**
-     * Set height
-     *
-     * @param integer $height
-     *
-     * @return Picture
-     */
-    public function setHeight(int $height) : Picture
+    public function setHeight(int $height): Picture
     {
         $this->height = $height;
 
         return $this;
     }
 
-    /**
-     * Get height
-     *
-     * @return int
-     */
-    public function getHeight() : int
+    public function getHeight(): ?int
     {
         return $this->height;
     }
 
-    /**
-     * Set width
-     *
-     * @param integer $width
-     *
-     * @return Picture
-     */
-    public function setWidth(int $width) : Picture
+    public function setWidth(int $width): Picture
     {
         $this->width = $width;
 
         return $this;
     }
 
-    /**
-     * Get width
-     *
-     * @return int
-     */
-    public function getWidth() : int
+    public function getWidth(): ?int
     {
         return $this->width;
     }
 
-    /**
-     * Set weight
-     *
-     * @param integer $weight
-     *
-     * @return Picture
-     */
-    public function setWeight(int $weight) : Picture
+    public function setWeight(int $weight): Picture
     {
         $this->weight = $weight;
 
         return $this;
     }
 
-    /**
-     * Get weight
-     *
-     * @return int
-     */
-    public function getWeight() : int
+    public function getWeight(): ?int
     {
         return $this->weight;
     }
 
-    /**
-     * Set mime
-     *
-     * @param string $mime
-     *
-     * @return Picture
-     */
-    public function setMime(string $mime) : Picture
+    public function setMime(string $mime): Picture
     {
         $this->mime = $mime;
 
         return $this;
     }
 
-    /**
-     * Get mime
-     *
-     * @return string
-     */
-    public function getMime() : string
+    public function getMime(): string
     {
         return $this->mime;
     }
 
-    /**
-     * Set properties
-     *
-     * @param array $properties
-     *
-     * @return Picture
-     */
-    public function setProperties(array $properties) : Picture
+    public function setProperties(array $properties): Picture
     {
         $this->properties = $properties;
 
         return $this;
     }
 
-    /**
-     * Get properties
-     *
-     * @return array
-     */
-    public function getProperties() : ?array
+    public function getProperties(): ?array
     {
         return $this->properties;
     }
 
-    /**
-     * Set creator
-     *
-     * @param \App\Entity\User $creator
-     *
-     * @return Picture
-     */
-    public function setCreator(User $creator = null) : Picture
+    public function setCreator(User $creator = null): Picture
     {
         $this->creator = $creator;
 
         return $this;
     }
 
-    /**
-     * Get creator
-     *
-     * @return \App\Entity\User
-     */
-    public function getCreator() : User
+    public function getCreator(): User
     {
         return $this->creator;
     }
 
-    /**
-     * Add tag
-     *
-     * @param \App\Entity\Tag $tag
-     *
-     * @return Picture
-     */
-    public function addTag(Tag $tag) : Picture
+    public function addTag(Tag $tag): Picture
     {
         $this->tags[] = $tag;
 
         return $this;
     }
 
-    /**
-     * Remove tag
-     *
-     * @param \App\Entity\Tag $tag
-     */
     public function removeTag(Tag $tag) : Picture
     {
         $this->tags->removeElement($tag);
@@ -381,147 +224,64 @@ class Picture
         return $this;
     }
 
-    /**
-     * Get tags
-     *
-     * @return ArrayCollection
-     */
-    public function getTags()
+    public function getTags(): Collection
     {
         return $this->tags;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreated() : \DateTime
     {
         return $this->created;
     }
 
-    /**
-     * @param \DateTime $created
-     * @return Picture
-     */
-    public function setCreated(\DateTime $created) : Picture
+    public function setCreated(\DateTime $created): Picture
     {
         $this->created = $created;
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getUpdated() : \DateTime
+    public function getUpdated(): \DateTime
     {
         return $this->updated;
     }
 
-    /**
-     * @param \DateTime $updated
-     * @return Picture
-     */
-    public function setUpdated(\DateTime $updated) : Picture
+    public function setUpdated(\DateTime $updated): Picture
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSha1sum(): string
     {
         return $this->sha1sum;
     }
 
-    /**
-     * @param string $sha1sum
-     * @return Picture
-     */
     public function setSha1sum(string $sha1sum): Picture
     {
         $this->sha1sum = $sha1sum;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMd5sum(): string
-    {
-        return $this->md5sum;
-    }
-
-    /**
-     * @param string $md5sum
-     * @return Picture
-     */
-    public function setMd5sum(string $md5sum): Picture
-    {
-        $this->md5sum = $md5sum;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
     public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * @param int $status
-     * @return Picture
-     */
     public function setStatus(int $status): Picture
     {
         $this->status = $status;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStatusInfo(): string
     {
         return $this->statusInfo;
     }
 
-    /**
-     * @param string $statusInfo
-     * @return Picture
-     */
     public function setStatusInfo(string $statusInfo): Picture
     {
         $this->statusInfo = $statusInfo;
         return $this;
-    }
-
-
-    /**
-     * Set pack
-     *
-     * @param \App\Entity\Pack $pack
-     *
-     * @return Picture
-     */
-    public function setPack(Pack $pack) : Picture
-    {
-        $this->pack = $pack;
-
-        return $this;
-    }
-
-    /**
-     * Get pack
-     *
-     * @return \App\Entity\Pack
-     */
-    public function getPack() : Pack
-    {
-        return $this->pack;
     }
 }

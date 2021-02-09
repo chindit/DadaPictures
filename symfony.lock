@@ -5,6 +5,9 @@
     "behat/transliterator": {
         "version": "v1.3.0"
     },
+    "chindit/collection": {
+        "version": "1.0.5"
+    },
     "composer/xdebug-handler": {
         "version": "1.3.3"
     },

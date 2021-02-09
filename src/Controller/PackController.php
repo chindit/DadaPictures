@@ -3,12 +3,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\BannedPicture;
 use App\Entity\Pack;
 use App\Form\Type\PreShowType;
 use App\Form\Type\PackType;
 use App\Message\PackMessage;
+use App\Model\Status;
 use App\Repository\PackRepository;
+use App\Service\FileManager;
 use App\Service\UploadManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -30,7 +34,11 @@ class PackController extends AbstractController
         Request $request
     ): Response
     {
-        $pagination = $paginator->paginate($packRepository->findAll(), (int)$request->query->get('page', 1), 1);
+        $pagination = $paginator->paginate(
+            $packRepository->findBy(['status' => Status::OK], ['id' => 'desc']),
+            (int)$request->query->get('page', 1),
+            25
+        );
 
         return $this->render('pack/index.html.twig', array(
             'packs' => $pagination,
@@ -52,7 +60,7 @@ class PackController extends AbstractController
             try {
                 $uploadManager->upload($pack);
 	            $this->addFlash('success', $translator->trans('pack.created'));
-	            $this->addFlash('warning', $translator->trans('pack.processing'));
+	            $this->addFlash('warning', $translator->trans('pack.validation'));
             } catch (\Exception $e) {
 	            $this->addFlash('danger', 'Unable to handle file upload');
 	            $this->addFlash('danger', $e->getMessage());
@@ -63,6 +71,23 @@ class PackController extends AbstractController
             'pack' => $pack,
             'form' => $form->createView(),
         ));
+    }
+
+    #[Route('{pack}/ban', name: 'pack_ban', methods: ['GET'])]
+    public function banAction(Pack $pack, EntityManagerInterface $entityManager, FileManager $fileManager): Response
+    {
+        foreach ($pack->getPictures() as $picture) {
+            $bannedPicture = new BannedPicture($picture->getSha1sum());
+            $entityManager->persist($bannedPicture);
+            $entityManager->remove($picture);
+            $fileManager->deletePicture($picture);
+            $entityManager->flush();
+        }
+
+        $this->get('session')->getFlashBag()->add('info', 'Pack «' . $pack->getName() . '» has
+            been correctly banned');
+
+        return $this->redirectToRoute('admin_dashboard');
     }
 
     /**
@@ -132,27 +157,20 @@ class PackController extends AbstractController
         ));
     }
 
-
-    /**
-     * Deletes a pack entity.
-     *
-     * @Route("/{id}", name="pack_delete", methods={"DELETE"})
-     * @param Request $request
-     * @param Pack $pack
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function deleteAction(Request $request, Pack $pack): Response
+    #[Route('/{id}/delete', name:'pack_delete', methods: ['GET', 'DELETE'])]
+    public function deleteAction(Request $request, Pack $pack, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createDeleteForm($pack);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($pack);
-            $em->flush();
+            $entityManager->remove($pack);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('pack_index');
         }
 
-        return $this->redirectToRoute('pack_index');
+        return $this->render('pack/delete.html.twig', ['pack' => $pack, 'form' => $this->createDeleteForm($pack)->createView()]);
     }
 
     /**

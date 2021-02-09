@@ -7,12 +7,14 @@ use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Factory\ArchiveFactory;
 use App\Model\Status;
+use App\Repository\BannedPictureRepository;
 use App\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -29,7 +31,10 @@ class UploadManager
         private TokenStorageInterface $tokenStorage,
         private FileManager $fileManager,
         private PackManager $packManager,
-		private FilesystemOperator $temporaryStorage)
+		private FilesystemOperator $temporaryStorage,
+        private Path $path,
+        private BannedPictureRepository $bannedPictureRepository
+    )
     {
     }
 
@@ -55,10 +60,12 @@ class UploadManager
     {
         $this->handler = ArchiveFactory::getHandler($pack->getFile());
         $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
-        $this->handler->extractArchive($pack->getFile(), $pack->getStoragePath());
+        $this->handler->extractArchive($pack->getFile(), $this->path->getTempDirectory() . $pack->getStoragePath());
         $pack->setStatus(Status::TEMPORARY);
         $this->entityManager->persist($pack);
+
         $this->uploadFiles($pack);
+
         $pack = $this->packManager->checkPackStatus($pack);
         $pack->setCreator($this->tokenStorage->getToken()->getUser());
         $this->entityManager->flush();
@@ -91,10 +98,22 @@ class UploadManager
      */
     public function uploadFiles(Pack $pack): void
     {
-        $fileList = $this->fileManager->getFilesFromDir($pack->getStoragePath());
+        $fileList = (new Finder())
+            ->ignoreDotFiles(true)
+            ->ignoreUnreadableDirs()
+            ->followLinks()
+            ->depth('< 30')
+            ->ignoreVCS(true)
+            ->in($this->path->getTempDirectory() . $pack->getStoragePath())
+            ->files()
+        ;
+
         foreach ($fileList as $file) {
             $picture = $this->fileManager->hydrateFileFromPath($file);
-            $picture->setPack($pack);
+            if (in_array($picture->getStatus(), [Status::WARNING, Status::ERROR])) {
+                continue;
+            }
+            $pack->addPicture($picture);
             $this->entityManager->persist($picture);
         }
     }

@@ -12,6 +12,10 @@ global:
     author: 'Auteur'
     actions: 'Actions'
     view: 'Voir'
+    delete:
+        confirm: 'Êtes-vous certain de vouloir poursuivre ?'
+        delete: 'Supprimer'
+        cancel: 'Non, revenir à l''accueil'
 account:
     my: 'Mon compte'
 login:
@@ -27,6 +31,9 @@ register:
     account: 'Vous avez déjà un compte ?'
 pictures:
     random: 'Voir 50 images aléatoires'
+    delete:
+        title: 'Supprimer l''image'
+        question: 'Vous êtes sur le point de supprimer l''image'
 tags:
     name: 'Tags'
     add: 'Ajouter des tags sur une image'
@@ -35,6 +42,9 @@ tags:
 pack:
     plural:
         name: Galeries
+    delete:
+        title: 'Supprimer le pack'
+        question: 'Vous êtes sur le point de supprimer le pack'
     total: 'Nombre de galeries disponibles'
     image_count: 'Nombre d''images'
     submit: 'Envoyer des images'
@@ -46,6 +56,7 @@ pack:
         tags: 'Tags s''appliquant à votre galerie'
         create: 'Créer'
     created: 'Votre galerie a été créée avec succès'
+    validation: 'Vos images doivent être validées par un administrateur avant publication.  Ceci peut prendre quelques heures'
     processing: 'Les images de votre galerie sont en cours de traitement.  Cette opération peut prendre plusieurs minutes'
     upload_error: 'Une erreur est survenue durant la création de votre galerie.  Veuillez réessayer'
 routes:

@@ -12,6 +12,7 @@ class Status
     const TEMPORARY = 2;
     const WARNING = 3;
     const ERROR = 4;
+    const DUPLICATE = 5;
 
     /**
      * Return bootstrap equivalent for status const

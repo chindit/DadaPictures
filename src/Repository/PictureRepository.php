@@ -7,27 +7,26 @@ namespace App\Repository;
 use App\Entity\Picture;
 use App\Entity\Tag;
 use App\Model\Status;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class PictureRepository
- * @package App\Repository
- */
-class PictureRepository extends \Doctrine\ORM\EntityRepository
+class PictureRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Picture::class);
+    }
+
     /**
      * Find duplicates for given picture
-     * @param Picture $picture
-     * @return Picture|null
      */
     public function findDuplicates(Picture $picture): ?Picture
     {
-        $md5 = $picture->getMd5sum();
         $sha1 = $picture->getSha1sum();
 
         return $this->createQueryBuilder('p')
-            ->where('(p.md5sum = :md5 OR p.sha1sum = :sha1)')
+            ->where('p.sha1sum = :sha1')
             ->andWhere('p.status = :status')
-            ->setParameter('md5', $md5)
             ->setParameter('sha1', $sha1)
             ->setParameter('status', Status::OK)
             ->getQuery()
