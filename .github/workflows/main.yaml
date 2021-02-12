@@ -9,20 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
       - name: PHP Code Style (phpcs)
         uses: chindit/actions-phpcs@master
         with:
-          php-version: '8.0'
           # Folder to check code style
           dir: src/
           cli: '--version'
       - name: PHPStan
         uses: chindit/actions-phpstan@master
         with:
-          php-version: '8.0'
           # Arguments to add to PHPStan
           arguments: 'src/ --level=8'
