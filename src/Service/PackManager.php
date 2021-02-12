@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
-
 
 use App\Entity\Pack;
 use App\Model\Status;
@@ -25,7 +25,7 @@ class PackManager
     /**
      * Update pack status based on files it contains
      */
-    public function checkPackStatus(Pack $pack) : Pack
+    public function checkPackStatus(Pack $pack): Pack
     {
         foreach ($pack->getPictures() as $picture) {
             if ($picture->getStatus() === Status::ERROR) {
@@ -44,7 +44,7 @@ class PackManager
      * Remove obsolete pictures from current pack
      * @param Pack $pack
      */
-    public function removeObsoletePictures(Pack $pack) : void
+    public function removeObsoletePictures(Pack $pack): void
     {
         $pictures = $pack->getPictures();
         foreach ($pictures as $picture) {

@@ -26,29 +26,27 @@ class UploadManager
         private Security $security,
         private FileManager $fileManager,
         private PackManager $packManager,
-		private FilesystemOperator $temporaryStorage,
+        private FilesystemOperator $temporaryStorage,
         private Path $path,
         private BannedPictureRepository $bannedPictureRepository
-    )
-    {
+    ) {
     }
 
     public function moveUploadFileToTempStorage(File $file): string
     {
-    	if (!$file->isReadable() || $file->getRealPath() === false)
-	    {
-		    throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
-	    }
+        if (!$file->isReadable() || $file->getRealPath() === false) {
+            throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
+        }
 
         $stream = fopen($file->getRealPath(), 'rb+');
-    	if ($stream === false) {
+        if ($stream === false) {
             throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
         }
         $newFileName = uniqid('temp_upload_', true);
         $this->temporaryStorage->writeStream($newFileName, $stream);
         fclose($stream);
 
-    	return $newFileName;
+        return $newFileName;
     }
 
     /**
@@ -91,7 +89,6 @@ class UploadManager
         $this->entityManager->flush();
 
         return $pack;
-
     }
 
     /**
@@ -163,7 +160,9 @@ class UploadManager
 
             $picture = $this->fileManager->moveFileToPack($picture, $pack, $newStoragePath);
 
-            $picture->setFilename(substr($newStoragePath, strrpos($newStoragePath, '/')+1) . '/' . basename($picture->getFilename()));
+            $picture->setFilename(
+                substr($newStoragePath, strrpos($newStoragePath, '/')+1) . '/' . basename($picture->getFilename())
+            );
 
             $this->entityManager->persist($picture);
         }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service\ArchiveHandler;
@@ -18,9 +19,9 @@ class ZipReader implements ArchiveHandlerInterface
      * @param File $file
      * @return array<int, string>
      */
-    public function getContent(File $file) : array
+    public function getContent(File $file): array
     {
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         $return = [];
         if ($zip->open($file->getPathname()) === true) {
             for ($i = 0; $i < $zip->numFiles; $i++) {
@@ -44,9 +45,9 @@ class ZipReader implements ArchiveHandlerInterface
      * @param string $extractPath
      * @return bool
      */
-    public function extractArchive(File $file, string $extractPath) : bool
+    public function extractArchive(File $file, string $extractPath): bool
     {
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
 
         if ($zip->open($file->getPathname()) === true) {
             $result = $zip->extractTo($extractPath);
@@ -56,6 +57,5 @@ class ZipReader implements ArchiveHandlerInterface
         }
 
         throw new IOException('Unable to open file «' . $file->getFilename() . '»');
-
     }
 }

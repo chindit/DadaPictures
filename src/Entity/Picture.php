@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -112,7 +113,7 @@ class Picture
         $this->filename = '';
     }
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -226,7 +227,7 @@ class Picture
         return $this;
     }
 
-    public function removeTag(Tag $tag) : self
+    public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);
 
@@ -241,7 +242,7 @@ class Picture
         return $this->tags;
     }
 
-    public function getCreated() : \DateTime
+    public function getCreated(): \DateTime
     {
         return $this->created;
     }

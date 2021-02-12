@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Form\Type;
-
 
 use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
-
 
 use App\Entity\Pack;
 use App\Service\UploadManager;
@@ -22,8 +22,7 @@ class FileController extends AbstractController
         string $storagePath,
         FlashBagInterface $flashBag,
         Security $security
-    ): Response
-    {
+    ): Response {
         $tmpDir = $storagePath . '/pictures/ftp';
         // Read files from first level in temp dir
         $detectedFiles = (is_dir($tmpDir)) ? (scandir($tmpDir) ?: []) : [];

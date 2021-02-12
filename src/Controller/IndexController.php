@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -15,9 +16,9 @@ class IndexController extends AbstractController
         return $this->render('default/index.html.twig');
     }
 
-	#[Route('/terms', name:'terms_and_conditions', methods:['GET'])]
+    #[Route('/terms', name:'terms_and_conditions', methods:['GET'])]
     public function termsAndConditions(): Response
     {
-    	return $this->render('default/terms.html.twig');
+        return $this->render('default/terms.html.twig');
     }
 }

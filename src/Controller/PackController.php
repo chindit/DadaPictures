@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -29,8 +30,7 @@ class PackController extends AbstractController
         PackRepository $packRepository,
         PaginatorInterface $paginator,
         Request $request
-    ): Response
-    {
+    ): Response {
         $pagination = $paginator->paginate(
             $packRepository->findBy(['status' => Status::OK], ['id' => 'desc']),
             (int)$request->query->get('page', '1'),
@@ -47,8 +47,7 @@ class PackController extends AbstractController
         Request $request,
         UploadManager $uploadManager,
         TranslatorInterface $translator
-    ): Response
-    {
+    ): Response {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
         $form->handleRequest($request);
@@ -56,11 +55,11 @@ class PackController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $uploadManager->upload($pack);
-	            $this->addFlash('success', $translator->trans('pack.created'));
-	            $this->addFlash('warning', $translator->trans('pack.validation'));
+                $this->addFlash('success', $translator->trans('pack.created'));
+                $this->addFlash('warning', $translator->trans('pack.validation'));
             } catch (\Exception $e) {
-	            $this->addFlash('danger', 'Unable to handle file upload');
-	            $this->addFlash('danger', $e->getMessage());
+                $this->addFlash('danger', 'Unable to handle file upload');
+                $this->addFlash('danger', $e->getMessage());
             }
         }
 
@@ -76,8 +75,7 @@ class PackController extends AbstractController
         EntityManagerInterface $entityManager,
         FileManager $fileManager,
         FlashBagInterface $flashBag
-    ): Response
-    {
+    ): Response {
         foreach ($pack->getPictures() as $picture) {
             $bannedPicture = new BannedPicture($picture->getSha1sum());
             $entityManager->persist($bannedPicture);
@@ -115,11 +113,7 @@ class PackController extends AbstractController
         ));
     }
 
-    /**
-     * Displays a form to edit an existing pack entity.
-     *
-     * @Route("/{id}/edit", name="pack_edit", methods={"GET", "POST"})
-     */
+    #[Route('/{id}/edit', name:'pack_edit', methods: ['GET', 'POST'])]
     public function editAction(Request $request, Pack $pack): Response
     {
         $deleteForm = $this->createDeleteForm($pack);
@@ -152,7 +146,10 @@ class PackController extends AbstractController
             return $this->redirectToRoute('pack_index');
         }
 
-        return $this->render('pack/delete.html.twig', ['pack' => $pack, 'form' => $this->createDeleteForm($pack)->createView()]);
+        return $this->render(
+            'pack/delete.html.twig',
+            ['pack' => $pack, 'form' => $this->createDeleteForm($pack)->createView()]
+        );
     }
 
     /**

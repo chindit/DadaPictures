@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model;
+
 /**
  * Static Class Status
  * Constants used for status
@@ -17,7 +19,7 @@ class Status
     /**
      * Return bootstrap equivalent for status const
      */
-    public static function toBootstrap(int $const) : string
+    public static function toBootstrap(int $const): string
     {
         switch ($const) {
             case Status::OK:

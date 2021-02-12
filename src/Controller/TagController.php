@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
-
 
 use App\Entity\Tag;
 use App\Form\Type\TagType;
@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
-
 
 #[Route('tag')]
 class TagController extends AbstractController
@@ -29,7 +28,7 @@ class TagController extends AbstractController
     }
 
 
-    public function tagListAction(TagRepository $tagRepository) : Response
+    public function tagListAction(TagRepository $tagRepository): Response
     {
         $tags = $tagRepository->findAll();
 
@@ -37,8 +36,11 @@ class TagController extends AbstractController
     }
 
     #[Route('/new', name: 'tag_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request, EntityManagerInterface $entityManager, FlashBagInterface $flashBag): Response
-    {
+    public function newAction(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        FlashBagInterface $flashBag
+    ): Response {
         $tag = new Tag();
         $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);

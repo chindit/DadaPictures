@@ -50,7 +50,9 @@ class FileManager
 
         $picture->setCreator($this->security->getUser());
         $picture->setName($file->getBasename());
-        $picture->setFilename(substr($file->getPathname(), strlen($this->path->getTempDirectory()), strlen($file->getPathname())));
+        $picture->setFilename(
+            substr($file->getPathname(), strlen($this->path->getTempDirectory()), strlen($file->getPathname()))
+        );
 
         $pictureType = exif_imagetype($file->getPathname());
 

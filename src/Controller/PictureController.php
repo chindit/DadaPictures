@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
-
 
 use App\Entity\BannedPicture;
 use App\Entity\Pack;
@@ -48,8 +48,7 @@ class PictureController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         FlashBagInterface $flashBag
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(PictureTagType::class, $picture);
 
         $form->handleRequest($request);
@@ -85,8 +84,7 @@ class PictureController extends AbstractController
         EntityManagerInterface $entityManager,
         FileManager $fileManager,
         FlashBagInterface $flashBag
-    ): Response
-    {
+    ): Response {
         $bannedPicture = new BannedPicture($picture->getSha1sum());
         $entityManager->persist($bannedPicture);
         $entityManager->remove($picture);
@@ -109,8 +107,7 @@ class PictureController extends AbstractController
         EntityManagerInterface $entityManager,
         FileManager $fileManager,
         FlashBagInterface $flashBag
-    ): Response
-    {
+    ): Response {
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('picture_delete', array('picture' => $picture->getId())))
             ->setMethod('DELETE')

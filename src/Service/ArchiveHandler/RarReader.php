@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service\ArchiveHandler;
-
 
 use RarArchive;
 use Symfony\Component\HttpFoundation\File\File;
@@ -18,7 +18,7 @@ class RarReader implements ArchiveHandlerInterface
      * @param File $file
      * @return array<int, string>
      */
-    public function getContent(File $file) : array
+    public function getContent(File $file): array
     {
         $rar = RarArchive::open($file->getPathname());
         if ($rar === false) {
@@ -47,7 +47,7 @@ class RarReader implements ArchiveHandlerInterface
      * @param string $extractPath
      * @return bool
      */
-    public function extractArchive(File $file, string $extractPath) : bool
+    public function extractArchive(File $file, string $extractPath): bool
     {
         $rar = RarArchive::open($file->getPathname());
         if ($rar === false) {

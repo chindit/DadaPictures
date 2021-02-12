@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -89,31 +90,31 @@ class Pack
         $this->updated = new \DateTime();
     }
 
-    public function getId() : ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setName(string $name) : self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function addTag(Tag $tag) : self
+    public function addTag(Tag $tag): self
     {
         $this->tags[] = $tag;
 
         return $this;
     }
 
-    public function removeTag(Tag $tag) : self
+    public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);
 
@@ -128,31 +129,31 @@ class Pack
         return $this->tags;
     }
 
-    public function setCreator(UserInterface $creator = null) : self
+    public function setCreator(UserInterface $creator = null): self
     {
         $this->creator = $creator;
 
         return $this;
     }
 
-    public function getCreator() : ?UserInterface
+    public function getCreator(): ?UserInterface
     {
         return $this->creator;
     }
 
-    public function getCreated() : \DateTime
+    public function getCreated(): \DateTime
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created) : self
+    public function setCreated(\DateTime $created): self
     {
         $this->created = $created;
 
         return $this;
     }
 
-    public function getUpdated() : \DateTime
+    public function getUpdated(): \DateTime
     {
         return $this->updated;
     }
@@ -164,12 +165,12 @@ class Pack
         return $this;
     }
 
-    public function getFile() : ?File
+    public function getFile(): ?File
     {
         return $this->file;
     }
 
-    public function setFile(File $file) : self
+    public function setFile(File $file): self
     {
         $this->file = $file;
 
