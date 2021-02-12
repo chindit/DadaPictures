@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -119,7 +120,7 @@ class UploadManager
     /**
      * Remove uploaded pack once it is extracted
      */
-    public function deleteFTPFile(File $file) : bool
+    public function deleteFTPFile(File $file): bool
     {
         return unlink($file->getFilename());
     }
@@ -127,7 +128,7 @@ class UploadManager
     /**
      * Validate upload and transfer files
      */
-    public function validateUpload(Pack $pack) : bool
+    public function validateUpload(Pack $pack): bool
     {
         $newStoragePath = $this->fileManager->prepareDestinationDir($pack);
 
@@ -161,7 +162,7 @@ class UploadManager
             $picture = $this->fileManager->moveFileToPack($picture, $pack, $newStoragePath);
 
             $picture->setFilename(
-                substr($newStoragePath, strrpos($newStoragePath, '/')+1) . '/' . basename($picture->getFilename())
+                substr($newStoragePath, strrpos($newStoragePath, '/') + 1) . '/' . basename($picture->getFilename())
             );
 
             $this->entityManager->persist($picture);

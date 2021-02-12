@@ -27,10 +27,10 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
     public const LOGIN_ROUTE = 'app_login';
 
     public function __construct(
-    private EntityManagerInterface $entityManager,
-    private UrlGeneratorInterface $urlGenerator,
-    private CsrfTokenManagerInterface $csrfTokenManager,
-    private UserPasswordEncoderInterface $passwordEncoder
+        private EntityManagerInterface $entityManager,
+        private UrlGeneratorInterface $urlGenerator,
+        private CsrfTokenManagerInterface $csrfTokenManager,
+        private UserPasswordEncoderInterface $passwordEncoder
     ) {
     }
 
@@ -85,8 +85,11 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
         return $credentials['password'];
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
-    {
+    public function onAuthenticationSuccess(
+        Request $request,
+        TokenInterface $token,
+        string $providerKey
+    ) {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }

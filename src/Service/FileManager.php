@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
-
 
 use App\Entity\Pack;
 use App\Entity\Picture;
@@ -28,12 +28,12 @@ class FileManager
     private array $allowedPictureType;
 
     public function __construct(
-    	private EntityManagerInterface $entityManager,
-	    private Security $security,
-	    private PictureRepository $pictureRepository,
-	    private BannedPictureRepository $bannedPictureRepository,
-	    private Path $path)
-    {
+        private EntityManagerInterface $entityManager,
+        private Security $security,
+        private PictureRepository $pictureRepository,
+        private BannedPictureRepository $bannedPictureRepository,
+        private Path $path
+    ) {
         $this->allowedPictureType = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_JPEG2000, IMAGETYPE_PNG, IMAGETYPE_WEBP];
     }
 
@@ -104,7 +104,7 @@ class FileManager
     /**
      * Create a temporary upload directory
      */
-    public function createTempUploadDirectory() : string
+    public function createTempUploadDirectory(): string
     {
         $dirName = uniqid('temp_', true);
         mkdir($this->path->getTempDirectory() . $dirName);
@@ -117,7 +117,7 @@ class FileManager
      * @param Pack $pack
      * @return string
      */
-    public function prepareDestinationDir(Pack $pack) : string
+    public function prepareDestinationDir(Pack $pack): string
     {
         $dirName = $this->cleanName($pack->getName());
 
@@ -130,7 +130,7 @@ class FileManager
         return $this->path->getStorageDirectory() . $dirName;
     }
 
-    public function findDuplicates(Picture $picture) : ?Picture
+    public function findDuplicates(Picture $picture): ?Picture
     {
         return $this->pictureRepository->findDuplicates($picture);
     }
@@ -140,7 +140,7 @@ class FileManager
      * @param Picture $picture
      * @return Picture
      */
-    public function getPictureHashes(Picture $picture) : Picture
+    public function getPictureHashes(Picture $picture): Picture
     {
         $picture->setSha1sum(sha1_file($this->path->getTempDirectory() . $picture->getFilename()) ?: 'error');
 
@@ -153,7 +153,7 @@ class FileManager
      * @param string $destinationPath
      * @return Picture
      */
-    public function moveFileToPack(Picture $picture, Pack $pack, string $destinationPath) : Picture
+    public function moveFileToPack(Picture $picture, Pack $pack, string $destinationPath): Picture
     {
         if (!is_file($picture->getFilename())) {
             throw new FileNotFoundException($picture->getFilename());
@@ -173,7 +173,7 @@ class FileManager
      * Clean temporary storage
      * @param string $storagePath
      */
-    public function cleanStorage(string $storagePath) : void
+    public function cleanStorage(string $storagePath): void
     {
         if (is_dir($storagePath)) {
             $files = scandir($storagePath) ?: [];
@@ -209,7 +209,7 @@ class FileManager
      * @param string $storagePath
      * @return string
      */
-    private function cleanName(string $filename, string $storagePath = null) : string
+    private function cleanName(string $filename, string $storagePath = null): string
     {
         $subDir = ($storagePath) ? substr($filename, strlen($storagePath)) : '';
         $subDir = (strlen($subDir) > 0 && $subDir[0] === '/') ? substr($subDir, 1) : $subDir;
@@ -221,11 +221,15 @@ class FileManager
         if (strlen($prefix) > 1) {
             $prefix .= (($prefix[-1] !== '_') ? '_' : '');
         }
-        return preg_replace("/[^.a-zA-Z0-9_-]+/", "",
-            transliterator_transliterate('Any-Latin;Latin-ASCII;',
-                str_replace(' ', '_', $prefix . basename($filename)))
-            ?: uniqid('', true))
+        return preg_replace(
+            "/[^.a-zA-Z0-9_-]+/",
+            "",
+            transliterator_transliterate(
+                'Any-Latin;Latin-ASCII;',
+                str_replace(' ', '_', $prefix . basename($filename))
+            )
+            ?: uniqid('', true)
+        )
             ?? uniqid('', true);
     }
-
 }

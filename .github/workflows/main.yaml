@@ -1,0 +1,24 @@
+name: tests
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: PHP Code Style (phpcs)
+        uses: chindit/actions-phpcs@master
+        with:
+          # Folder to check code style
+          dir: src/
+          cli: '--version'
+      - name: PHPStan
+        uses: chindit/actions-phpstan@master
+        with:
+          # Arguments to add to PHPStan
+          arguments: 'src/ --level=8'

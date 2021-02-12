@@ -19,9 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Picture
 {
-    const STATUS_OK = 1;
-    const STATUS_TEMP = 2;
-    const STATUS_ERROR = 3;
+    public const STATUS_OK = 1;
+    public const STATUS_TEMP = 2;
+    public const STATUS_ERROR = 3;
 
     /**
      * @ORM\Column(name="id", type="integer")

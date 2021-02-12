@@ -10,11 +10,11 @@ namespace App\Model;
  */
 class Status
 {
-    const OK = 1;
-    const TEMPORARY = 2;
-    const WARNING = 3;
-    const ERROR = 4;
-    const DUPLICATE = 5;
+    public const OK = 1;
+    public const TEMPORARY = 2;
+    public const WARNING = 3;
+    public const ERROR = 4;
+    public const DUPLICATE = 5;
 
     /**
      * Return bootstrap equivalent for status const
