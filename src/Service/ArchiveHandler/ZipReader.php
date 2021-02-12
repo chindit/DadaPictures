@@ -16,7 +16,7 @@ class ZipReader implements ArchiveHandlerInterface
     /**
      * Return the list of files content in the archive
      * @param File $file
-     * @return array
+     * @return array<int, string>
      */
     public function getContent(File $file) : array
     {
@@ -24,7 +24,11 @@ class ZipReader implements ArchiveHandlerInterface
         $return = [];
         if ($zip->open($file->getPathname()) === true) {
             for ($i = 0; $i < $zip->numFiles; $i++) {
-                $return[] = $zip->getNameIndex($i);
+                $name = $zip->getNameIndex($i);
+                if ($name === false) {
+                    continue;
+                }
+                $return[] = $name;
             }
             $zip->close();
 

@@ -16,7 +16,10 @@ class PackRepository extends ServiceEntityRepository
         parent::__construct($registry, Pack::class);
     }
 
-    public function countPacksInValidation(): array
+    /**
+     * @return array|Pack[]
+     */
+    public function getPacksInValidation(): array
     {
         return $this->createQueryBuilder('c')
             ->where('c.status = :status')

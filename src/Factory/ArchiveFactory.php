@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
+use App\Service\ArchiveHandler\ArchiveHandlerInterface;
 use App\Service\ArchiveHandler\RarReader;
 use App\Service\ArchiveHandler\ZipReader;
 use Symfony\Component\HttpFoundation\File\File;
@@ -13,12 +14,11 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class ArchiveFactory
 {
-    public static function getHandler(File $file)
+    public static function getHandler(File $file): ArchiveHandlerInterface
     {
         switch ($file->getMimeType()) {
             case 'application/zip':
                 return new ZipReader();
-                break;
             case 'application/x-rar':
                 return new RarReader();
             default:

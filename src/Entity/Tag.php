@@ -4,111 +4,76 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Tag
  *
  * @ORM\Table(name="tag")
- * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
+ * @ORM\Entity()
  */
 class Tag
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=150, unique=true)
      */
-    private $name;
+    private string $name = '';
 
     /**
-     * @var ArrayCollection
-     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Picture", mappedBy="tags")
+     *
+     * @var Collection<int, Picture> $pictures
      */
-    private $pictures;
+    private Collection $pictures;
 
-    /**
-     * Tag constructor.
-     */
     public function __construct()
     {
-        $this->name = '';
+        $this->pictures = new ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId() : int
+    public function getId() : ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Tag
-     */
-    public function setName(string $name) : Tag
+    public function setName(string $name) : self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
     public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * Add picture
-     *
-     * @param \App\Entity\Picture $picture
-     *
-     * @return Tag
-     */
-    public function addPicture(\App\Entity\Picture $picture)
+    public function addPicture(Picture $picture): self
     {
         $this->pictures[] = $picture;
 
         return $this;
     }
 
-    /**
-     * Remove picture
-     *
-     * @param \App\Entity\Picture $picture
-     */
-    public function removePicture(\App\Entity\Picture $picture)
+    public function removePicture(Picture $picture): self
     {
         $this->pictures->removeElement($picture);
+
+        return $this;
     }
 
     /**
-     * Get pictures
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection<int, Picture>
      */
-    public function getPictures()
+    public function getPictures(): Collection
     {
         return $this->pictures;
     }

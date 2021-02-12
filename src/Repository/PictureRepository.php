@@ -52,7 +52,7 @@ class PictureRepository extends ServiceEntityRepository
     /**
      * Return all pictures belonging to this tag
      * @param Tag $tag
-     * @return array
+     * @return array|Picture[]
      */
     public function findRandomByTag(Tag $tag): array
     {
@@ -67,7 +67,7 @@ class PictureRepository extends ServiceEntityRepository
 
     /**
      * Return 50 random pictures
-     * @return array
+     * @return array|Picture[]
      */
     public function findRandom(): array
     {

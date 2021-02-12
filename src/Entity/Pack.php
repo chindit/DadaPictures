@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,75 +20,62 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Pack
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=150)
      * @Assert\Length(min="2", max="150")
      */
-    private $name;
+    private string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="storagePath", type="string", length=255)
      */
-    private $storagePath;
+    private string $storagePath;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private int $status;
 
     /**
-     * @var PersistentCollection|Picture[]
+     * @var Collection<int, Picture>
      *
      * @ORM\ManyToMany(targetEntity="Picture")
      */
-    private $pictures;
+    private Collection $pictures;
 
     /**
-     * @var PersistentCollection|Tag[]
+     * @var Collection<int, Tag>
      *
      * @ORM\ManyToMany(targetEntity="Tag")
      */
-    private $tags;
+    private Collection $tags;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      */
-    private $creator;
+    private ?UserInterface $creator;
 
     /**
-     * @var \DateTime
      * @ORM\Column(name="created", type="datetime")
      */
-    private $created;
+    private \DateTime $created;
 
     /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated", type="datetime")
      */
-    private $updated;
+    private \DateTime $updated;
 
     /**
-     * @var File
      * @Assert\File(mimeTypes={"application/zip", "application/x-rar-compressed"})
      */
-    private $file;
+    private ?File $file;
 
     /**
      * Constructor
@@ -101,61 +89,31 @@ class Pack
         $this->updated = new \DateTime();
     }
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId() : int
+    public function getId() : ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Pack
-     */
-    public function setName(string $name) : Pack
+    public function setName(string $name) : self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
     public function getName() : string
     {
         return $this->name;
     }
 
-    /**
-     * Add tag
-     *
-     * @param \App\Entity\Tag $tag
-     *
-     * @return Pack
-     */
-    public function addTag(Tag $tag) : Pack
+    public function addTag(Tag $tag) : self
     {
         $this->tags[] = $tag;
 
         return $this;
     }
 
-    /**
-     * Remove tag
-     *
-     * @param \App\Entity\Tag $tag
-     * @return Pack
-     */
-    public function removeTag(Tag $tag) : Pack
+    public function removeTag(Tag $tag) : self
     {
         $this->tags->removeElement($tag);
 
@@ -163,178 +121,100 @@ class Pack
     }
 
     /**
-     * Get tags
-     *
-     * @return PersistentCollection|Tag[]
+     * @return Collection<int, Tag>
      */
     public function getTags()
     {
         return $this->tags;
     }
 
-    /**
-     * Set creator
-     *
-     * @param \App\Entity\User $creator
-     *
-     * @return Pack
-     */
-    public function setCreator(User $creator = null) : Pack
+    public function setCreator(UserInterface $creator = null) : self
     {
         $this->creator = $creator;
 
         return $this;
     }
 
-    /**
-     * Get creator
-     *
-     * @return \App\Entity\User
-     */
-    public function getCreator() : User
+    public function getCreator() : ?UserInterface
     {
         return $this->creator;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreated() : \DateTime
     {
         return $this->created;
     }
 
-    /**
-     * @param \DateTime $created
-     * @return Pack
-     */
-    public function setCreated(\DateTime $created) : Pack
+    public function setCreated(\DateTime $created) : self
     {
         $this->created = $created;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getUpdated() : \DateTime
     {
         return $this->updated;
     }
 
-    /**
-     * @param \DateTime $updated
-     * @return Pack
-     */
-    public function setUpdated(\DateTime $updated)  : Pack
+    public function setUpdated(\DateTime $updated): self
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * @return File
-     */
     public function getFile() : ?File
     {
         return $this->file;
     }
 
-    /**
-     * @param mixed $file
-     * @return Pack
-     */
-    public function setFile(File $file) : Pack
+    public function setFile(File $file) : self
     {
         $this->file = $file;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStoragePath(): string
     {
         return $this->storagePath;
     }
 
-    /**
-     * @param string $storagePath
-     * @return Pack
-     */
-    public function setStoragePath(string $storagePath): Pack
+    public function setStoragePath(string $storagePath): self
     {
         $this->storagePath = $storagePath;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * @param int $status
-     * @return Pack
-     */
-    public function setStatus(int $status): Pack
+    public function setStatus(int $status): self
     {
         $this->status = $status;
-        return $this;
-    }
-
-
-    /**
-     * Set pictures
-     *
-     * @param \App\Entity\Picture $pictures
-     *
-     * @return Pack
-     */
-    public function setPictures(Picture $pictures = null) : Pack
-    {
-        $this->pictures = $pictures;
 
         return $this;
     }
 
     /**
-     * Get pictures
-     *
-     * @return PersistentCollection|\App\Entity\Picture[]
+     * @return Collection<int, Picture>
      */
-    public function getPictures()
+    public function getPictures(): Collection
     {
         return $this->pictures;
     }
 
-    /**
-     * Add picture
-     *
-     * @param \App\Entity\Picture $picture
-     *
-     * @return Pack
-     */
-    public function addPicture(Picture $picture) : Pack
+    public function addPicture(Picture $picture): self
     {
         $this->pictures[] = $picture;
 
         return $this;
     }
 
-    /**
-     * Remove picture
-     *
-     * @param \App\Entity\Picture $picture
-     * @return Pack
-     */
-    public function removePicture(Picture $picture) : Pack
+    public function removePicture(Picture $picture): self
     {
         $this->pictures->removeElement($picture);
 

@@ -27,7 +27,7 @@
             <div class="card-footer">
                 <a class="btn btn-primary" href="#">Validate pack</a>
                 <a class="btn btn-danger" href="{{ path('pack_delete', {id: pack.id}) }}">Delete pack</a>
-                <a class="btn btn-secondary" href="#">Ban pack</a>
+                <a class="btn btn-secondary" href="{{ path('pack_ban', {pack: pack.id}) }}">Ban pack</a>
             </div>
         </div>
     {% endfor %}

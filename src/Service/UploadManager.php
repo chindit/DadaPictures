@@ -9,26 +9,21 @@ use App\Factory\ArchiveFactory;
 use App\Model\Status;
 use App\Repository\BannedPictureRepository;
 use App\Service\ArchiveHandler\ArchiveHandlerInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 
-/**
- * Class UploadManager
- * @package App\Service
- */
 class UploadManager
 {
     private ArchiveHandlerInterface $handler;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TokenStorageInterface $tokenStorage,
+        private Security $security,
         private FileManager $fileManager,
         private PackManager $packManager,
 		private FilesystemOperator $temporaryStorage,
@@ -40,12 +35,15 @@ class UploadManager
 
     public function moveUploadFileToTempStorage(File $file): string
     {
-    	if (!$file->isReadable())
+    	if (!$file->isReadable() || $file->getRealPath() === false)
 	    {
 		    throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
 	    }
 
         $stream = fopen($file->getRealPath(), 'rb+');
+    	if ($stream === false) {
+            throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
+        }
         $newFileName = uniqid('temp_upload_', true);
         $this->temporaryStorage->writeStream($newFileName, $stream);
         fclose($stream);
@@ -58,6 +56,9 @@ class UploadManager
      */
     public function upload(Pack $pack): Pack
     {
+        if ($pack->getFile() === null) {
+            throw new FileNotFoundException(sprintf('Pack %s does not contain a file for upload', $pack->getName()));
+        }
         $this->handler = ArchiveFactory::getHandler($pack->getFile());
         $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
         $this->handler->extractArchive($pack->getFile(), $this->path->getTempDirectory() . $pack->getStoragePath());
@@ -67,7 +68,7 @@ class UploadManager
         $this->uploadFiles($pack);
 
         $pack = $this->packManager->checkPackStatus($pack);
-        $pack->setCreator($this->tokenStorage->getToken()->getUser());
+        $pack->setCreator($this->security->getUser());
         $this->entityManager->flush();
 
         return $pack;
@@ -85,7 +86,7 @@ class UploadManager
         $pack->setStatus(Status::TEMPORARY);
         $this->uploadFiles($pack);
         $pack = $this->packManager->checkPackStatus($pack);
-        $pack->setCreator($this->tokenStorage->getToken()->getUser());
+        $pack->setCreator($this->security->getUser());
         $this->entityManager->persist($pack);
         $this->entityManager->flush();
 
@@ -129,11 +130,11 @@ class UploadManager
     /**
      * Validate upload and transfer files
      */
-    public function validateUpload(Pack $pack, ArrayCollection $pictures) : bool
+    public function validateUpload(Pack $pack) : bool
     {
         $newStoragePath = $this->fileManager->prepareDestinationDir($pack);
 
-        foreach ($pictures as $picture) {
+        foreach ($pack->getPictures() as $picture) {
             /** @var $picture Picture */
             if ($picture->getStatus() !== Status::OK && $picture->getStatus() !== Status::TEMPORARY) {
                 return false;
@@ -148,7 +149,7 @@ class UploadManager
             [$width, $height] = getimagesize($picture->getFilename());
             $picture->setWidth($width);
             $picture->setHeight($height);
-            $picture->setWeight(filesize($picture->getFilename()));
+            $picture->setWeight(filesize($picture->getFilename()) ?: 0);
 
             $picture->setStatus(Status::OK);
             $picture->setStatusInfo('OK');

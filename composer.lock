@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01454a011b67cc9665ddc26be70561b9",
+    "content-hash": "5c25d4cd2019cdb41d102ea84b9ded70",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -111,49 +111,6 @@
                 "source": "https://github.com/Behat/Transliterator/tree/v1.3.0"
             },
             "time": "2020-01-14T16:39:13+00:00"
-        },
-        {
-            "name": "chindit/collection",
-            "version": "1.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/chindit/collection.git",
-                "reference": "2ebf8f97e9a3eb97db476caa8fc9076e8911ec78"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/chindit/collection/zipball/2ebf8f97e9a3eb97db476caa8fc9076e8911ec78",
-                "reference": "2ebf8f97e9a3eb97db476caa8fc9076e8911ec78",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Chindit\\Collection\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "David Lumaye",
-                    "email": "littletiger58@gmail.com"
-                }
-            ],
-            "description": "Small array wrapper to ease array handling",
-            "support": {
-                "issues": "https://github.com/chindit/collection/issues",
-                "source": "https://github.com/chindit/collection/tree/1.0.5"
-            },
-            "time": "2021-02-03T21:16:00+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -8334,6 +8291,62 @@
             "time": "2021-02-06T18:34:03+00:00"
         },
         {
+            "name": "squizlabs/php_codesniffer",
+            "version": "3.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9d583721a7157ee997f235f327de038e7ea6dac4",
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "bin": [
+                "bin/phpcs",
+                "bin/phpcbf"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "https://github.com/squizlabs/PHP_CodeSniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "support": {
+                "issues": "https://github.com/squizlabs/PHP_CodeSniffer/issues",
+                "source": "https://github.com/squizlabs/PHP_CodeSniffer",
+                "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
+            },
+            "time": "2020-10-23T02:01:07+00:00"
+        },
+        {
             "name": "symfony/debug-bundle",
             "version": "v5.2.3",
             "source": {
@@ -8762,6 +8775,7 @@
         "ext-exif": "*",
         "ext-fileinfo": "*",
         "ext-imagick": "*",
+        "ext-intl": "*",
         "ext-zip": "*"
     },
     "platform-dev": [],

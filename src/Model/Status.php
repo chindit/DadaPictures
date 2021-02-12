@@ -16,9 +16,6 @@ class Status
 
     /**
      * Return bootstrap equivalent for status const
-     *
-     * @param Status $const
-     * @return string
      */
     public static function toBootstrap(int $const) : string
     {

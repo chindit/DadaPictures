@@ -5,11 +5,10 @@ namespace App\Service;
 
 
 use App\Entity\Picture;
-use App\Model\Status;
 
 final class Path
 {
-    public function __construct(private $storagePath)
+    public function __construct(private string $storagePath)
     {
     }
 

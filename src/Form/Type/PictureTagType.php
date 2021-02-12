@@ -17,9 +17,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PictureTagType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @param FormBuilderInterface|FormBuilderInterface[] $builder
+     * @param array<string, mixed> $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('tags', EntityType::class, [
@@ -33,7 +34,7 @@ class PictureTagType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\Picture'

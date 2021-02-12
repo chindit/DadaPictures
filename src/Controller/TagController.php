@@ -6,28 +6,22 @@ namespace App\Controller;
 
 use App\Entity\Tag;
 use App\Form\Type\TagType;
+use App\Repository\TagRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Tag controller.
- *
- * @Route("tag")
- */
+
+#[Route('tag')]
 class TagController extends AbstractController
 {
-    /**
-     * Lists all tag entities.
-     *
-     * @Route("/", name="tag_index", methods={"GET"})
-     */
-    public function indexAction()
+    #[Route('/', name: 'tag_index', methods: ['GET'])]
+    public function indexAction(TagRepository $tagRepository): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $tags = $em->getRepository('App:Tag')->findAll();
+        $tags = $tagRepository->findAll();
 
         return $this->render('tag/index.html.twig', array(
             'tags' => $tags,
@@ -35,39 +29,31 @@ class TagController extends AbstractController
     }
 
 
-    public function tagListAction() : Response
+    public function tagListAction(TagRepository $tagRepository) : Response
     {
-        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
+        $tags = $tagRepository->findAll();
 
         return $this->render('tagList.html.twig', ['tags' => $tags]);
     }
 
-    /**
-     * Creates a new tag entity.
-     *
-     * @Route("/new", name="tag_new", methods={"GET", "POST"})
-     */
-    public function newAction(Request $request)
+    #[Route('/new', name: 'tag_new', methods: ['GET', 'POST'])]
+    public function newAction(Request $request, EntityManagerInterface $entityManager, FlashBagInterface $flashBag): Response
     {
         $tag = new Tag();
         $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->persist($tag);
-            $this->getDoctrine()->getManager()->flush();
-            $this->get('session')->getFlashBag()->add('info', 'Tag «' . $tag->getName() . '» successfully added');
+            $entityManager->persist($tag);
+            $entityManager->flush();
+            $flashBag->add('info', 'Tag «' . $tag->getName() . '» successfully added');
         }
 
         return $this->render('tag/new.html.twig', array('form' => $form->createView()));
     }
 
-    /**
-     * Displays a form to edit an existing tag entity.
-     *
-     * @Route("/{id}/edit", name="tag_edit", methods={"GET", "POST"})
-     */
-    public function editAction(Request $request, Tag $tag)
+    #[Route('/{id}/edit', name: 'tag_edit', methods: ['GET', 'POST'])]
+    public function editAction(Request $request, Tag $tag, EntityManagerInterface $entityManager): Response
     {
         $deleteForm = $this->createFormBuilder()
             ->setAction($this->generateUrl('tag_delete', array('id' => $tag->getId())))
@@ -77,7 +63,7 @@ class TagController extends AbstractController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
 
             return $this->redirectToRoute('tag_edit', array('id' => $tag->getId()));
         }
@@ -89,12 +75,8 @@ class TagController extends AbstractController
         ));
     }
 
-    /**
-     * Deletes a tag entity.
-     *
-     * @Route("/{id}", name="tag_delete", methods={"DELETE"})
-     */
-    public function deleteAction(Request $request, Tag $tag)
+    #[Route('/{id}', name:'tag_delete', methods: ['DELETE'])]
+    public function deleteAction(Request $request, Tag $tag, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('tag_delete', array('id' => $tag->getId())))
@@ -104,9 +86,8 @@ class TagController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($tag);
-            $em->flush();
+            $entityManager->remove($tag);
+            $entityManager->flush();
         }
 
         return $this->redirectToRoute('tag_index');

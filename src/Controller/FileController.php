@@ -9,24 +9,31 @@ use App\Service\UploadManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('file')]
 class FileController extends AbstractController
 {
     #[Route('/new/{name}', name:'ftp_pack_list', defaults: ['name' => ''], methods:['GET'])]
-    public function newAction(string $name, string $storagePath): Response
+    public function newAction(
+        string $name,
+        string $storagePath,
+        FlashBagInterface $flashBag,
+        Security $security
+    ): Response
     {
         $tmpDir = $storagePath . '/pictures/ftp';
         // Read files from first level in temp dir
-        $detectedFiles = (is_dir($tmpDir)) ? scandir($tmpDir) : [];
+        $detectedFiles = (is_dir($tmpDir)) ? (scandir($tmpDir) ?: []) : [];
 
         if (!empty($name)) {
             if (!in_array($name, $detectedFiles)) {
-                $this->get('session')->getFlashBag()->add('danger', 'Pack not found');
+                $flashBag->add('danger', 'Pack not found');
             } else {
                 $pack = new Pack();
-                $pack->setCreator($this->getUser());
+                $pack->setCreator($security->getUser());
                 $pack->setStoragePath($tmpDir . '/');
                 $pack->setName(pathinfo($name)['filename']);
                 /** @var UploadManager $uploadManager */
@@ -39,14 +46,16 @@ class FileController extends AbstractController
                         $pack->setFile($file);
 
                         $pack = $uploadManager->upload($pack);
-
+                        if ($pack->getFile() === null) {
+                            throw new \LogicException('File is missing from pack');
+                        }
                         $uploadManager->deleteFTPFile($pack->getFile());
                     }
 
                     return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));
                 } catch (\Exception $e) {
-                    $this->get('session')->getFlashBag()->add('danger', 'Unable to handle file upload');
-                    $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+                    $flashBag->add('danger', 'Unable to handle file upload');
+                    $flashBag->add('danger', $e->getMessage());
                 }
             }
         }

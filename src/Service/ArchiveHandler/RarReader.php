@@ -16,7 +16,7 @@ class RarReader implements ArchiveHandlerInterface
     /**
      * Return the list of files content in the archive
      * @param File $file
-     * @return array
+     * @return array<int, string>
      */
     public function getContent(File $file) : array
     {
@@ -27,6 +27,10 @@ class RarReader implements ArchiveHandlerInterface
         $files = $rar->getEntries();
 
         $fileList = [];
+
+        if ($files === false) {
+            return [];
+        }
 
         foreach ($files as $entry) {
             $fileList[] = $entry->getName();
@@ -51,6 +55,10 @@ class RarReader implements ArchiveHandlerInterface
         }
 
         $entries = $rar->getEntries();
+
+        if ($entries === false) {
+            return false;
+        }
 
         foreach ($entries as $entry) {
             $entry->extract($extractPath);

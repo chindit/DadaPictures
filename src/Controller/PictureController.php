@@ -9,45 +9,30 @@ use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Entity\Tag;
 use App\Form\Type\PictureTagType;
+use App\Repository\PictureRepository;
 use App\Service\FileManager;
 use App\Service\Path;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class PictureController
- * @package App\Controller
- *
- * @Route("pictures")
- */
+#[Route('picture')]
 class PictureController extends AbstractController
 {
-
-    /**
-     * Render JS for pictures in pack
-     * @param Pack $pack
-     * @return Response
-     *
-     * @Route("/pack/{id}", name="pack_view_pictures", methods={"GET"})
-     */
+    #[Route('/pack/{id}', name: 'pack_view_pictures', methods: ['GET'])]
     public function viewPackPicturesAction(Pack $pack): Response
     {
         return $this->render('picture/diaporama.html.twig', ['pack' => $pack]);
     }
 
-    /**
-     * Add tags for a random picture
-     * @return Response
-     *
-     * @Route("/tag/random", name="pictures_tag", methods={"GET"})
-     */
-    public function pictureAddTagsAction(): Response
+    #[Route('/tag/random', name: 'picture_tag', methods: ['GET'])]
+    public function pictureAddTagsAction(PictureRepository $pictureRepository, FlashBagInterface $flashBag): Response
     {
-        if (!$picture = $this->getDoctrine()->getRepository(Picture::class)->getPictureWithoutTags()) {
-            $this->get('session')->getFlashBag()->add('info', 'All pictures are tagged');
+        if (!$picture = $pictureRepository->getPictureWithoutTags()) {
+            $flashBag->add('info', 'All pictures are tagged');
 
             return $this->redirectToRoute('pack_index');
         }
@@ -57,57 +42,50 @@ class PictureController extends AbstractController
         return $this->render('picture/addTags.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
     }
 
-    /**
-     * @param Picture $picture
-     * @param Request $request
-     * @return Response
-     *
-     * @Route("/tag/{id}/add", name="pictures_add_tag", methods={"POST"})
-     */
-    public function addTagsToPictureAction(Picture $picture, Request $request): Response
+    #[Route('/tag/{id}/add', name:'picture_add_tag', methods: ['POST'])]
+    public function addTagsToPictureAction(
+        Picture $picture,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        FlashBagInterface $flashBag
+    ): Response
     {
         $form = $this->createForm(PictureTagType::class, $picture);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
         } else {
-            $this->get('session')->getFlashBag()->add('warning', 'An error has occurred during form submission');
+            $flashBag->add('warning', 'An error has occurred during form submission');
         }
 
         return $this->forward('App:Picture:pictureAddTags');
     }
 
-    /**
-     * View pictures ordered randomly by tag
-     * @param Tag $tag
-     * @return Response
-     *
-     * @Route("/tag/{id}/pictures", name="tag_pictures", defaults={"id" = null}, methods={"GET"})
-     */
-    public function viewRandomPicturesByTagAction(Tag $tag): Response
+    #[Route('/tag/{id}/pictures', name: 'tag_pictures', defaults: ['id' => null], methods: ['GET'])]
+    public function viewRandomPicturesByTagAction(Tag $tag, PictureRepository $pictureRepository): Response
     {
-        $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandomByTag($tag);
+        $pictures = $pictureRepository->findRandomByTag($tag);
 
         return $this->render('picture/diaporama.html.twig', ['pictures' => $pictures, 'tag' => $tag]);
     }
 
-    /**
-     * Return 50 random pictures
-     * @return Response
-     *
-     * @Route("/random", name="pictures_random", methods={"GET"})
-     */
-    public function viewRandomAction(): Response
+    #[Route('/random', name: 'pictures_random', methods: ['GET'])]
+    public function viewRandomAction(PictureRepository $pictureRepository): Response
     {
-        $pictures = $this->getDoctrine()->getRepository(Picture::class)->findRandom();
+        $pictures = $pictureRepository->findRandom();
 
         return $this->render('picture/diaporama.html.twig', ['pictures' => $pictures]);
     }
 
     #[Route('{picture}/ban', name:'picture_ban', methods: ['GET'])]
-    public function banAction(Picture $picture, EntityManagerInterface $entityManager, FileManager $fileManager): Response
+    public function banAction(
+        Picture $picture,
+        EntityManagerInterface $entityManager,
+        FileManager $fileManager,
+        FlashBagInterface $flashBag
+    ): Response
     {
         $bannedPicture = new BannedPicture($picture->getSha1sum());
         $entityManager->persist($bannedPicture);
@@ -115,7 +93,7 @@ class PictureController extends AbstractController
         $fileManager->deletePicture($picture);
         $entityManager->flush();
 
-        $this->get('session')->getFlashBag()->add('info', 'File «' . $picture->getFilename() . '» has
+        $flashBag->add('info', 'File «' . $picture->getFilename() . '» has
             been correctly banned');
 
         return $this->redirectToRoute('admin_dashboard');
@@ -125,7 +103,13 @@ class PictureController extends AbstractController
      * Deletes a pack entity.
      */
     #[Route('{picture}/delete', name:'picture_delete', methods: ['GET', 'DELETE'])]
-    public function deleteAction(Request $request, Picture $picture, EntityManagerInterface $entityManager, FileManager $fileManager): Response
+    public function deleteAction(
+        Request $request,
+        Picture $picture,
+        EntityManagerInterface $entityManager,
+        FileManager $fileManager,
+        FlashBagInterface $flashBag
+    ): Response
     {
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('picture_delete', array('picture' => $picture->getId())))
@@ -140,8 +124,7 @@ class PictureController extends AbstractController
             $fileManager->deletePicture($picture);
             $entityManager->flush();
 
-            $this->get('session')->getFlashBag()->add('info', 'File «' . $picture->getFilename() . '» has
-            been correctly removed');
+            $flashBag->add('info', 'File «' . $picture->getFilename() . '» has been correctly removed');
 
             return $this->redirectToRoute('pack_index');
         }
@@ -153,7 +136,7 @@ class PictureController extends AbstractController
     public function viewPicture(Picture $picture, Path $path): Response
     {
         return new Response(
-            file_get_contents($path->getPictureFullpath($picture)),
+            file_get_contents($path->getPictureFullpath($picture)) ?: '',
             Response::HTTP_OK,
             ['Content-Type' => $picture->getMime()]
         );

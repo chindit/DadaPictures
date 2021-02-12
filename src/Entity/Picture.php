@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Picture
@@ -65,6 +66,7 @@ class Picture
 
     /**
      * @ORM\Column(name="properties", type="array", nullable=true)
+     * @var string[] $properties
      */
     private array $properties;
 
@@ -81,7 +83,7 @@ class Picture
     /**
      * @ORM\ManyToOne(targetEntity="User")
      */
-    private User $creator;
+    private UserInterface $creator;
 
     /**
      * @ORM\Column(name="created", type="datetime")
@@ -96,6 +98,7 @@ class Picture
 
     /**
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="pictures")
+     * @var Collection<int, Tag> $tags
      */
     private Collection $tags;
 
@@ -114,7 +117,7 @@ class Picture
         return $this->id;
     }
 
-    public function setName(string $name): Picture
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -126,7 +129,7 @@ class Picture
         return $this->name;
     }
 
-    public function setFilename(string $filename): Picture
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 
@@ -138,7 +141,7 @@ class Picture
         return $this->filename;
     }
 
-    public function setHeight(int $height): Picture
+    public function setHeight(int $height): self
     {
         $this->height = $height;
 
@@ -150,7 +153,7 @@ class Picture
         return $this->height;
     }
 
-    public function setWidth(int $width): Picture
+    public function setWidth(int $width): self
     {
         $this->width = $width;
 
@@ -162,7 +165,7 @@ class Picture
         return $this->width;
     }
 
-    public function setWeight(int $weight): Picture
+    public function setWeight(int $weight): self
     {
         $this->weight = $weight;
 
@@ -174,7 +177,7 @@ class Picture
         return $this->weight;
     }
 
-    public function setMime(string $mime): Picture
+    public function setMime(string $mime): self
     {
         $this->mime = $mime;
 
@@ -186,44 +189,53 @@ class Picture
         return $this->mime;
     }
 
-    public function setProperties(array $properties): Picture
+    /**
+     * @param array|string[] $properties
+     */
+    public function setProperties(array $properties): self
     {
         $this->properties = $properties;
 
         return $this;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function getProperties(): ?array
     {
         return $this->properties;
     }
 
-    public function setCreator(User $creator = null): Picture
+    public function setCreator(UserInterface $creator): self
     {
         $this->creator = $creator;
 
         return $this;
     }
 
-    public function getCreator(): User
+    public function getCreator(): UserInterface
     {
         return $this->creator;
     }
 
-    public function addTag(Tag $tag): Picture
+    public function addTag(Tag $tag): self
     {
         $this->tags[] = $tag;
 
         return $this;
     }
 
-    public function removeTag(Tag $tag) : Picture
+    public function removeTag(Tag $tag) : self
     {
         $this->tags->removeElement($tag);
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Tag>
+     */
     public function getTags(): Collection
     {
         return $this->tags;
@@ -234,7 +246,7 @@ class Picture
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created): Picture
+    public function setCreated(\DateTime $created): self
     {
         $this->created = $created;
         return $this;
@@ -245,7 +257,7 @@ class Picture
         return $this->updated;
     }
 
-    public function setUpdated(\DateTime $updated): Picture
+    public function setUpdated(\DateTime $updated): self
     {
         $this->updated = $updated;
 
@@ -257,7 +269,7 @@ class Picture
         return $this->sha1sum;
     }
 
-    public function setSha1sum(string $sha1sum): Picture
+    public function setSha1sum(string $sha1sum): self
     {
         $this->sha1sum = $sha1sum;
         return $this;
@@ -268,7 +280,7 @@ class Picture
         return $this->status;
     }
 
-    public function setStatus(int $status): Picture
+    public function setStatus(int $status): self
     {
         $this->status = $status;
         return $this;
@@ -279,9 +291,10 @@ class Picture
         return $this->statusInfo;
     }
 
-    public function setStatusInfo(string $statusInfo): Picture
+    public function setStatusInfo(string $statusInfo): self
     {
         $this->statusInfo = $statusInfo;
+
         return $this;
     }
 }

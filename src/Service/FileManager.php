@@ -13,9 +13,8 @@ use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class FileManager
@@ -23,11 +22,14 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class FileManager
 {
+    /**
+     * @var array|int[]
+     */
     private array $allowedPictureType;
 
     public function __construct(
     	private EntityManagerInterface $entityManager,
-	    private TokenStorageInterface $tokenStorage,
+	    private Security $security,
 	    private PictureRepository $pictureRepository,
 	    private BannedPictureRepository $bannedPictureRepository,
 	    private Path $path)
@@ -42,11 +44,11 @@ class FileManager
     {
         $picture = new Picture();
 
-        if (!$this->tokenStorage->getToken() || !$this->tokenStorage->getToken()->getUser() instanceof User) {
+        if (!$this->security->getUser() instanceof User) {
             throw new AccessDeniedException("User must be logged to access this resource");
         }
 
-        $picture->setCreator($this->tokenStorage->getToken()->getUser());
+        $picture->setCreator($this->security->getUser());
         $picture->setName($file->getBasename());
         $picture->setFilename(substr($file->getPathname(), strlen($this->path->getTempDirectory()), strlen($file->getPathname())));
 
@@ -73,7 +75,7 @@ class FileManager
             }
         }
 
-        $picture->setMime(mime_content_type($file->getPathname()));
+        $picture->setMime(mime_content_type($file->getPathname()) ?: 'text/plain');
 
         $picture = $this->getPictureHashes($picture);
 
@@ -126,14 +128,9 @@ class FileManager
         return $this->path->getStorageDirectory() . $dirName;
     }
 
-    /**
-     * Return duplicate of given picture if it exists
-     * @param Picture $picture
-     * @return Picture|null
-     */
     public function findDuplicates(Picture $picture) : ?Picture
     {
-        return $this->entityManager->getRepository(Picture::class)->findDuplicates($picture);
+        return $this->pictureRepository->findDuplicates($picture);
     }
 
     /**
@@ -143,7 +140,7 @@ class FileManager
      */
     public function getPictureHashes(Picture $picture) : Picture
     {
-        $picture->setSha1sum(sha1_file($this->path->getTempDirectory() . $picture->getFilename()));
+        $picture->setSha1sum(sha1_file($this->path->getTempDirectory() . $picture->getFilename()) ?: 'error');
 
         return $picture;
     }
@@ -177,7 +174,7 @@ class FileManager
     public function cleanStorage(string $storagePath) : void
     {
         if (is_dir($storagePath)) {
-            $files = scandir($storagePath);
+            $files = scandir($storagePath) ?: [];
 
             foreach ($files as $file) {
                 if ($file !== '.' && $file !== '..') {
@@ -224,7 +221,9 @@ class FileManager
         }
         return preg_replace("/[^.a-zA-Z0-9_-]+/", "",
             transliterator_transliterate('Any-Latin;Latin-ASCII;',
-                str_replace(' ', '_', $prefix . basename($filename))));
+                str_replace(' ', '_', $prefix . basename($filename)))
+            ?: uniqid('', true))
+            ?? uniqid('', true);
     }
 
 }
