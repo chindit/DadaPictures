@@ -11,14 +11,18 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
+        with:
+          php-version: '8.0'
       - name: PHP Code Style (phpcs)
         uses: chindit/actions-phpcs@master
         with:
+          php-version: '8.0'
           # Folder to check code style
           dir: src/
           cli: '--version'
       - name: PHPStan
         uses: chindit/actions-phpstan@master
         with:
+          php-version: '8.0'
           # Arguments to add to PHPStan
           arguments: 'src/ --level=8'
