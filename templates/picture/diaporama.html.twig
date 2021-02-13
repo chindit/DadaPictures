@@ -80,11 +80,11 @@
         var items = [
             {% if pack is defined %}
             {% for picture in pack.pictures %}
-            {src: '{{ asset('pictures/' ~ picture.filename) }}', w:{{ picture.width }}, h: {{ picture.height }}},
+            {src: '{{ path('view_picture', {picture: picture.id}) }}', w:{{ picture.width }}, h: {{ picture.height }}},
             {% endfor %}
             {% else %}
             {% for picture in pictures %}
-            {src: '{{ asset('pictures/' ~ picture.filename) }}', w:{{ picture.width }}, h: {{ picture.height }}},
+            {src: '{{ path('view_picture', {picture: picture.id}) }}', w:{{ picture.width }}, h: {{ picture.height }}},
             {% endfor %}
             {% endif %}
         ];

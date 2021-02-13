@@ -72,6 +72,8 @@ class PictureRepository extends ServiceEntityRepository
     public function findRandom(): array
     {
         $query = $this->createQueryBuilder('p')
+            ->where('p.status = :status')
+            ->setParameter('status', Picture::STATUS_OK)
             ->orderBy('RAND()')
             ->setMaxResults(50);
 

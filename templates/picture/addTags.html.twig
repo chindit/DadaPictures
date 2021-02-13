@@ -4,7 +4,7 @@
     <h1>Tag a picture</h1>
 
     <div class="picture">
-        <img id="tagged-picture" src="{{ asset('pictures/' ~ picture.filename) }}" alt="{{ picture.name }}"/>
+        <img id="tagged-picture" src="{{ path('view_picture', {picture:picture.id}) }}" alt="{{ picture.name }}"/>
     </div>
     {{ form_start(form) }}
     {{ form_widget(form) }}

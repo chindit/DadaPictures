@@ -25,7 +25,7 @@
                 {% endfor %}
             </div>
             <div class="card-footer">
-                <a class="btn btn-primary" href="#">Validate pack</a>
+                <a class="btn btn-primary" href="{{ path('pack_confirm', {id: pack.id}) }}">Validate pack</a>
                 <a class="btn btn-danger" href="{{ path('pack_delete', {id: pack.id}) }}">Delete pack</a>
                 <a class="btn btn-secondary" href="{{ path('pack_ban', {pack: pack.id}) }}">Ban pack</a>
             </div>

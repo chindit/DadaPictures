@@ -144,16 +144,16 @@ class UploadManager
                 return false;
             }
 
-            [$width, $height] = getimagesize($picture->getFilename());
+            [$width, $height] = getimagesize($this->path->getTempDirectory() . $picture->getFilename());
             $picture->setWidth($width);
             $picture->setHeight($height);
-            $picture->setWeight(filesize($picture->getFilename()) ?: 0);
+            $picture->setWeight(filesize($this->path->getTempDirectory() .$picture->getFilename()) ?: 0);
 
             $picture->setStatus(Status::OK);
             $picture->setStatusInfo('OK');
 
             if (in_array($picture->getMime(), ['image/tiff', 'image/jpeg'])) {
-                $exif = exif_read_data($picture->getFilename(), 'COMPUTED,IFD0,COMMENT,EXIF');
+                $exif = exif_read_data($this->path->getTempDirectory() . $picture->getFilename(), 'COMPUTED,IFD0,COMMENT,EXIF');
                 if ($exif !== false) {
                     $picture->setProperties($exif);
                 }

@@ -155,12 +155,12 @@ class FileManager
      */
     public function moveFileToPack(Picture $picture, Pack $pack, string $destinationPath): Picture
     {
-        if (!is_file($picture->getFilename())) {
+        if (!is_file($this->path->getTempDirectory() . $picture->getFilename())) {
             throw new FileNotFoundException($picture->getFilename());
         }
 
         $newName = $this->cleanName($picture->getFilename(), $pack->getStoragePath());
-        if (!rename($picture->getFilename(), $destinationPath . '/' . $newName)) {
+        if (!rename($this->path->getTempDirectory() . $picture->getFilename(), $destinationPath . '/' . $newName)) {
             throw new \RuntimeException("Unable to move file «" . $picture->getFilename() . '»');
         }
 
