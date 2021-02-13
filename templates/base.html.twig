@@ -41,7 +41,7 @@
                         </a>
                         {{ render(controller('App\\Controller\\TagController::tagListAction')) }}
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('pictures_tag') }}">{% trans %}tags.add{% endtrans %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('picture_tag') }}">{% trans %}tags.add{% endtrans %}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('pictures_random') }}">{% trans %}pictures.random{% endtrans %}</a></li>
                 {% endif %}
             </ul>

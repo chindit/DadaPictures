@@ -5,59 +5,29 @@
     <div class="count mb-2">
         {% trans %}pack.total{% endtrans %}:&nbsp;{{ packs.getTotalItemCount }}
     </div>
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th scope="col">{{ knp_pagination_sortable(packs, 'Id', 'a.id') }}</th>
-            <th scope="col" {% if packs.isSorted('a.Title') %} class="sorted"{% endif %}>
-                {{ knp_pagination_sortable(packs, 'Name', 'a.name') }}</th>
-            <th scope="col">{% trans %}global.created_at{% endtrans %}</th>
-            <th scope="col">{% trans %}global.author{% endtrans %}</th>
-            <th scope="col">{% trans %}pack.image_count{% endtrans %}</th>
-            <th scope="col">{% trans %}global.view{% endtrans %}</th>
-            {% if is_granted("ROLE_ADMIN") %}
-                <th scope="col">Status</th>
-            {% endif %}
-            <th scope="col">{% trans %}global.actions{% endtrans %}</th>
-        </tr>
-        </thead>
-        {# table body #}
-        {% for pack in packs %}
-            <tr>
-                <td><a href="{{ path('pack_show', { 'id': pack.id }) }}">{{ pack.id }}</a></td>
-                <td>{{ pack.name }}</td>
-                <td>{% if pack.created %}{{ pack.created|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ pack.creator.username }}</td>
-                <td>{{ pack.pictures|length }}</td>
-                <td><a class="btn btn-bg" href="{{ path('pack_view_pictures', {'id': pack.id}) }}"><i class="far fa-images"></i></a></td>
-                {% if is_granted("ROLE_ADMIN") %}
-                    <td>
-                        {% if pack.status == 1 %}
-                            <i class="glyphicon glyphicon-check"></i>
-                        {% elseif pack.status == 2 %}
-                            <i class="glyphicon glyphicon-warning-sign"></i>
-                        {% else %}
-                            <i class="glyphicon glyphicon-exclamation-sign"></i>
-                        {% endif %}
-                    </td>
-                {% endif %}
-                <td>
-                    <div class="btn-group" role="group" aria-label="Actions">
-                        {% if pack.status == 2 %}
-                            <a href="{{ path('pack_pre_show', { 'id': pack.id }) }}" class="btn btn-primary"><i class="fas fa-cogs"></i></a>
-                        {% endif %}
-                        <a href="{{ path('pack_show', { 'id': pack.id }) }}" class="btn btn-primary"><i class="far fa-eye"></i></a>
-                        <a href="{{ path('pack_edit', { 'id': pack.id }) }}" class="btn btn-primary"><i class="far fa-edit"></i></a>
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+
+    <div class="button-margin">
+        <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">{% trans %}pack.create{% endtrans %}</a>
+    </div>
+
+    {% for pack in packs %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ path('view_picture', {'picture': (pack.pictures|first).id}) }}" class="card-img-top" alt="{{ pack.name }}">
+            <div class="card-body">
+                <p class="card-text">{{ pack.name }}</p>
+            </div>
+        </div>
+    {% endfor %}
     {# display navigation #}
     <div class="navigation">
         {{ knp_pagination_render(packs) }}
     </div>
-    <div class="button-margin">
-        <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">{% trans %}pack.create{% endtrans %}</a>
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumb">
+        <a href="{{ path('homepage') }}">{% trans %}routes.home{% endtrans %}</a>
+        &nbsp;&gt;&nbsp;
+        {% trans %}pack.plural.name{% endtrans %}
     </div>
 {% endblock %}

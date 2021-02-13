@@ -48,7 +48,7 @@ pack:
     total: 'Nombre de galeries disponibles'
     image_count: 'Nombre d''images'
     submit: 'Envoyer des images'
-    create: 'Créer une nouvelle galerie'
+    create: 'Envoyer des photos'
     view: 'Voir les galeries'
     form:
         name: 'Titre de votre galerie'

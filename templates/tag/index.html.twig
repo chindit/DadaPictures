@@ -3,34 +3,27 @@
 {% block body %}
     <h1>Tag list</h1>
 
+    {% if is_granted("ROLE_ADMIN") %}
     <div>
-        <button class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">Create a new tag</button>
+        <a class="btn btn-bg btn-primary" href="{{ path('tag_new') }}">Create a new tag</a>
     </div>
+    {% endif %}
 
-    <table class="table-bordered">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Pictures</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for tag in tags %}
-                <tr>
-                    <td>{{ tag.id }}</td>
-                    <td>{{ tag.name }}</td>
-                    <td>{{ tag.pictures|length }}</td>
-                    <td>
-                        <ul class="no-bullets">
-                            <li>
-                                <a href="{{ path('tag_edit', { 'id': tag.id }) }}"><i class="glyphicon glyphicon-pencil"></i>Edit</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% for tag in tags %}
+        <h4 class="d-inline">
+            <a href="#">
+                <span class="badge rounded-pill bg-light text-dark">{{ tag.name }}</span>
+            </a>
+        </h4>
+    {% else %}
+        <span>No tags available</span>
+    {% endfor %}
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumb">
+        <a href="{{ path('homepage') }}">{% trans %}routes.home{% endtrans %}</a>
+        &nbsp;&gt;&nbsp;
+        {% trans %}tags.name{% endtrans %}
+    </div>
 {% endblock %}

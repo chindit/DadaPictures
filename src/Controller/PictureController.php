@@ -37,7 +37,7 @@ class PictureController extends AbstractController
             return $this->redirectToRoute('pack_index');
         }
 
-        $form = $this->createForm(PictureTagType::class, $picture, ['action' => $this->generateUrl('pictures_add_tag', ['id' => $picture->getId()])]);
+        $form = $this->createForm(PictureTagType::class, $picture, ['action' => $this->generateUrl('picture_add_tag', ['id' => $picture->getId()])]);
 
         return $this->render('picture/addTags.html.twig', ['picture' => $picture, 'form' => $form->createView()]);
     }
@@ -100,7 +100,7 @@ class PictureController extends AbstractController
     /**
      * Deletes a pack entity.
      */
-    #[Route('{picture}/delete', name:'picture_delete', methods: ['GET', 'DELETE'])]
+    #[Route('{id}/delete', name:'picture_delete', methods: ['GET', 'DELETE'])]
     public function deleteAction(
         Request $request,
         Picture $picture,

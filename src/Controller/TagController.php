@@ -51,7 +51,7 @@ class TagController extends AbstractController
             $flashBag->add('info', 'Tag «' . $tag->getName() . '» successfully added');
         }
 
-        return $this->render('tag/new.html.twig', array('form' => $form->createView()));
+        return $this->render('tag/new.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route('/{id}/edit', name: 'tag_edit', methods: ['GET', 'POST'])]

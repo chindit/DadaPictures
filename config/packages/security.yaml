@@ -25,6 +25,7 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/tag/new, role: ROLE_ADMIN }
         - { path: ^/pack/, role: ROLE_USER }
         - { path: ^/picture, role: ROLE_USER }
         - { path: ^/tag, role: ROLE_USER }
