@@ -59,7 +59,7 @@ class PictureController extends AbstractController
             $flashBag->add('warning', 'An error has occurred during form submission');
         }
 
-        return $this->forward('App:Picture:pictureAddTags');
+        return $this->redirectToRoute('picture_tag');
     }
 
     #[Route('/tag/{id}/pictures', name: 'tag_pictures', defaults: ['id' => null], methods: ['GET'])]
@@ -130,8 +130,11 @@ class PictureController extends AbstractController
     }
 
     #[Route('/view/{picture}', name:'view_picture', methods: ['GET'])]
-    public function viewPicture(Picture $picture, Path $path): Response
+    public function viewPicture(Picture $picture, Path $path, EntityManagerInterface $entityManager): Response
     {
+        $picture->incrementViews();
+        $entityManager->flush();
+
         return new Response(
             file_get_contents($path->getPictureFullpath($picture)) ?: '',
             Response::HTTP_OK,

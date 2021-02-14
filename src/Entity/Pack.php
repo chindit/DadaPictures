@@ -44,6 +44,11 @@ class Pack
     private int $status;
 
     /**
+     * @ORM\Column(name="views", type="integer", options={"unsigned"=true})
+     */
+    private int $views = 0;
+
+    /**
      * @var Collection<int, Picture>
      *
      * @ORM\ManyToMany(targetEntity="Picture")
@@ -105,6 +110,18 @@ class Pack
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getViews(): int
+    {
+        return $this->views;
+    }
+
+    public function incrementViews(): self
+    {
+        $this->views++;
+
+        return $this;
     }
 
     public function addTag(Tag $tag): self

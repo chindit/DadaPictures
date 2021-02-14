@@ -12,6 +12,7 @@ global:
     author: 'Auteur'
     actions: 'Actions'
     view: 'Voir'
+    add: 'Ajouter'
     delete:
         confirm: 'Êtes-vous certain de vouloir poursuivre ?'
         delete: 'Supprimer'

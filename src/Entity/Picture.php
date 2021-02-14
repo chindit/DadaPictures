@@ -82,6 +82,16 @@ class Picture
     private string $statusInfo;
 
     /**
+     * @ORM\Column(name="views", type="integer", options={"unsigned"=true})
+     */
+    private int $views = 0;
+
+    /**
+     * @ORM\Column(name="thumbnail", type="string", unique=true, nullable=true)
+     */
+    private ?string $thumbnail = '';
+
+    /**
      * @ORM\ManyToOne(targetEntity="User")
      */
     private UserInterface $creator;
@@ -188,6 +198,30 @@ class Picture
     public function getMime(): string
     {
         return $this->mime;
+    }
+
+    public function getViews(): int
+    {
+        return $this->views;
+    }
+
+    public function incrementViews(): self
+    {
+        $this->views++;
+
+        return $this;
+    }
+
+    public function getThumbnail(): string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
     }
 
     /**

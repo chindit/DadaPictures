@@ -839,10 +839,15 @@
     "mkdirp" "^1.0.4"
     "rimraf" "^3.0.2"
 
-"@symfony/webpack-encore@^1.0.5":
-  "integrity" "sha512-HOnkVnZzS41QWhxeRvNvBMnfPOic2qOC4P/qCjZzgy9DEzeXCsL1Uu825NNBAdK4eZET6t2n/gRn3xQk9sljuw=="
-  "resolved" "https://registry.npmjs.org/@symfony/webpack-encore/-/webpack-encore-1.0.5.tgz"
-  "version" "1.0.5"
+"@popperjs/core@^2.6.0":
+  "integrity" "sha512-cPqjjzuFWNK3BSKLm0abspP0sp/IGOli4p5I5fKFAzdS8fvjdOwDCfZqAaIiXd9lPkOWi3SUUfZof3hEb7J/uw=="
+  "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.6.0.tgz"
+  "version" "2.6.0"
+
+"@symfony/webpack-encore@^1.1.0":
+  "integrity" "sha512-5LvIt1itMTc6wvD57moXJN+FqHclJPzjZeuBWeacnSBDgh614rynhPyM9voIK6c8erbHjv+tAMTpWLIN/qzuzQ=="
+  "resolved" "https://registry.npmjs.org/@symfony/webpack-encore/-/webpack-encore-1.1.0.tgz"
+  "version" "1.1.0"
   dependencies:
     "@babel/core" "^7.7.0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0"
@@ -867,7 +872,6 @@
     "webpack" "^5.12"
     "webpack-cli" "^4"
     "webpack-dev-server" "^4.0.0-beta.0"
-    "webpack-manifest-plugin" "^3"
     "yargs-parser" "^20.2.4"
 
 "@types/anymatch@*":
@@ -1457,10 +1461,10 @@
   "resolved" "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
   "version" "1.0.0"
 
-"bootstrap@^4.6.0":
-  "integrity" "sha512-Io55IuQY3kydzHtbGvQya3H+KorS/M9rSNyfCGCg9WZ4pyT/lCxIlpJgG1GXW/PswzC84Tr2fBYi+7+jFVQQBw=="
-  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-4.6.0.tgz"
-  "version" "4.6.0"
+"bootstrap@^5.0.0-beta2":
+  "integrity" "sha512-e+uPbPHqTQWKyCX435uVlOmgH9tUt0xtjvyOC7knhKgOS643BrQKuTo+KecGpPV7qlmOyZgCfaM4xxPWtDEN/g=="
+  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-5.0.0-beta2.tgz"
+  "version" "5.0.0-beta2"
 
 "brace-expansion@^1.1.7":
   "integrity" "sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA=="
@@ -3444,7 +3448,7 @@
     "merge-stream" "^2.0.0"
     "supports-color" "^7.0.0"
 
-"jquery@^3.5.1", "jquery@1.9.1 - 3":
+"jquery@^3.5.1":
   "integrity" "sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg=="
   "resolved" "https://registry.npmjs.org/jquery/-/jquery-3.5.1.tgz"
   "version" "3.5.1"
@@ -3660,11 +3664,6 @@
   "integrity" "sha1-2TPOuSBdgr3PSIb2dCvcK03qFG0="
   "resolved" "https://registry.npmjs.org/map-obj/-/map-obj-1.0.1.tgz"
   "version" "1.0.1"
-
-"material-design-icons@^3.0.1":
-  "integrity" "sha1-mnHEh0chjrylHlGmbaaCA4zct78="
-  "resolved" "https://registry.npmjs.org/material-design-icons/-/material-design-icons-3.0.1.tgz"
-  "version" "3.0.1"
 
 "mdn-data@2.0.4":
   "integrity" "sha512-iV3XNKw06j5Q7mi6h+9vbx23Tv7JkjEVgKHW4pimwyDGWm0OIQntJJ+u1C6mg6mK1EaTv42XQ7w76yuzH7M2cA=="
@@ -5110,10 +5109,10 @@
     "scss-tokenizer" "^0.2.3"
     "yargs" "^13.3.2"
 
-"sass-loader@^11.0.0":
-  "integrity" "sha512-08+bTpDfYK/wTow+LQx2D3VCFQinQij4uyGJl3yRUiOTx7n0FDDiReIIbXIVU0LFX5FhjC7s99lSKT4Qnm5eFg=="
-  "resolved" "https://registry.npmjs.org/sass-loader/-/sass-loader-11.0.0.tgz"
-  "version" "11.0.0"
+"sass-loader@^11.0.1":
+  "integrity" "sha512-Vp1LcP4slTsTNLEiDkTcm8zGN/XYYrZz2BZybQbliWA8eXveqA/AxsEjllQTpJbg2MzCsx/qNO48sHdZtOaxTw=="
+  "resolved" "https://registry.npmjs.org/sass-loader/-/sass-loader-11.0.1.tgz"
+  "version" "11.0.1"
   dependencies:
     "klona" "^2.0.4"
     "neo-async" "^2.6.2"
@@ -5665,7 +5664,7 @@
     "unquote" "~1.1.1"
     "util.promisify" "~1.0.0"
 
-"tapable@^2.0.0", "tapable@^2.1.1", "tapable@^2.2.0":
+"tapable@^2.1.1", "tapable@^2.2.0":
   "integrity" "sha512-FBk4IesMV1rBxX2tfiK8RAmogtWn53puLOQlvO8XuwlgxcYbP4mVPS9Ph4aeamSyyVjOl24aYWAuc8U5kCVwMw=="
   "resolved" "https://registry.npmjs.org/tapable/-/tapable-2.2.0.tgz"
   "version" "2.2.0"
@@ -6038,14 +6037,6 @@
     "webpack-dev-middleware" "^4.0.2"
     "ws" "^7.4.0"
 
-"webpack-manifest-plugin@^3":
-  "integrity" "sha512-nbORTdky2HxD8XSaaT+zrsHb30AAgyWAWgCLWaAeQO21VGCScGb52ipqlHA/njix1Z8OW8IOlo4+XK0OKr1fkw=="
-  "resolved" "https://registry.npmjs.org/webpack-manifest-plugin/-/webpack-manifest-plugin-3.0.0.tgz"
-  "version" "3.0.0"
-  dependencies:
-    "tapable" "^2.0.0"
-    "webpack-sources" "^2.2.0"
-
 "webpack-merge@^5.7.3":
   "integrity" "sha512-6/JUQv0ELQ1igjGDzHkXbVDRxkfA57Zw7PfiupdLFJYrgFqY5ZP8xxbpp2lU3EPwYx89ht5Z/aDkD40hFCm5AA=="
   "resolved" "https://registry.npmjs.org/webpack-merge/-/webpack-merge-5.7.3.tgz"
@@ -6078,15 +6069,7 @@
     "source-list-map" "^2.0.1"
     "source-map" "^0.6.1"
 
-"webpack-sources@^2.2.0":
-  "integrity" "sha512-bQsA24JLwcnWGArOKUxYKhX3Mz/nK1Xf6hxullKERyktjNMC4x8koOeaDNTA2fEJ09BdWLbM/iTW0ithREUP0w=="
-  "resolved" "https://registry.npmjs.org/webpack-sources/-/webpack-sources-2.2.0.tgz"
-  "version" "2.2.0"
-  dependencies:
-    "source-list-map" "^2.0.1"
-    "source-map" "^0.6.1"
-
-"webpack@*", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.27.0 || ^5.0.0", "webpack@^4.4.0 || ^5.0.0", "webpack@^5.0.0", "webpack@^5.1.0", "webpack@^5.12", "webpack@>=2", "webpack@>=4.44.2", "webpack@>=5.0.0", "webpack@4.x.x || 5.x.x":
+"webpack@*", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.27.0 || ^5.0.0", "webpack@^4.4.0 || ^5.0.0", "webpack@^5.0.0", "webpack@^5.1.0", "webpack@^5.12", "webpack@>=2", "webpack@>=5.0.0", "webpack@4.x.x || 5.x.x":
   "integrity" "sha512-gGPip54KK7DznaaPHVuNGqym3LAXXL+bPkZ9SlLTCdHmmk+m5x+D4UZdhWvw32CMahYlZwZYPsioFIw36/txYQ=="
   "resolved" "https://registry.npmjs.org/webpack/-/webpack-5.20.2.tgz"
   "version" "5.20.2"

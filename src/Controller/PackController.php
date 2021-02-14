@@ -98,13 +98,12 @@ class PackController extends AbstractController
         return $this->redirectToRoute('pack_index');
     }
 
-    /**
-     * Finds and displays a pack entity.
-     *
-     * @Route("/{id}", name="pack_show", methods={"GET"})
-     */
-    public function showAction(Pack $pack): Response
+    #[Route('/{id}', name: 'pack_show', methods: ['GET'])]
+    public function showAction(Pack $pack, EntityManagerInterface $entityManager): Response
     {
+        $pack->incrementViews();
+        $entityManager->flush();
+
         $deleteForm = $this->createDeleteForm($pack);
 
         return $this->render('pack/show.html.twig', array(
@@ -117,7 +116,7 @@ class PackController extends AbstractController
     public function editAction(Request $request, Pack $pack): Response
     {
         $deleteForm = $this->createDeleteForm($pack);
-        $editForm = $this->createForm('App\Form\Type\PackType', $pack);
+        $editForm = $this->createForm(PackType::class, $pack);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

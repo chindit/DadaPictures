@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Tag;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,11 +22,11 @@ class PictureTagType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('tags', EntityType::class, [
+            ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
                 'choice_label' => 'name',
                 'expanded' => true,
-                'multiple' => true
+                'multiple' => true,
             ]);
     }
 

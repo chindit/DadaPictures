@@ -4,12 +4,12 @@
     <h1>Tag a picture</h1>
 
     <div class="picture">
-        <img id="tagged-picture" src="{{ path('view_picture', {picture:picture.id}) }}" alt="{{ picture.name }}"/>
+        <img id="tagged-picture" class="max-screen-size" src="{{ path('view_picture', {picture:picture.id}) }}" alt="{{ picture.name }}"/>
     </div>
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <input type="submit" class="btn btn-bg btn-primary" value="Create"/>
-    {% if is_granted("ROLE_USER") %}
+    <input type="submit" class="btn btn-bg btn-primary" value="{% trans %}global.add{% endtrans %}"/>
+    {% if is_granted("ROLE_ADMIN") %}
         <a href="{{ path('picture_delete', {'id': picture.id}) }}" class="form-button btn btn-danger">Delete</a>
     {% endif %}
     {{ form_end(form) }}

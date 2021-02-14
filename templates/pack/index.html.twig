@@ -10,14 +10,18 @@
         <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">{% trans %}pack.create{% endtrans %}</a>
     </div>
 
+    <section class="d-flex">
     {% for pack in packs %}
-        <div class="card" style="width: 18rem;">
-            <img src="{{ path('view_picture', {'picture': (pack.pictures|first).id}) }}" class="card-img-top" alt="{{ pack.name }}">
+        <div class="card mr-3 mb-3 d-inline-flex" style="width: 12rem;">
+            <a href="{{ path('pack_show', {id: pack.id}) }}">
+                <img src="{{ path('view_picture', {'picture': (pack.pictures|first).id}) }}" class="card-img-top" alt="{{ pack.name }}">
+            </a>
             <div class="card-body">
-                <p class="card-text">{{ pack.name }}</p>
+                <p class="card-text"><a href="{{ path('pack_show', {id: pack.id}) }}">{{ pack.name }}</a></p>
             </div>
         </div>
     {% endfor %}
+    </section>
     {# display navigation #}
     <div class="navigation">
         {{ knp_pagination_render(packs) }}
