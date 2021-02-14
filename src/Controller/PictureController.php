@@ -141,4 +141,18 @@ class PictureController extends AbstractController
             ['Content-Type' => $picture->getMime()]
         );
     }
+
+    #[Route('/view/thumb/{picture}', name: 'view_thumbnail_picture', methods: ['GET'])]
+    public function viewThumbnail(Picture $picture, Path $path): Response
+    {
+        if (!$picture->getThumbnail()) {
+            return $this->redirectToRoute('view_picture', ['picture' => $picture]);
+        }
+
+        return new Response(
+            file_get_contents($path->getThumbnailsDirectory() . $picture->getThumbnail()) ?: '',
+            Response::HTTP_OK,
+            ['Content-Type' => 'image/jpg']
+        );
+    }
 }

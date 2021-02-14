@@ -30,4 +30,9 @@ final class Path
             return $this->getStorageDirectory() . $picture->getFilename();
         }
     }
+
+    public function getThumbnailsDirectory(): string
+    {
+        return $this->getStorageDirectory() . 'thumbs/';
+    }
 }

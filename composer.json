@@ -17,6 +17,7 @@
         "php": ">=8.0",
         "ext-exif": "*",
         "ext-fileinfo": "*",
+        "ext-gd": "*",
         "ext-imagick": "*",
         "ext-intl": "*",
         "ext-zip": "*",

@@ -29,7 +29,8 @@ class UploadManager
         private PackManager $packManager,
         private FilesystemOperator $temporaryStorage,
         private Path $path,
-        private BannedPictureRepository $bannedPictureRepository
+        private BannedPictureRepository $bannedPictureRepository,
+        private PictureConverter $pictureConverter
     ) {
     }
 
@@ -147,6 +148,7 @@ class UploadManager
             [$width, $height] = getimagesize($this->path->getTempDirectory() . $picture->getFilename());
             $picture->setWidth($width);
             $picture->setHeight($height);
+            $this->pictureConverter->createThumbnail($picture);
             $picture->setWeight(filesize($this->path->getTempDirectory() . $picture->getFilename()) ?: 0);
 
             $picture->setStatus(Status::OK);
