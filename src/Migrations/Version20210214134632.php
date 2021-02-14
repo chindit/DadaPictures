@@ -12,12 +12,12 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20210214134632 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE pack ADD views INT UNSIGNED NOT NULL');
@@ -25,7 +25,7 @@ final class Version20210214134632 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_16DB4F89C35726E6 ON picture (thumbnail)');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE pack DROP views');

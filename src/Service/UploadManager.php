@@ -147,7 +147,7 @@ class UploadManager
             [$width, $height] = getimagesize($this->path->getTempDirectory() . $picture->getFilename());
             $picture->setWidth($width);
             $picture->setHeight($height);
-            $picture->setWeight(filesize($this->path->getTempDirectory() .$picture->getFilename()) ?: 0);
+            $picture->setWeight(filesize($this->path->getTempDirectory() . $picture->getFilename()) ?: 0);
 
             $picture->setStatus(Status::OK);
             $picture->setStatusInfo('OK');
