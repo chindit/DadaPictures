@@ -142,13 +142,14 @@ class UploadManager
             $picture = $this->fileManager->getPictureHashes($picture);
 
             if ($this->fileManager->findDuplicates($picture)) {
-                return false;
+                $picture->setStatus(Status::DUPLICATE);
+                continue;
             }
 
             [$width, $height] = getimagesize($this->path->getTempDirectory() . $picture->getFilename());
             if ($width === null || $height === null) {
                 $picture->setStatus(Status::ERROR);
-                return false;
+                continue;
             }
             $picture->setWidth($width);
             $picture->setHeight($height);
