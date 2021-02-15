@@ -146,6 +146,10 @@ class UploadManager
             }
 
             [$width, $height] = getimagesize($this->path->getTempDirectory() . $picture->getFilename());
+            if ($width === null || $height === null) {
+                $picture->setStatus(Status::ERROR);
+                return false;
+            }
             $picture->setWidth($width);
             $picture->setHeight($height);
             $this->pictureConverter->createThumbnail($picture);
