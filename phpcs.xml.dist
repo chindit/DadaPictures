@@ -12,6 +12,9 @@
         <exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
         <exclude name="PSR1.Files.SideEffects.FoundWithSymbols" />
         <exclude name="Generic.Files.LineLength.TooLong" />
+        <exclude name="Squiz.Classes.ValidClassName.MissingBrace" />
+        <exclude name="PSR2.Classes.ClassDeclaration.MissingBrace" />
+        <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.Indent" />
     </rule>
 
     <file>bin/</file>
