@@ -16,19 +16,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class PictureThumbsCommand extends Command
 {
     protected static $defaultName = 'picture:thumbs';
-    protected static $defaultDescription = 'Generate missing thumbnails';
+    protected static string $defaultDescription = 'Generate missing thumbnails';
 
     public function __construct(
         string $name = null,
         private PictureRepository $pictureRepository,
         private PictureConverter $pictureConverter,
         private EntityManagerInterface $entityManager
-    )
-    {
+    ) {
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription(self::$defaultDescription)

@@ -229,8 +229,7 @@ class Picture
     public function setProperties(array $properties): self
     {
         $encoded = json_encode($properties);
-        if ($encoded === false)
-        {
+        if ($encoded === false) {
             return $this;
         }
         $this->properties = $encoded;
