@@ -66,10 +66,9 @@ class Picture
     private string $sha1sum;
 
     /**
-     * @ORM\Column(name="properties", type="array", nullable=true)
-     * @var string[] $properties
+     * @ORM\Column(name="properties", type="text", nullable=true)
      */
-    private array $properties;
+    private string $properties;
 
     /**
      * @ORM\Column(name="status", type="integer")
@@ -229,7 +228,7 @@ class Picture
      */
     public function setProperties(array $properties): self
     {
-        $this->properties = $properties;
+        $this->properties = json_encode($properties);
 
         return $this;
     }
@@ -239,7 +238,7 @@ class Picture
      */
     public function getProperties(): ?array
     {
-        return $this->properties;
+        return json_decode($this->properties, true) ?: null;
     }
 
     public function setCreator(UserInterface $creator): self
