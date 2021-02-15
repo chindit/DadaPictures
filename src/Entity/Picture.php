@@ -243,7 +243,7 @@ class Picture
      */
     public function getProperties(): ?array
     {
-        $decoded = json_decode($this->properties, true)
+        $decoded = json_decode($this->properties, true);
 
         return is_array($decoded) ? $decoded : null;
     }
