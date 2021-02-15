@@ -4,15 +4,15 @@
     <h1>Tag list</h1>
 
     {% if is_granted("ROLE_ADMIN") %}
-    <div>
+    <div class="mb-3">
         <a class="btn btn-bg btn-primary" href="{{ path('tag_new') }}">Create a new tag</a>
     </div>
     {% endif %}
 
     {% for tag in tags %}
         <h4 class="d-inline">
-            <a href="#">
-                <span class="badge rounded-pill bg-light text-dark">{{ tag.name }}</span>
+            <a href="#" class="btn btn-outline-secondary">
+                {{ tag.name }}
             </a>
         </h4>
     {% else %}

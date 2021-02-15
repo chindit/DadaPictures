@@ -6,11 +6,11 @@
         {% trans %}pack.total{% endtrans %}:&nbsp;{{ packs.getTotalItemCount }}
     </div>
 
-    <div class="button-margin">
+    <div class="button-margin float-end">
         <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">{% trans %}pack.create{% endtrans %}</a>
     </div>
 
-    <section class="d-flex">
+    <section class="d-flex clearfix">
     {% for pack in packs %}
         <div class="card mr-3 mb-3 d-inline-flex" style="width: 12rem;">
             <a href="{{ path('pack_show', {id: pack.id}) }}">
