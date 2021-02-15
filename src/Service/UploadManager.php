@@ -136,7 +136,11 @@ class UploadManager
         foreach ($pack->getPictures() as $picture) {
             /** @var $picture Picture */
             if ($picture->getStatus() !== Status::TEMPORARY) {
-                return false;
+                if ($picture->getStatus() === Status::OK) {
+                    continue;
+                } else {
+                    return false;
+                }
             }
 
             $picture = $this->fileManager->getPictureHashes($picture);
