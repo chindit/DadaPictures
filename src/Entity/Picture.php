@@ -89,7 +89,7 @@ class Picture
     /**
      * @ORM\Column(name="thumbnail", type="string", unique=true, nullable=true)
      */
-    private ?string $thumbnail = '';
+    private ?string $thumbnail;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
