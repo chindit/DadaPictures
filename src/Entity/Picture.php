@@ -228,7 +228,12 @@ class Picture
      */
     public function setProperties(array $properties): self
     {
-        $this->properties = json_encode($properties);
+        $encoded = json_encode($properties);
+        if ($encoded === false)
+        {
+            return $this;
+        }
+        $this->properties = $encoded;
 
         return $this;
     }
@@ -238,7 +243,9 @@ class Picture
      */
     public function getProperties(): ?array
     {
-        return json_decode($this->properties, true) ?: null;
+        $decoded = json_decode($this->properties, true)
+
+        return is_array($decoded) ? $decoded : null;
     }
 
     public function setCreator(UserInterface $creator): self
