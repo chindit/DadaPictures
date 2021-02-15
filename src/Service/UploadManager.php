@@ -135,7 +135,7 @@ class UploadManager
 
         foreach ($pack->getPictures() as $picture) {
             /** @var $picture Picture */
-            if ($picture->getStatus() !== Status::OK && $picture->getStatus() !== Status::TEMPORARY) {
+            if ($picture->getStatus() !== Status::TEMPORARY) {
                 return false;
             }
 
