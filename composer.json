@@ -26,6 +26,7 @@
         "knplabs/knp-paginator-bundle": "^5.4",
         "league/flysystem-bundle": "^2.0",
         "sensio/framework-extra-bundle": "^6.0",
+        "sentry/sentry-symfony": "^4.0",
         "symfony/asset": "^5.2",
         "symfony/dotenv": "^5.2",
         "symfony/finder": "5.2.*",
