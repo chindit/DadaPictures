@@ -5,11 +5,20 @@ namespace App\Handler;
 
 
 use App\Entity\Pack;
-use App\Message\UploadMessage;
+use App\Message\ValidateUploadMessage;
+use App\Repository\PackRepository;
+use App\Service\UploadManager;
 
-class ValidateUploadHandler extends UploadHandler
+class ValidateUploadHandler
 {
-    public function __invoke(UploadMessage $upload): void
+    public function __construct(
+        protected PackRepository $packRepository,
+        protected UploadManager $uploadManager
+    )
+    {
+    }
+
+    public function __invoke(ValidateUploadMessage $upload): void
     {
         /** @var Pack $pack */
         $pack = $this->packRepository->find($upload->getContents());
