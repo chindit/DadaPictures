@@ -133,12 +133,16 @@ class PackController extends AbstractController
     }
 
     #[Route('/{id}/delete', name:'pack_delete', methods: ['GET', 'DELETE'])]
-    public function deleteAction(Request $request, Pack $pack, EntityManagerInterface $entityManager): Response
+    public function deleteAction(Request $request, Pack $pack, EntityManagerInterface $entityManager, FileManager $fileManager): Response
     {
         $form = $this->createDeleteForm($pack);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+        	foreach ($pack->getPictures() as $picture) {
+        		$fileManager->deletePicture($picture);
+        		$entityManager->remove($picture);
+	        }
             $entityManager->remove($pack);
             $entityManager->flush();
 
