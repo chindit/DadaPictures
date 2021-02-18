@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Messaget;
+namespace App\Message;
 
 
 class UploadMessage
