@@ -5,10 +5,20 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
         routing:
             # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            'App\Message\UploadMessage': async
+            'App\Message\ValidateUploadMessage': async
+
+        retry_strategy:
+            max_retries: 3
+            # milliseconds delay
+            delay: 10000
+            # causes the delay to be higher before each retry
+            # e.g. 1 second delay, 2 seconds, 4 seconds
+            multiplier: 3
+            max_delay: 0

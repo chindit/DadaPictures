@@ -7,6 +7,9 @@ namespace App\Controller;
 use App\Entity\BannedPicture;
 use App\Entity\Pack;
 use App\Form\Type\PackType;
+use App\Handler\ValidateUploadHandler;
+use App\Messages\UploadMessage;
+use App\Messages\ValidateUploadMessage;
 use App\Model\Status;
 use App\Repository\PackRepository;
 use App\Service\FileManager;
@@ -19,6 +22,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -46,7 +50,8 @@ class PackController extends AbstractController
     public function newAction(
         Request $request,
         UploadManager $uploadManager,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        EntityManagerInterface $entityManager
     ): Response {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
@@ -54,7 +59,12 @@ class PackController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $uploadManager->upload($pack);
+                $pack->setStoragePath($uploadManager->moveUploadFileToTempStorage($pack->getFile()));
+                $entityManager->persist($pack);
+                $entityManager->flush();
+
+                $this->dispatchMessage(new UploadMessage($pack->getId()));
+
                 $this->addFlash('success', $translator->trans('pack.created'));
                 $this->addFlash('warning', $translator->trans('pack.validation'));
             } catch (\Exception $e) {
@@ -91,9 +101,9 @@ class PackController extends AbstractController
     }
 
     #[Route('/{id}/confirm', name:'pack_confirm', methods: ['GET'])]
-    public function publishAction(Pack $pack, UploadManager $uploadManager): Response
+    public function publishAction(Pack $pack): Response
     {
-        $uploadManager->validateUpload($pack);
+        $this->dispatchMessage(new ValidateUploadMessage($pack->getId()));
 
         return $this->redirectToRoute('pack_index');
     }

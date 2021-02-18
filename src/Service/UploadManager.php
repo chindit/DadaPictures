@@ -44,7 +44,7 @@ class UploadManager
         if ($stream === false) {
             throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
         }
-        $newFileName = uniqid('temp_upload_', true);
+        $newFileName = uniqid('temp_upload_', true) . '.' . $file->guessExtension();
         $this->temporaryStorage->writeStream($newFileName, $stream);
         fclose($stream);
 

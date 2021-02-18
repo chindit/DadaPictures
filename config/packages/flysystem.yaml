@@ -4,7 +4,7 @@ flysystem:
         temporary.storage:
             adapter: 'local'
             options:
-                directory: '/tmp'
+                directory: '%storage%/tmp'
         default.storage:
             adapter: 'local'
             options:
