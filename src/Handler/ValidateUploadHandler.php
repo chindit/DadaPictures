@@ -5,7 +5,7 @@ namespace App\Handler;
 
 
 use App\Entity\Pack;
-use App\Messages\UploadMessage;
+use App\Message\UploadMessage;
 
 class ValidateUploadHandler extends UploadHandler
 {
