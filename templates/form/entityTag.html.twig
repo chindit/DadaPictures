@@ -5,7 +5,7 @@
     </div>
 {% endif %}
 {% for child in form.children|filter(child => not child.rendered) %}
-    <input type="checkbox" class="btn-check" id="btn-check-outlined-{{ child.vars.value }}" autocomplete="off" value="{{ child.vars.value }}">
+    <input type="checkbox" class="btn-check" id="btn-check-outlined-{{ child.vars.value }}" name="{{ child.vars.full_name }}" autocomplete="off" value="{{ child.vars.value }}">
     <label class="btn btn-outline-primary" for="btn-check-outlined-{{ child.vars.value }}">{{ child.vars.label }}</label>
 {% endfor %}
 {% endblock %}

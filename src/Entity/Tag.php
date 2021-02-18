@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Tag
  *
@@ -26,6 +28,7 @@ class Tag
     /**
      * @ORM\Column(name="name", type="string", length=150, unique=true)
      */
+    #[Assert\Unique]
     private string $name = '';
 
     /**
