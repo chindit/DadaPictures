@@ -34,8 +34,12 @@ class UploadManager
     ) {
     }
 
-    public function moveUploadFileToTempStorage(File $file): string
+    public function moveUploadFileToTempStorage(?File $file): string
     {
+        if ($file === null) {
+            return '';
+        }
+
         if (!$file->isReadable() || $file->getRealPath() === false) {
             throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
         }

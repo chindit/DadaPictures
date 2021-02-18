@@ -25,7 +25,7 @@ class Pack
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private ?int $id;
+    private int $id;
 
     /**
      * @ORM\Column(name="name", type="string", length=150)
@@ -95,7 +95,7 @@ class Pack
         $this->updated = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
