@@ -8,8 +8,9 @@ use App\Entity\Pack;
 use App\Message\UploadMessage;
 use App\Repository\PackRepository;
 use App\Service\UploadManager;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class UploadHandler
+class UploadHandler implements MessageHandlerInterface
 {
     public function __construct(
         protected PackRepository $packRepository,
