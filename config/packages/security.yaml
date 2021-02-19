@@ -27,8 +27,6 @@ security:
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/tag/new, role: ROLE_ADMIN }
         - { path: ^/pack/, role: ROLE_USER }
-        - { path: ^/picture, role: ROLE_USER }
-        - { path: ^/tag, role: ROLE_USER }
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
