@@ -15,6 +15,8 @@ class Status
     public const WARNING = 3;
     public const ERROR = 4;
     public const DUPLICATE = 5;
+    public const PROCESSING_UPLOAD = 6;
+    public const PROCESSING_VALIDATION = 7;
 
     /**
      * Return bootstrap equivalent for status const

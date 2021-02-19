@@ -58,6 +58,7 @@ class PackController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $pack->setStoragePath($uploadManager->moveUploadFileToTempStorage($pack->getFile()));
+                $pack->setStatus(Status::PROCESSING_UPLOAD);
                 $entityManager->persist($pack);
                 $entityManager->flush();
 
@@ -99,8 +100,10 @@ class PackController extends AbstractController
     }
 
     #[Route('/{id}/confirm', name:'pack_confirm', methods: ['GET'])]
-    public function publishAction(Pack $pack): Response
+    public function publishAction(Pack $pack, EntityManagerInterface $entityManager): Response
     {
+    	$pack->setStatus(Status::PROCESSING_VALIDATION);
+    	$entityManager->flush();
         $this->dispatchMessage(new ValidateUploadMessage($pack->getId()));
 
         return $this->redirectToRoute('pack_index');
