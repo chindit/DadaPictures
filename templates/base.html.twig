@@ -27,14 +27,8 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     {% if is_granted("ROLE_USER") %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDopdownPacks" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {% trans %}pack.plural.name{% endtrans %}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDopdownPacks">
-                                <li><a class="dropdown-item" href="{{ path('pack_index') }}">{% trans %}pack.view{% endtrans %}</a></li>
-                                <li><a class="dropdown-item" href="{{ path('pack_new') }}">{% trans %}pack.submit{% endtrans %}</a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('pack_new') }}">{% trans %}pack.submit{% endtrans %}</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTags" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

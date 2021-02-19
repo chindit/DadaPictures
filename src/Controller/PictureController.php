@@ -34,7 +34,7 @@ class PictureController extends AbstractController
         if (!$picture = $pictureRepository->getPictureWithoutTags()) {
             $flashBag->add('info', 'All pictures are tagged');
 
-            return $this->redirectToRoute('pack_index');
+            return $this->redirectToRoute('homepage');
         }
 
         $form = $this->createForm(PictureTagType::class, $picture, ['action' => $this->generateUrl('picture_add_tag', ['id' => $picture->getId()])]);
@@ -123,7 +123,7 @@ class PictureController extends AbstractController
 
             $flashBag->add('info', 'File «' . $picture->getFilename() . '» has been correctly removed');
 
-            return $this->redirectToRoute('pack_index');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('picture/delete.html.twig', ['picture' => $picture, 'form' => $form->createView()]);

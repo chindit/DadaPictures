@@ -28,23 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('pack')]
 class PackController extends AbstractController
 {
-    #[Route('/', name:'pack_index', methods: ['GET'])]
-    public function indexAction(
-        PackRepository $packRepository,
-        PaginatorInterface $paginator,
-        Request $request
-    ): Response {
-        $pagination = $paginator->paginate(
-            $packRepository->findBy(['status' => Status::OK], ['id' => 'desc']),
-            (int)$request->query->get('page', '1'),
-            25
-        );
-
-        return $this->render('pack/index.html.twig', array(
-            'packs' => $pagination,
-        ));
-    }
-
     #[Route('/new', name:'pack_new', methods: ['GET', 'POST'])]
     public function newAction(
         Request $request,
@@ -109,7 +92,7 @@ class PackController extends AbstractController
     	$entityManager->flush();
         $this->dispatchMessage(new ValidateUploadMessage($pack->getId()));
 
-        return $this->redirectToRoute('pack_index');
+        return $this->redirectToRoute('homepage');
     }
 
     #[Route('/{id}', name: 'pack_show', methods: ['GET'])]
@@ -160,7 +143,7 @@ class PackController extends AbstractController
             $entityManager->remove($pack);
             $entityManager->flush();
 
-            return $this->redirectToRoute('pack_index');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render(

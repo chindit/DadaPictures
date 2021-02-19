@@ -3,19 +3,32 @@
 {% block body %}
     <div id="wrapper">
         <div class="page-container d-flex">
-            {% if not is_granted("ROLE_USER") %}
-            <div id="welcome">
-                <h1><span>{% trans %}global.welcome{% endtrans %} {{ site_name }}</span></h1>
+            <h1>{% trans %}pack.plural.name{% endtrans %}</h1>
+            <div class="count mb-2">
+                {% trans %}pack.total{% endtrans %}:&nbsp;{{ packs.getTotalItemCount }}
             </div>
 
-            <div id="next">
-                <p>{% trans %}global.registration{% endtrans %}</p>
-                <p>{% trans %}global.please{% endtrans %} <a href="{{ path('app_login') }}">{% trans %}global.login{% endtrans %}</a> {% trans %}global.or{% endtrans %}
-                <a href="{{ path('app_register') }}">{% trans %}global.register{% endtrans %}</a></p>
+            <div class="button-margin mb-3">
+                <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">{% trans %}pack.create{% endtrans %}</a>
             </div>
-            {% else %}
-            <p>We need to update Homepage</p>
-            {% endif %}
+
+            <section class="d-flex flex-wrap">
+                {% for pack in packs %}
+                    <figure class="thumb">
+                        <a href="{{ path('pack_show', {id: pack.id}) }}">
+                            <img
+                                    src="{{ path('view_thumbnail_picture', {'picture': (pack.pictures|first).id}) }}"
+                                    alt="{{ pack.name }}"
+                            />
+                        </a>
+                        <figcaption>{{ pack.name }}</figcaption>
+                    </figure>
+                {% endfor %}
+            </section>
+            {# display navigation #}
+            <div class="navigation">
+                {{ knp_pagination_render(packs) }}
+            </div>
         </div>
     </div>
 {% endblock %}
