@@ -23,9 +23,11 @@
         <li>
             <a href="{{ path('homepage') }}">Back to the list</a>
         </li>
+        {% if pack.creator = app.user %}
         <li>
             <a href="{{ path('pack_edit', { 'id': pack.id }) }}">Edit</a>
         </li>
+        {% endif %}
         <li>
             {{ form_start(delete_form) }}
                 <input type="submit" value="Delete">
