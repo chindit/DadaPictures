@@ -13,50 +13,49 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('PS/default-skin/default-skin.css') }}">
     <script src="{{ asset('PS/photoswipe.min.js') }}"></script>
     <script src="{{ asset('PS/photoswipe-ui-default.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script async defer src="https://kit.fontawesome.com/a32969d67a.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ path('homepage') }}">{{ site_name }}</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav mr-auto">
-                {% if is_granted("ROLE_USER") %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDopdownPacks" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {% trans %}pack.plural.name{% endtrans %}
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDopdownPacks">
-                            <a class="dropdown-item" href="{{ path('pack_index') }}">{% trans %}pack.view{% endtrans %}</a>
-                            <a class="dropdown-item" href="{{ path('pack_new') }}">{% trans %}pack.submit{% endtrans %}</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTags" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {% trans %}tags.name{% endtrans %}
-                        </a>
-                        {{ render(controller('App\\Controller\\TagController::tagListAction')) }}
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('picture_tag') }}">{% trans %}tags.add{% endtrans %}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('pictures_random') }}">{% trans %}pictures.random{% endtrans %}</a></li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav">
-                {% if not is_granted("ROLE_USER") %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">{% trans %}login.title{% endtrans %}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">{% trans %}register.title{% endtrans %}</a></li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('my_account') }}">{% trans %}account.my{% endtrans %}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">{% trans %}global.logout{% endtrans %}</a></li>
-                {% endif %}
-            </ul>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('homepage') }}">{{ site_name }}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    {% if is_granted("ROLE_USER") %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDopdownPacks" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% trans %}pack.plural.name{% endtrans %}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDopdownPacks">
+                                <li><a class="dropdown-item" href="{{ path('pack_index') }}">{% trans %}pack.view{% endtrans %}</a></li>
+                                <li><a class="dropdown-item" href="{{ path('pack_new') }}">{% trans %}pack.submit{% endtrans %}</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTags" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% trans %}tags.name{% endtrans %}
+                            </a>
+                            {{ render(controller('App\\Controller\\TagController::tagListAction')) }}
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('picture_tag') }}">{% trans %}tags.add{% endtrans %}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('pictures_random') }}">{% trans %}pictures.random{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if not is_granted("ROLE_USER") %}
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">{% trans %}login.title{% endtrans %}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">{% trans %}register.title{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ path('my_account') }}">{% trans %}account.my{% endtrans %}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">{% trans %}global.logout{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
 </header>
