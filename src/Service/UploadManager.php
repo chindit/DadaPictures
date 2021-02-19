@@ -27,7 +27,6 @@ class UploadManager
         private Security $security,
         private FileManager $fileManager,
         private PackManager $packManager,
-        private FilesystemOperator $temporaryStorage,
         private Path $path,
         private BannedPictureRepository $bannedPictureRepository,
         private PictureConverter $pictureConverter
@@ -49,7 +48,7 @@ class UploadManager
             throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
         }
         $newFileName = uniqid('temp_upload_', true) . '.' . $file->guessExtension();
-        $this->temporaryStorage->writeStream($newFileName, $stream);
+        file_put_contents($this->path->getTempUploadDirectory() . $newFileName, $stream);
         fclose($stream);
 
         return $newFileName;
@@ -60,7 +59,7 @@ class UploadManager
      */
     public function upload(Pack $pack): Pack
     {
-    	$file = new File($pack->getStoragePath());
+    	$file = new File($this->path->getTempUploadDirectory() . $pack->getStoragePath());
         $this->handler = ArchiveFactory::getHandler($file);
         $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
         $this->handler->extractArchive($file, $this->path->getTempDirectory() . $pack->getStoragePath());
@@ -70,7 +69,6 @@ class UploadManager
         $this->uploadFiles($pack);
 
         $pack = $this->packManager->checkPackStatus($pack);
-        $pack->setCreator($this->security->getUser());
         $this->entityManager->flush();
 
         return $pack;

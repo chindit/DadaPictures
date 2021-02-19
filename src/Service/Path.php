@@ -17,6 +17,11 @@ final class Path
         return $this->storagePath . (str_ends_with($this->storagePath, '/') ? '' : '/') . 'pictures/temp/';
     }
 
+    public function getTempUploadDirectory(): string
+    {
+    	return $this->storagePath . (str_ends_with($this->storagePath, '/') ? '' : '/') . 'tmp/';
+    }
+
     public function getStorageDirectory(): string
     {
         return $this->storagePath . (str_ends_with($this->storagePath, '/') ? '' : '/') . 'pictures/';

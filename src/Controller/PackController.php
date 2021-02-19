@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('pack')]
@@ -49,7 +50,8 @@ class PackController extends AbstractController
         Request $request,
         UploadManager $uploadManager,
         TranslatorInterface $translator,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+	    Security $security
     ): Response {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
@@ -59,6 +61,7 @@ class PackController extends AbstractController
             try {
                 $pack->setStoragePath($uploadManager->moveUploadFileToTempStorage($pack->getFile()));
                 $pack->setStatus(Status::PROCESSING_UPLOAD);
+	            $pack->setCreator($security->getUser());
                 $entityManager->persist($pack);
                 $entityManager->flush();
 
