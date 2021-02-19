@@ -15,6 +15,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class FileManager
@@ -40,15 +41,15 @@ class FileManager
     /**
      * Hydrate a picture from path
      */
-    public function hydrateFileFromPath(SplFileInfo $file): Picture
+    public function hydrateFileFromPath(SplFileInfo $file, ?UserInterface $user = null): Picture
     {
         $picture = new Picture();
 
-        if (!$this->security->getUser() instanceof User) {
+        if ($user === null && !$this->security->getUser() instanceof User) {
             throw new AccessDeniedException("User must be logged to access this resource");
         }
 
-        $picture->setCreator($this->security->getUser());
+        $picture->setCreator($user ?? $this->security->getUser());
         $picture->setName($file->getBasename());
         $picture->setFilename(
             substr($file->getPathname(), strlen($this->path->getTempDirectory()), strlen($file->getPathname()))

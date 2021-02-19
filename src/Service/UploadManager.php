@@ -109,7 +109,7 @@ class UploadManager
         ;
 
         foreach ($fileList as $file) {
-            $picture = $this->fileManager->hydrateFileFromPath($file);
+            $picture = $this->fileManager->hydrateFileFromPath($file, $pack->getCreator());
             if (in_array($picture->getStatus(), [Status::WARNING, Status::ERROR])) {
                 continue;
             }
