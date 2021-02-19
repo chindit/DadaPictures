@@ -60,9 +60,10 @@ class UploadManager
      */
     public function upload(Pack $pack): Pack
     {
-        $this->handler = ArchiveFactory::getHandler(new File($pack->getStoragePath()));
+    	$file = new File($pack->getStoragePath());
+        $this->handler = ArchiveFactory::getHandler($file);
         $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
-        $this->handler->extractArchive($pack->getFile(), $this->path->getTempDirectory() . $pack->getStoragePath());
+        $this->handler->extractArchive($file, $this->path->getTempDirectory() . $pack->getStoragePath());
         $pack->setStatus(Status::TEMPORARY);
         $this->entityManager->persist($pack);
 
