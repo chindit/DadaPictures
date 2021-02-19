@@ -26,7 +26,7 @@ class IndexController extends AbstractController
 		    25
 	    );
 
-	    return $this->render('pack/index.html.twig', array(
+	    return $this->render('default/index.html.twig', array(
 		    'packs' => $pagination,
 	    ));
     }
