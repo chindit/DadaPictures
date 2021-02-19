@@ -60,9 +60,6 @@ class UploadManager
      */
     public function upload(Pack $pack): Pack
     {
-        if ($pack->getFile() === null) {
-            throw new FileNotFoundException(sprintf('Pack %s does not contain a file for upload', $pack->getName()));
-        }
         $this->handler = ArchiveFactory::getHandler(new File($pack->getStoragePath()));
         $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
         $this->handler->extractArchive($pack->getFile(), $this->path->getTempDirectory() . $pack->getStoragePath());
