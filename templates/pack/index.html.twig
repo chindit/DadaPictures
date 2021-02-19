@@ -12,18 +12,16 @@
 
     <section class="d-flex flex-wrap">
     {% for pack in packs %}
-        <div class="card mr-3 mb-3 d-inline-flex squared-picture-container">
+        <figure class="jaquette">
             <a href="{{ path('pack_show', {id: pack.id}) }}">
                 <img
                         src="{{ path('view_thumbnail_picture', {'picture': (pack.pictures|first).id}) }}"
-                        class="card-img-top squared-picture"
                         alt="{{ pack.name }}"
-                >
+                        class="img_jaquette"
+                />
             </a>
-            <div class="card-body">
-                <p class="card-text"><a href="{{ path('pack_show', {id: pack.id}) }}">{{ pack.name }}</a></p>
-            </div>
-        </div>
+            <figcaption>{{ pack.name }}</figcaption>
+        </figure>
     {% endfor %}
     </section>
     {# display navigation #}
