@@ -6,6 +6,7 @@
     <p>Author: {{ pack.creator.username }}</p>
     <p>Uploaded at: {{ pack.created|date('Y-m-d H:i:s') }}</p>
     <p>Number of pictures: {{ pack.pictures|length }}</p>
+    <a href="{{ path('pack_view_pictures', {id: pack.id}) }}" class="btn btn-primary">{% trans %}pictures.slideshow{% endtrans %}</a>
     <section class="d-flex flex-wrap">
         {% for picture in pack.pictures %}
             <figure class="thumb">
@@ -23,7 +24,7 @@
         <li>
             <a href="{{ path('homepage') }}">Back to the list</a>
         </li>
-        {% if pack.creator = app.user %}
+        {% if pack.creator == app.user %}
         <li>
             <a href="{{ path('pack_edit', { 'id': pack.id }) }}">Edit</a>
         </li>

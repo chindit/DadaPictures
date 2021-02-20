@@ -35,6 +35,7 @@ pictures:
     delete:
         title: 'Supprimer l''image'
         question: 'Vous êtes sur le point de supprimer l''image'
+        slideshow: 'Diaporama'
 tags:
     name: 'Tags'
     add: 'Ajouter des tags sur une image'

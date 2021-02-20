@@ -34,6 +34,7 @@ pictures:
     delete:
         title: 'Delete picture'
         question: 'You''re about to delete picture'
+    slideshow: 'Slideshow'
 tags:
     name: 'Tags'
     add: 'Add tags to a picture'
