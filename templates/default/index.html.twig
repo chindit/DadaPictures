@@ -8,9 +8,11 @@
                 {% trans %}pack.total{% endtrans %}:&nbsp;{{ packs.getTotalItemCount }}
             </div>
 
-            <div class="button-margin mb-3">
+            {% if is_granted('ROLE_USER') %}
+            <div class="button-margin mt-4 mb-3">
                 <a class="btn btn-bg btn-primary" href="{{ path('pack_new') }}">{% trans %}pack.create{% endtrans %}</a>
             </div>
+            {% endif %}
 
             <section class="d-flex flex-wrap">
                 {% for pack in packs %}
