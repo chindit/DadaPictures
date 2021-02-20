@@ -79,7 +79,7 @@ class Pack
     private \DateTime $updated;
 
     /**
-     * @Assert\File(mimeTypes={"application/zip", "application/x-rar-compressed"})
+     * @Assert\File(mimeTypes={"application/zip", "application/x-rar-compressed", "application/gzip", "application/x-tar"})
      */
     private ?File $file;
 

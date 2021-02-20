@@ -47,8 +47,8 @@ final class PictureConverter
         $ratio = max([($picture->getWidth() ?? 0) / $this->thumbnailWidth, ($picture->getHeight() ?? 0) / $this->thumbnailHeight]);
 
         $image = imagecrop($image, [
-            'x' => floor(($picture->getWidth() / $this->thumbnailWidth) / 2),
-            'y' => floor(($picture->getHeight() / $this->thumbnailHeight) / 2),
+            'x' => floor(($picture->getWidth() - ($picture->getWidth() / $ratio)) / 2),
+            'y' => floor(($picture->getHeight() - ($picture->getHeight() / $ratio)) / 2),
             'width' => $this->thumbnailWidth * $ratio,
             'height' => $this->thumbnailHeight * $ratio
         ]);

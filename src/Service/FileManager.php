@@ -198,9 +198,9 @@ class FileManager
      */
     public function deletePicture(Picture $picture): void
     {
-        if (is_file($this->path->getTempDirectory()) . $picture->getFilename()) {
+        if (is_file($this->path->getTempDirectory() . $picture->getFilename())) {
             unlink($this->path->getTempDirectory() . $picture->getFilename());
-        } elseif (is_file($this->path->getStorageDirectory()) . $picture->getFilename()) {
+        } elseif (is_file($this->path->getStorageDirectory() . $picture->getFilename())) {
             unlink($this->path->getStorageDirectory() . $picture->getFilename());
         }
     }

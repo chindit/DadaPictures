@@ -109,7 +109,7 @@ class PictureController extends AbstractController
         FlashBagInterface $flashBag
     ): Response {
         $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('picture_delete', array('picture' => $picture->getId())))
+            ->setAction($this->generateUrl('picture_delete', array('id' => $picture->getId())))
             ->setMethod('DELETE')
             ->getForm();
 
