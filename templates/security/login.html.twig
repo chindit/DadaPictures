@@ -23,16 +23,26 @@
 					{% endif %}
 					<form method="post">
 						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-							</div>
-							<input type="text" name="username" class="form-control input_user" value="{{ last_username }}" placeholder="{% trans %}global.username{% endtrans %}">
+							<span class="input-group-text"><i class="fas fa-user"></i></span>
+							<input
+									type="text"
+									class="form-control"
+									aria-label="Username"
+									name="username"
+									value="{{ last_username }}"
+									placeholder="{% trans %}global.username{% endtrans %}"
+							>
 						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-							</div>
-							<input type="password" name="password" class="form-control input_pass" value="" placeholder="{% trans %}global.password{% endtrans %}">
+						<div class="input-group mb-3">
+							<span class="input-group-text"><i class="fas fa-key"></i></span>
+							<input
+									type="password"
+									class="form-control"
+									aria-label="Password"
+									name="password"
+									value=""
+									placeholder="{% trans %}global.password{% endtrans %}"
+							>
 						</div>
 						<div class="form-group">
 							<div class="custom-control custom-checkbox">
@@ -50,7 +60,7 @@
 
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
-						{% trans %}login.no_account{% endtrans%} <a href="{{ path('app_register') }}" class="ml-2">{% trans %}login.signup{% endtrans %}</a>
+						{% trans %}login.no_account{% endtrans%}&nbsp;&nbsp;<a href="{{ path('app_register') }}" class="ml-2">{% trans %}login.signup{% endtrans %}</a>
 					</div>
 					{#<div class="d-flex justify-content-center links">
 						<a href="#">Forgot your password?</a>
