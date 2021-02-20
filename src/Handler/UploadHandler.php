@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Handler;
-
 
 use App\Entity\Pack;
 use App\Message\UploadMessage;
@@ -15,8 +15,7 @@ class UploadHandler implements MessageHandlerInterface
     public function __construct(
         protected PackRepository $packRepository,
         protected UploadManager $uploadManager
-    )
-    {
+    ) {
     }
 
     public function __invoke(UploadMessage $upload): void

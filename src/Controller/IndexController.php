@@ -16,19 +16,19 @@ class IndexController extends AbstractController
 {
     #[Route('/', name:'homepage', methods:['GET'])]
     public function indexAction(
-	    PackRepository $packRepository,
-	    PaginatorInterface $paginator,
-	    Request $request
+        PackRepository $packRepository,
+        PaginatorInterface $paginator,
+        Request $request
     ): Response {
-	    $pagination = $paginator->paginate(
-		    $packRepository->findBy(['status' => Status::OK], ['id' => 'desc']),
-		    (int)$request->query->get('page', '1'),
-		    25
-	    );
+        $pagination = $paginator->paginate(
+            $packRepository->findBy(['status' => Status::OK], ['id' => 'desc']),
+            (int)$request->query->get('page', '1'),
+            25
+        );
 
-	    return $this->render('default/index.html.twig', array(
-		    'packs' => $pagination,
-	    ));
+        return $this->render('default/index.html.twig', array(
+            'packs' => $pagination,
+        ));
     }
 
     #[Route('/terms', name:'terms_and_conditions', methods:['GET'])]

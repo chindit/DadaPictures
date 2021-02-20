@@ -34,7 +34,7 @@ class PackController extends AbstractController
         UploadManager $uploadManager,
         TranslatorInterface $translator,
         EntityManagerInterface $entityManager,
-	    Security $security
+        Security $security
     ): Response {
         $pack = new Pack();
         $form = $this->createForm(PackType::class, $pack);
@@ -44,7 +44,7 @@ class PackController extends AbstractController
             try {
                 $pack->setStoragePath($uploadManager->moveUploadFileToTempStorage($pack->getFile()));
                 $pack->setStatus(Status::PROCESSING_UPLOAD);
-	            $pack->setCreator($security->getUser());
+                $pack->setCreator($security->getUser());
                 $entityManager->persist($pack);
                 $entityManager->flush();
 
@@ -88,8 +88,8 @@ class PackController extends AbstractController
     #[Route('/{id}/confirm', name:'pack_confirm', methods: ['GET'])]
     public function publishAction(Pack $pack, EntityManagerInterface $entityManager): Response
     {
-    	$pack->setStatus(Status::PROCESSING_VALIDATION);
-    	$entityManager->flush();
+        $pack->setStatus(Status::PROCESSING_VALIDATION);
+        $entityManager->flush();
         $this->dispatchMessage(new ValidateUploadMessage($pack->getId()));
 
         return $this->redirectToRoute('homepage');
@@ -136,10 +136,10 @@ class PackController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-        	foreach ($pack->getPictures() as $picture) {
-        		$fileManager->deletePicture($picture);
-        		$entityManager->remove($picture);
-	        }
+            foreach ($pack->getPictures() as $picture) {
+                $fileManager->deletePicture($picture);
+                $entityManager->remove($picture);
+            }
             $entityManager->remove($pack);
             $entityManager->flush();
 

@@ -49,6 +49,7 @@ class FileManager
             throw new AccessDeniedException("User must be logged to access this resource");
         }
 
+        //@phpstan-ignore-next-line
         $picture->setCreator($user ?? $this->security->getUser());
         $picture->setName($file->getBasename());
         $picture->setFilename(

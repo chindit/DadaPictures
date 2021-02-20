@@ -44,9 +44,18 @@ final class PictureConverter
             throw new \Exception(sprintf('Unable to create thumbnail for picture %s', $picture->getFilename()));
         }
 
-        $ratio = floor(max([($picture->getWidth() ?? 0) / $this->thumbnailWidth, ($picture->getHeight() ?? 0) / $this->thumbnailHeight]));
+        $ratio = max([($picture->getWidth() ?? 0) / $this->thumbnailWidth, ($picture->getHeight() ?? 0) / $this->thumbnailHeight]);
 
-		$image = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => $this->thumbnailWidth * $ratio, 'height' => $this->thumbnailHeight * $ratio]);
+        $image = imagecrop($image, [
+            'x' => floor(($picture->getWidth() / $this->thumbnailWidth) / 2),
+            'y' => floor(($picture->getHeight() / $this->thumbnailHeight) / 2),
+            'width' => $this->thumbnailWidth * $ratio,
+            'height' => $this->thumbnailHeight * $ratio
+        ]);
+
+        if ($image === false) {
+            throw new \Exception(sprintf('Unable to crop picture %s', $picture->getFilename()));
+        }
 
         imagecopyresized(
             $thumb,
