@@ -12,6 +12,7 @@ global:
     author: 'Author'
     actions: 'Actions'
     view: 'View'
+    edit: 'Edit'
     delete:
         confirm: 'Are you sure you want to continue ?'
         text: 'Delete'
@@ -35,6 +36,11 @@ pictures:
         title: 'Delete picture'
         question: 'You''re about to delete picture'
     slideshow: 'Slideshow'
+    pictures: 'pictures'
+    author: 'Author'
+    created: 'Created at'
+    count: 'Number of pictures'
+    views: 'Views'
 tags:
     name: 'Tags'
     add: 'Add tags to a picture'

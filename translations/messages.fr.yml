@@ -13,6 +13,7 @@ global:
     actions: 'Actions'
     view: 'Voir'
     add: 'Ajouter'
+    edit: 'Éditer'
     delete:
         confirm: 'Êtes-vous certain de vouloir poursuivre ?'
         delete: 'Supprimer'
@@ -35,7 +36,12 @@ pictures:
     delete:
         title: 'Supprimer l''image'
         question: 'Vous êtes sur le point de supprimer l''image'
-        slideshow: 'Diaporama'
+    slideshow: 'Diaporama'
+    pictures: 'images'
+    author: 'Auteur'
+    created: 'Créé le'
+    count: 'Nombre d''images'
+    views: 'Nombre de vues'
 tags:
     name: 'Tags'
     add: 'Ajouter des tags sur une image'
