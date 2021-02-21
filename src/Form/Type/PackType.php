@@ -4,12 +4,14 @@ namespace App\Form\Type;
 
 use App\Entity\Pack;
 use App\Entity\Tag;
+use App\Model\Languages;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class PackType
@@ -17,6 +19,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class PackType extends AbstractType
 {
+	public function __construct(private Security $security)
+	{
+
+	}
     /**
      * @param FormBuilderInterface|FormBuilderInterface[] $builder
      * @param array<string, mixed> $options
@@ -28,7 +34,10 @@ class PackType extends AbstractType
             ->add('file', FileType::class, ['label' => 'pack.form.archive'])
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
-                'choice_label' => 'name',
+                'choice_label' => function(Tag $tag) {
+            	    $language = $this->security->getUser()->getLanguage() ?? Languages::EN;
+            	    return $tag->getTranslation($language)->getName();
+                },
                 'expanded' => true,
                 'multiple' => true,
                 'required' => false,

@@ -24,11 +24,17 @@ class Tag
      */
     private ?int $id;
 
+	/**
+	 * @ORM\Column(name="name", type="string", length=150, unique=true)
+	 */
+	private string $name = '';
+
     /**
-     * @ORM\Column(name="name", type="string", length=150, unique=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\TranslatedTag", cascade={"persist", "remove"})
+     *
+     * @var Collection<int, TranslatedTag> $translations
      */
-    #[Assert\Unique]
-    private string $name = '';
+    private Collection $translations;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Picture", mappedBy="tags")
@@ -40,6 +46,7 @@ class Tag
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,17 +54,64 @@ class Tag
         return $this->id;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
+	public function setName(string $name): self
+	{
+		$this->name = $name;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @return Collection<int, TranslatedTag>
+	 */
+	public function getTranslations(): Collection
+	{
+		return $this->translations;
+	}
+
+	public function addTranslation(TranslatedTag $tag): self
+	{
+		$this->translations[] = $tag;
+
+		return $this;
+	}
+
+	public function getTranslation(string $language): ?TranslatedTag
+	{
+		/** @var TranslatedTag $translation */
+		foreach ($this->translations as $translation) {
+			if ($translation->getLanguage() === $language) {
+				return $translation;
+			}
+		}
+
+		foreach ($this->translations as $translation) {
+			if ($translation->getLanguage() === 'en') {
+				return $translation;
+			}
+		}
+
+		if (count($this->translations) === 0) {
+			return null;
+		}
+
+		return $this->translations[0];
+	}
+
+	/**
+	 * @param Collection<int, TranslatedTag> $translations
+	 */
+	public function setTranslations(Collection $translations): self
+	{
+		$this->translations = $translations;
+
+		return $this;
+	}
 
     public function addPicture(Picture $picture): self
     {

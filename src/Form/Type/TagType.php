@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Entity\TranslatedTag;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,6 +32,10 @@ class TagType extends AbstractType
                 new NotBlank(),
                 new Length(['min' => 3, 'max' => 150])
             ]])
+	        ->add('translations', EntityType::class, [
+	        	'class' => TranslatedTag::class,
+		        'choice_label' => 'name'
+	        ])
             ->add('submit', SubmitType::class);
     }
 

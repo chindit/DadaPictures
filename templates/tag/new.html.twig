@@ -1,11 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Tag creation</h1>
+    <h1 class="h1">Tag creation</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+    <form>
+        {% for language in languages %}
+        <div class="mb-3">
+            <label for="tag-{{ language }}" class="form-label">Tag in {{ language|upper }}</label>
+            <input type="text" class="form-control" name="tag[{{ language }}]" id="tag-{{ language }}" minlength="3" required>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 {% endblock %}
 
 {% block breadcrumb %}

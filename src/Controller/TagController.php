@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Tag;
+use App\Entity\TranslatedTag;
 use App\Form\Type\TagType;
+use App\Model\Languages;
 use App\Repository\TagRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,17 +43,31 @@ class TagController extends AbstractController
         EntityManagerInterface $entityManager,
         FlashBagInterface $flashBag
     ): Response {
-        $tag = new Tag();
-        $form = $this->createForm(TagType::class, $tag);
-        $form->handleRequest($request);
+    	if ($request->query->has('tag')) {
+    		if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
+			    $flashBag->add('danger', 'Tag sent is not valid');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($tag);
-            $entityManager->flush();
-            $flashBag->add('info', 'Tag «' . $tag->getName() . '» successfully added');
-        }
+			    return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
+		    }
 
-        return $this->render('tag/new.html.twig', ['form' => $form->createView()]);
+    		$tag = new Tag();
+    		$tag->setName(uniqid(more_entropy: true));
+
+    		foreach (Languages::all() as $language) {
+    			$translatedTag = new TranslatedTag();
+    			$translatedTag->setLanguage($language);
+    			$translatedTag->setName($request->query->get('tag')[$language]);
+    			$tag->addTranslation($translatedTag);
+    			$entityManager->persist($translatedTag);
+		    }
+
+    		$entityManager->persist($tag);
+    		$entityManager->flush();
+
+		    $flashBag->add('info', 'Tag «' . $tag->getName() . '» successfully added');
+	    }
+
+        return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
     }
 
     #[Route('/{id}/edit', name: 'tag_edit', methods: ['GET', 'POST'])]

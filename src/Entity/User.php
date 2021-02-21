@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Model\Languages;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,7 +29,12 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      * @var string[] $roles
      */
-    private array $roles = [];
+    private array $roles = ["ROLE_USER"];
+
+	/**
+	 * @ORM\Column(type="string", length=2, nullable=true)
+	 */
+    private ?string $language = Languages::EN;
 
     /**
      * @var string The hashed password
@@ -85,6 +91,18 @@ class User implements UserInterface
 
         return $this;
     }
+
+	public function getLanguage(): string
+	{
+		return $this->language ?? Languages::EN;
+	}
+
+	public function setLanguage(string $language): self
+	{
+		$this->language = $language;
+
+		return $this;
+	}
 
     /**
      * @see UserInterface

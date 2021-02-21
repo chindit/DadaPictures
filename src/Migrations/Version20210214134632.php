@@ -32,4 +32,9 @@ final class Version20210214134632 extends AbstractMigration
         $this->addSql('DROP INDEX UNIQ_16DB4F89C35726E6 ON picture');
         $this->addSql('ALTER TABLE picture DROP views, DROP thumbnail');
     }
+
+	public function isTransactional(): bool
+	{
+		return false;
+	}
 }
