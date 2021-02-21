@@ -21,8 +21,8 @@ class PackType extends AbstractType
 {
 	public function __construct(private Security $security)
 	{
-
 	}
+
     /**
      * @param FormBuilderInterface|FormBuilderInterface[] $builder
      * @param array<string, mixed> $options

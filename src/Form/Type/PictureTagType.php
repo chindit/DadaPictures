@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Tag;
+use App\Model\Languages;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class PictureTagType
@@ -15,6 +17,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class PictureTagType extends AbstractType
 {
+	public function __construct(private Security $security)
+	{
+	}
+
     /**
      * @param FormBuilderInterface|FormBuilderInterface[] $builder
      * @param array<string, mixed> $options
@@ -24,7 +30,10 @@ class PictureTagType extends AbstractType
         $builder
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
-                'choice_label' => 'name',
+                'choice_label' => function(Tag $tag) {
+	                $language = $this->security->getUser()->getLanguage() ?? Languages::EN;
+	                return $tag->getTranslation($language)->getName();
+                },
                 'expanded' => true,
                 'multiple' => true,
             ]);
