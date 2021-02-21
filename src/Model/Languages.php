@@ -7,8 +7,10 @@ class Languages
 	public const FR = 'fr';
 	public const EN = 'en';
 
-
-	public static function all()
+	/**
+	 * @return string[]
+	 */
+	public static function all(): array
 	{
 		return [self::EN, self::FR];
 	}

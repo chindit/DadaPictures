@@ -12,7 +12,11 @@
     {% for tag in tags %}
         <h4 class="d-inline">
             <a href="#" class="btn btn-outline-secondary">
-                {{ tag.name }}
+                {% if app.user %}
+                    {{ tag.translation(app.user.language).name }}
+                {% else %}
+                    {{ tag.translation('en').name }}
+                {% endif %}
             </a>
         </h4>
     {% else %}

@@ -31,8 +31,8 @@ class PictureTagType extends AbstractType
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
                 'choice_label' => function(Tag $tag) {
-	                $language = $this->security->getUser()->getLanguage() ?? Languages::EN;
-	                return $tag->getTranslation($language)->getName();
+	                $language = $this->security->getUser()?->getLanguage() ?? Languages::EN;
+	                return $tag->getTranslation($language)?->getName();
                 },
                 'expanded' => true,
                 'multiple' => true,
