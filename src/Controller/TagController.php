@@ -77,19 +77,31 @@ class TagController extends AbstractController
             ->setAction($this->generateUrl('tag_delete', array('id' => $tag->getId())))
             ->setMethod('DELETE')
             ->getForm();
-        $editForm = $this->createForm('App\Form\Type\TagType', $tag);
-        $editForm->handleRequest($request);
+	    if ($request->query->has('tag')) {
+		    if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
+			    $this->addFlash('danger', 'Tag sent is not valid');
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $entityManager->flush();
+			    return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
+		    }
 
-            return $this->redirectToRoute('tag_edit', array('id' => $tag->getId()));
-        }
+		    foreach (Languages::all() as $language) {
+			    $translatedTag = $tag->getTranslation($language, true) ?: new TranslatedTag();
+			    $translatedTag->setLanguage($language);
+			    $translatedTag->setName($request->query->get('tag')[$language]);
+			    $tag->addTranslation($translatedTag);
+			    $entityManager->persist($translatedTag);
+		    }
+
+		    $entityManager->persist($tag);
+		    $entityManager->flush();
+
+		    $this->addFlash('info', 'Tag «' . $tag->getName() . '» successfully edited');
+	    }
 
         return $this->render('tag/edit.html.twig', array(
             'tag' => $tag,
-            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'languages' => Languages::all()
         ));
     }
 

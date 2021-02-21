@@ -81,13 +81,17 @@ class Tag
 		return $this;
 	}
 
-	public function getTranslation(string $language): ?TranslatedTag
+	public function getTranslation(string $language, bool $strict = false): ?TranslatedTag
 	{
 		/** @var TranslatedTag $translation */
 		foreach ($this->translations as $translation) {
 			if ($translation->getLanguage() === $language) {
 				return $translation;
 			}
+		}
+
+		if ($strict) {
+			return null;
 		}
 
 		foreach ($this->translations as $translation) {

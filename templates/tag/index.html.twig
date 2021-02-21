@@ -18,6 +18,9 @@
                     {{ tag.translation('en').name }}
                 {% endif %}
             </a>
+            {% if is_granted("ROLE_ADMIN") %}
+                <a class="btn btn-primary" href="{{ path('tag_edit', {id: tag.id}) }}"><i class="far fa-edit"></i></a>
+            {% endif %}
         </h4>
     {% else %}
         <span>No tags available</span>
