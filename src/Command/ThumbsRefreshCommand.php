@@ -38,7 +38,7 @@ class ThumbsRefreshCommand extends Command
 
         $io->progressStart($pictureCount);
 
-        $picureQuery = $this->entityManager->createQuery('SELECT p FROM App\Entity\Picture p');
+        $picureQuery = $this->entityManager->createQuery('SELECT p FROM App\Entity\Picture p WHERE p.status = 1');
 
         foreach ($picureQuery->toIterable() as $picture) {
         	try
