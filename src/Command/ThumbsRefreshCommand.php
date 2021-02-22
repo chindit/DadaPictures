@@ -5,23 +5,21 @@ namespace App\Command;
 use App\Service\PictureConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ThumbsRefreshCommand extends Command
 {
     protected static $defaultName = 'thumbs:refresh';
-    protected static $defaultDescription = 'Refresh all thumbnails';
+    protected static string $defaultDescription = 'Refresh all thumbnails';
 
     public function __construct(string $name = null, private EntityManagerInterface $entityManager, private PictureConverter $pictureConverter)
     {
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription(self::$defaultDescription)
@@ -41,15 +39,13 @@ class ThumbsRefreshCommand extends Command
         $picureQuery = $this->entityManager->createQuery('SELECT p FROM App\Entity\Picture p WHERE p.status = 1');
 
         foreach ($picureQuery->toIterable() as $picture) {
-        	try
-	        {
-		        $this->pictureConverter->createThumbnail($picture, true);
-	        } catch (\Exception $e) {
-        		$io->error(sprintf('Unable to create thumb for picture %s.  Error returned is %s', $picture->getFilename(), $e->getMessage()));
-	        } finally
-	        {
-		        $io->progressAdvance();
-	        }
+            try {
+                $this->pictureConverter->createThumbnail($picture, true);
+            } catch (\Exception $e) {
+                $io->error(sprintf('Unable to create thumb for picture %s.  Error returned is %s', $picture->getFilename(), $e->getMessage()));
+            } finally {
+                $io->progressAdvance();
+            }
         }
 
         $io->progressFinish();

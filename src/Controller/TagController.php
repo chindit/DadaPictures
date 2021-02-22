@@ -44,7 +44,9 @@ class TagController extends AbstractController
         FlashBagInterface $flashBag
     ): Response {
         if ($request->query->has('tag')) {
-            if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
+            /** @var string|string[]|null $tagRequest */
+            $tagRequest = $request->query->get('tag');
+            if (!is_countable($tagRequest) || count($tagRequest) !== count(Languages::all())) {
                 $flashBag->add('danger', 'Tag sent is not valid');
 
                 return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
@@ -56,7 +58,7 @@ class TagController extends AbstractController
             foreach (Languages::all() as $language) {
                 $translatedTag = new TranslatedTag();
                 $translatedTag->setLanguage($language);
-                $translatedTag->setName($request->query->get('tag')[$language]);
+                $translatedTag->setName($tagRequest[$language] ?? '');
                 $tag->addTranslation($translatedTag);
                 $entityManager->persist($translatedTag);
             }
@@ -78,7 +80,9 @@ class TagController extends AbstractController
             ->setMethod('DELETE')
             ->getForm();
         if ($request->query->has('tag')) {
-            if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
+            /** @var string|string[]|null $tagRequest */
+            $tagRequest = $request->query->get('tag');
+            if (!is_countable($tagRequest) || count($tagRequest) !== count(Languages::all())) {
                 $this->addFlash('danger', 'Tag sent is not valid');
 
                 return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
@@ -87,7 +91,7 @@ class TagController extends AbstractController
             foreach (Languages::all() as $language) {
                 $translatedTag = $tag->getTranslation($language, true) ?: new TranslatedTag();
                 $translatedTag->setLanguage($language);
-                $translatedTag->setName($request->query->get('tag')[$language]);
+                $translatedTag->setName($tagRequest[$language]);
                 $tag->addTranslation($translatedTag);
                 $entityManager->persist($translatedTag);
             }

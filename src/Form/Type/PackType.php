@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Entity\Pack;
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Model\Languages;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -35,7 +36,9 @@ class PackType extends AbstractType
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
                 'choice_label' => function (Tag $tag) {
-                    $language = $this->security->getUser()?->getLanguage() ?? Languages::EN;
+                    /** @var ?User $user */
+                    $user = $this->security->getUser();
+                    $language = $user?->getLanguage() ?? Languages::EN;
                     return $tag->getTranslation($language)?->getName();
                 },
                 'expanded' => true,

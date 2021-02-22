@@ -8,23 +8,21 @@ use App\Model\Languages;
 use App\Repository\TagRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateTagsCommand extends Command
 {
     protected static $defaultName = 'migrate:tags';
-    protected static $defaultDescription = 'Migrate tags to translated tags';
+    protected static string $defaultDescription = 'Migrate tags to translated tags';
 
     public function __construct(string $name = null, private EntityManagerInterface $entityManager, private TagRepository $tagRepository)
     {
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription(self::$defaultDescription)

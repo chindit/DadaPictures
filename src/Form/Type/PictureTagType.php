@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Model\Languages;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,7 +32,9 @@ class PictureTagType extends AbstractType
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
                 'choice_label' => function (Tag $tag) {
-                    $language = $this->security->getUser()?->getLanguage() ?? Languages::EN;
+                    /** @var ?User $user */
+                    $user = $this->security->getUser();
+                    $language = $user?->getLanguage() ?? Languages::EN;
                     return $tag->getTranslation($language)?->getName();
                 },
                 'expanded' => true,
