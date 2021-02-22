@@ -24,10 +24,10 @@ class Tag
      */
     private ?int $id;
 
-	/**
-	 * @ORM\Column(name="name", type="string", length=150, unique=true)
-	 */
-	private string $name = '';
+    /**
+     * @ORM\Column(name="name", type="string", length=150, unique=true)
+     */
+    private string $name = '';
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\TranslatedTag", cascade={"persist", "remove"})
@@ -54,68 +54,68 @@ class Tag
         return $this->id;
     }
 
-	public function setName(string $name): self
-	{
-		$this->name = $name;
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getName(): string
-	{
-		return $this->name;
-	}
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
-	/**
-	 * @return Collection<int, TranslatedTag>
-	 */
-	public function getTranslations(): Collection
-	{
-		return $this->translations;
-	}
+    /**
+     * @return Collection<int, TranslatedTag>
+     */
+    public function getTranslations(): Collection
+    {
+        return $this->translations;
+    }
 
-	public function addTranslation(TranslatedTag $tag): self
-	{
-		$this->translations[] = $tag;
+    public function addTranslation(TranslatedTag $tag): self
+    {
+        $this->translations[] = $tag;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getTranslation(string $language, bool $strict = false): ?TranslatedTag
-	{
-		/** @var TranslatedTag $translation */
-		foreach ($this->translations as $translation) {
-			if ($translation->getLanguage() === $language) {
-				return $translation;
-			}
-		}
+    public function getTranslation(string $language, bool $strict = false): ?TranslatedTag
+    {
+        /** @var TranslatedTag $translation */
+        foreach ($this->translations as $translation) {
+            if ($translation->getLanguage() === $language) {
+                return $translation;
+            }
+        }
 
-		if ($strict) {
-			return null;
-		}
+        if ($strict) {
+            return null;
+        }
 
-		foreach ($this->translations as $translation) {
-			if ($translation->getLanguage() === 'en') {
-				return $translation;
-			}
-		}
+        foreach ($this->translations as $translation) {
+            if ($translation->getLanguage() === 'en') {
+                return $translation;
+            }
+        }
 
-		if (count($this->translations) === 0) {
-			return null;
-		}
+        if (count($this->translations) === 0) {
+            return null;
+        }
 
-		return $this->translations[0];
-	}
+        return $this->translations[0];
+    }
 
-	/**
-	 * @param Collection<int, TranslatedTag> $translations
-	 */
-	public function setTranslations(Collection $translations): self
-	{
-		$this->translations = $translations;
+    /**
+     * @param Collection<int, TranslatedTag> $translations
+     */
+    public function setTranslations(Collection $translations): self
+    {
+        $this->translations = $translations;
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function addPicture(Picture $picture): self
     {

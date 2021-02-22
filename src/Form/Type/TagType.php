@@ -32,10 +32,10 @@ class TagType extends AbstractType
                 new NotBlank(),
                 new Length(['min' => 3, 'max' => 150])
             ]])
-	        ->add('translations', EntityType::class, [
-	        	'class' => TranslatedTag::class,
-		        'choice_label' => 'name'
-	        ])
+            ->add('translations', EntityType::class, [
+                'class' => TranslatedTag::class,
+                'choice_label' => 'name'
+            ])
             ->add('submit', SubmitType::class);
     }
 

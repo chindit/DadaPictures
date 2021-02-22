@@ -31,9 +31,9 @@ class User implements UserInterface
      */
     private array $roles = ["ROLE_USER"];
 
-	/**
-	 * @ORM\Column(type="string", length=2, nullable=true)
-	 */
+    /**
+     * @ORM\Column(type="string", length=2, nullable=true)
+     */
     private ?string $language = Languages::EN;
 
     /**
@@ -92,17 +92,17 @@ class User implements UserInterface
         return $this;
     }
 
-	public function getLanguage(): string
-	{
-		return $this->language ?? Languages::EN;
-	}
+    public function getLanguage(): string
+    {
+        return $this->language ?? Languages::EN;
+    }
 
-	public function setLanguage(string $language): self
-	{
-		$this->language = $language;
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @see UserInterface

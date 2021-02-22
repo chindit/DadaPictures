@@ -17,9 +17,9 @@ use Symfony\Component\Security\Core\Security;
  */
 class PictureTagType extends AbstractType
 {
-	public function __construct(private Security $security)
-	{
-	}
+    public function __construct(private Security $security)
+    {
+    }
 
     /**
      * @param FormBuilderInterface|FormBuilderInterface[] $builder
@@ -30,9 +30,9 @@ class PictureTagType extends AbstractType
         $builder
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
-                'choice_label' => function(Tag $tag) {
-	                $language = $this->security->getUser()?->getLanguage() ?? Languages::EN;
-	                return $tag->getTranslation($language)?->getName();
+                'choice_label' => function (Tag $tag) {
+                    $language = $this->security->getUser()?->getLanguage() ?? Languages::EN;
+                    return $tag->getTranslation($language)?->getName();
                 },
                 'expanded' => true,
                 'multiple' => true,

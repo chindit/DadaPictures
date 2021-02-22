@@ -33,8 +33,8 @@ final class Version20210214134632 extends AbstractMigration
         $this->addSql('ALTER TABLE picture DROP views, DROP thumbnail');
     }
 
-	public function isTransactional(): bool
-	{
-		return false;
-	}
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

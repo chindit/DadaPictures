@@ -35,7 +35,7 @@ final class PictureConverter
         }
     }
 
-    public function createThumbnail(Picture $picture): void
+    public function createThumbnail(Picture $picture, bool $overwrite = false): void
     {
         $picturePath = $this->path->getPictureFullpath($picture);
         $image = ImageFactory::getResource($picturePath);
@@ -46,12 +46,13 @@ final class PictureConverter
 
         $ratio = min([($picture->getWidth() ?? 0) / $this->thumbnailWidth, ($picture->getHeight() ?? 0) / $this->thumbnailHeight]);
 
-        $image = imagecrop($image, [
+        $parameters = [
             'x' => floor(($picture->getWidth() - ($this->thumbnailWidth * $ratio)) / 2),
             'y' => floor(($picture->getHeight() - ($this->thumbnailHeight * $ratio)) / 2),
-            'width' => $this->thumbnailWidth * $ratio,
-            'height' => $this->thumbnailHeight * $ratio
-        ]);
+            'width' => ceil($this->thumbnailWidth * $ratio),
+            'height' => ceil($this->thumbnailHeight * $ratio)
+        ];
+        $image = imagecrop($image, $parameters);
 
         if ($image === false) {
             throw new \Exception(sprintf('Unable to crop picture %s', $picture->getFilename()));
@@ -66,11 +67,11 @@ final class PictureConverter
             0,
             $this->thumbnailWidth,
             $this->thumbnailHeight,
-            $picture->getWidth() ?? 0,
-            $picture->getHeight() ?? 0
+            (int)ceil($this->thumbnailWidth * $ratio),
+            (int)ceil($this->thumbnailHeight * $ratio)
         );
 
-        $name = uniqid('thumb_', true) . '.jpg';
+        $name = $overwrite ? $picture->getThumbnail() : uniqid('thumb_', true) . '.jpg';
         imagejpeg($thumb, $this->path->getThumbnailsDirectory() . $name);
 
         $picture->setThumbnail($name);

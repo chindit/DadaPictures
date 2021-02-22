@@ -21,10 +21,10 @@ class MigrateTagsCommand extends Command
 
     public function __construct(string $name = null, private EntityManagerInterface $entityManager, private TagRepository $tagRepository)
     {
-	    parent::__construct($name);
+        parent::__construct($name);
     }
 
-	protected function configure()
+    protected function configure()
     {
         $this
             ->setDescription(self::$defaultDescription)
@@ -38,12 +38,12 @@ class MigrateTagsCommand extends Command
         /** @var Tag[] $tags */
         $tags = $this->tagRepository->findAll();
 
-        foreach($tags as $tag) {
-        	$translatedTag = new TranslatedTag();
-        	$translatedTag->setName($tag->getName());
-        	$translatedTag->setLanguage(Languages::FR);
-        	$tag->setName(uniqid(more_entropy: true));
-        	$tag->addTranslation($translatedTag);
+        foreach ($tags as $tag) {
+            $translatedTag = new TranslatedTag();
+            $translatedTag->setName($tag->getName());
+            $translatedTag->setLanguage(Languages::FR);
+            $tag->setName(uniqid(more_entropy: true));
+            $tag->addTranslation($translatedTag);
         }
 
         $this->entityManager->flush();

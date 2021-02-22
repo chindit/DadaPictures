@@ -31,7 +31,7 @@ class PictureController extends AbstractController
     #[Route('/pack/{pack}/picture/{picture}', name: 'pack_view_single_picture', methods: ['GET'])]
     public function viewPackSinglePictureAction(Pack $pack, Picture $picture): Response
     {
-    	return $this->render('picture/view.html.twig', ['pack' => $pack, 'picture' => $picture]);
+        return $this->render('picture/view.html.twig', ['pack' => $pack, 'picture' => $picture]);
     }
 
     #[Route('/tag/random', name: 'picture_tag', methods: ['GET'])]

@@ -19,9 +19,9 @@ use Symfony\Component\Security\Core\Security;
  */
 class PackType extends AbstractType
 {
-	public function __construct(private Security $security)
-	{
-	}
+    public function __construct(private Security $security)
+    {
+    }
 
     /**
      * @param FormBuilderInterface|FormBuilderInterface[] $builder
@@ -34,9 +34,9 @@ class PackType extends AbstractType
             ->add('file', FileType::class, ['label' => 'pack.form.archive'])
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
-                'choice_label' => function(Tag $tag) {
-            	    $language = $this->security->getUser()?->getLanguage() ?? Languages::EN;
-            	    return $tag->getTranslation($language)?->getName();
+                'choice_label' => function (Tag $tag) {
+                    $language = $this->security->getUser()?->getLanguage() ?? Languages::EN;
+                    return $tag->getTranslation($language)?->getName();
                 },
                 'expanded' => true,
                 'multiple' => true,

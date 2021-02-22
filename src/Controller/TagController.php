@@ -43,29 +43,29 @@ class TagController extends AbstractController
         EntityManagerInterface $entityManager,
         FlashBagInterface $flashBag
     ): Response {
-    	if ($request->query->has('tag')) {
-    		if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
-			    $flashBag->add('danger', 'Tag sent is not valid');
+        if ($request->query->has('tag')) {
+            if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
+                $flashBag->add('danger', 'Tag sent is not valid');
 
-			    return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
-		    }
+                return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
+            }
 
-    		$tag = new Tag();
-    		$tag->setName(uniqid(more_entropy: true));
+            $tag = new Tag();
+            $tag->setName(uniqid(more_entropy: true));
 
-    		foreach (Languages::all() as $language) {
-    			$translatedTag = new TranslatedTag();
-    			$translatedTag->setLanguage($language);
-    			$translatedTag->setName($request->query->get('tag')[$language]);
-    			$tag->addTranslation($translatedTag);
-    			$entityManager->persist($translatedTag);
-		    }
+            foreach (Languages::all() as $language) {
+                $translatedTag = new TranslatedTag();
+                $translatedTag->setLanguage($language);
+                $translatedTag->setName($request->query->get('tag')[$language]);
+                $tag->addTranslation($translatedTag);
+                $entityManager->persist($translatedTag);
+            }
 
-    		$entityManager->persist($tag);
-    		$entityManager->flush();
+            $entityManager->persist($tag);
+            $entityManager->flush();
 
-		    $flashBag->add('info', 'Tag «' . $tag->getName() . '» successfully added');
-	    }
+            $flashBag->add('info', 'Tag «' . $tag->getName() . '» successfully added');
+        }
 
         return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
     }
@@ -77,26 +77,26 @@ class TagController extends AbstractController
             ->setAction($this->generateUrl('tag_delete', array('id' => $tag->getId())))
             ->setMethod('DELETE')
             ->getForm();
-	    if ($request->query->has('tag')) {
-		    if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
-			    $this->addFlash('danger', 'Tag sent is not valid');
+        if ($request->query->has('tag')) {
+            if (!is_countable($request->query->get('tag')) || count($request->query->get('tag')) !== count(Languages::all())) {
+                $this->addFlash('danger', 'Tag sent is not valid');
 
-			    return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
-		    }
+                return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
+            }
 
-		    foreach (Languages::all() as $language) {
-			    $translatedTag = $tag->getTranslation($language, true) ?: new TranslatedTag();
-			    $translatedTag->setLanguage($language);
-			    $translatedTag->setName($request->query->get('tag')[$language]);
-			    $tag->addTranslation($translatedTag);
-			    $entityManager->persist($translatedTag);
-		    }
+            foreach (Languages::all() as $language) {
+                $translatedTag = $tag->getTranslation($language, true) ?: new TranslatedTag();
+                $translatedTag->setLanguage($language);
+                $translatedTag->setName($request->query->get('tag')[$language]);
+                $tag->addTranslation($translatedTag);
+                $entityManager->persist($translatedTag);
+            }
 
-		    $entityManager->persist($tag);
-		    $entityManager->flush();
+            $entityManager->persist($tag);
+            $entityManager->flush();
 
-		    $this->addFlash('info', 'Tag «' . $tag->getName() . '» successfully edited');
-	    }
+            $this->addFlash('info', 'Tag «' . $tag->getName() . '» successfully edited');
+        }
 
         return $this->render('tag/edit.html.twig', array(
             'tag' => $tag,
