@@ -41,8 +41,15 @@ class ThumbsRefreshCommand extends Command
         $picureQuery = $this->entityManager->createQuery('SELECT p FROM App\Entity\Picture p');
 
         foreach ($picureQuery->toIterable() as $picture) {
-            $this->pictureConverter->createThumbnail($picture, true);
-            $io->progressAdvance();
+        	try
+	        {
+		        $this->pictureConverter->createThumbnail($picture, true);
+	        } catch (\Exception $e) {
+        		$io->error(sprintf('Unable to create thumb for picture %s.  Error returned is %s', $picture->getFilename(), $e->getMessage()));
+	        } finally
+	        {
+		        $io->progressAdvance();
+	        }
         }
 
         $io->progressFinish();
