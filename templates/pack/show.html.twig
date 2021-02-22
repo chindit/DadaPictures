@@ -16,7 +16,7 @@
                 <section class="d-flex flex-wrap">
                     {% for picture in pack.pictures %}
                         <figure class="thumb">
-                            <a href="{{ path('view_picture', {'picture': picture.id}) }}">
+                            <a href="{{ path('pack_view_single_picture', {'picture': picture.id, 'pack': pack.id}) }}">
                                 <img
                                         src="{{ path('view_thumbnail_picture', {'picture': (picture.id)}) }}"
                                         alt="{{ pack.name }}"

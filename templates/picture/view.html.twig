@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 col-md-9 col-lg-9">
+				<div class="row mb-4">
+					<div class="col-md-2 fst-italic">
+						{{ pack.pictures|length }}&nbsp;{% trans %}pictures.pictures{% endtrans %}
+					</div>
+					<!--<div class="col-md-2 offset-md-8">
+						<a href="{{ path('pack_view_pictures', {id: pack.id}) }}" class="btn btn-primary">{% trans %}pictures.slideshow{% endtrans %}</a>
+					</div>-->
+				</div>
+				<img src="{{ path('view_picture', {picture: picture.id}) }}" alt="{{ pack.name }}" />
+			</div>
+			<div class="col-sm-12 col-md-3 col-lg-3">
+				<div class="row">
+				</div>
+			</div>
+	</div>
+{% endblock %}
+
+{% block breadcrumb %}
+	<div class="breadcrumb">
+		<a href="{{ path('homepage') }}">{% trans %}routes.home{% endtrans %}</a>
+		&nbsp;&gt;&nbsp;
+		<a href="{{ path('pack_show', {id: pack.id}) }}">{{ pack.name }}</a>
+	</div>
+{% endblock %}

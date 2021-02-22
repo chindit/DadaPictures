@@ -26,6 +26,7 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/tag/new, role: ROLE_ADMIN }
+        - { path: ^/tag/\d+/edit, role: ROLE_ADMIN }
         - { path: ^/pack/, role: ROLE_USER }
         - { path: ^/picture/tag/, role: ROLE_USER }
     providers:
