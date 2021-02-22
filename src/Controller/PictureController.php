@@ -9,10 +9,12 @@ use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Entity\Tag;
 use App\Form\Type\PictureTagType;
+use App\Model\Status;
 use App\Repository\PictureRepository;
 use App\Service\FileManager;
 use App\Service\Path;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,10 +30,18 @@ class PictureController extends AbstractController
         return $this->render('picture/diaporama.html.twig', ['pack' => $pack]);
     }
 
-    #[Route('/pack/{pack}/picture/{picture}', name: 'pack_view_single_picture', methods: ['GET'])]
-    public function viewPackSinglePictureAction(Pack $pack, Picture $picture): Response
-    {
-        return $this->render('picture/view.html.twig', ['pack' => $pack, 'picture' => $picture]);
+    #[Route('/pack/{pack}/picture/{page}', name: 'pack_view_single_picture', methods: ['GET'])]
+    public function viewPackSinglePictureAction(
+        Pack $pack,
+        int $page,
+        PaginatorInterface $paginator
+    ): Response {
+        $pagination = $paginator->paginate(
+            $pack->getPictures(),
+            $page,
+            1
+        );
+        return $this->render('picture/view.html.twig', ['pack' => $pack, 'pagination' => $pagination]);
     }
 
     #[Route('/tag/random', name: 'picture_tag', methods: ['GET'])]
