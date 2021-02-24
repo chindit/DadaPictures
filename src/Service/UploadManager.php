@@ -133,6 +133,12 @@ class UploadManager
     {
         $newStoragePath = $this->fileManager->prepareDestinationDir($pack);
 
+        if (!$this->checkFiles($pack)) {
+        	$pack->setStatus(Status::ERROR);
+        	$this->entityManager->flush();
+        	return false;
+        }
+
         foreach ($pack->getPictures() as $picture) {
             /** @var $picture Picture */
             if ($picture->getStatus() !== Status::TEMPORARY) {
@@ -176,11 +182,25 @@ class UploadManager
         }
 
         $this->fileManager->cleanStorage($pack->getStoragePath());
-        $this->packManager->removeObsoletePictures($pack);
+        // Temporary avoid to remove "obsolete" pictures
+        // $this->packManager->removeObsoletePictures($pack);
 
         $pack->setStatus(Status::OK);
         $pack->setStoragePath($newStoragePath);
         $this->entityManager->flush();
+
+        return true;
+    }
+
+    private function checkFiles(Pack $pack): bool
+    {
+        /** @var Picture $picture */
+        foreach ($pack->getPictures() as $picture) {
+            if (!is_file($this->path->getTempDirectory() . $picture->getFilename())) {
+                $picture->setStatusInfo(sprintf('File not found.  Looked in %s', $this->path->getTempDirectory() . $picture->getFilename()));
+                return false;
+            }
+        }
 
         return true;
     }
