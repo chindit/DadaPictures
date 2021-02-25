@@ -12,6 +12,7 @@ use App\Repository\BannedPictureRepository;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
@@ -123,11 +124,12 @@ class FileManager
     {
         $dirName = $this->cleanName($pack->getName());
 
-        if (is_dir($this->path->getStorageDirectory() . $dirName)) {
+        $filesystem = new Filesystem();
+        if ($filesystem->exists($this->path->getStorageDirectory() . $dirName)) {
             $dirName .= '_' . uniqid('', true);
         }
 
-        mkdir($this->path->getStorageDirectory()  . $dirName);
+        $filesystem->mkdir($this->path->getStorageDirectory()  . $dirName);
 
         return $this->path->getStorageDirectory() . $dirName;
     }
@@ -157,14 +159,15 @@ class FileManager
      */
     public function moveFileToPack(Picture $picture, Pack $pack, string $destinationPath): Picture
     {
-        if (!is_file($this->path->getTempDirectory() . $picture->getFilename())) {
+        $filesystem = new Filesystem();
+
+        if (!$filesystem->exists($this->path->getTempDirectory() . $picture->getFilename())) {
             throw new FileNotFoundException($picture->getFilename());
         }
 
-        $newName = $this->cleanName($picture->getFilename(), $pack->getStoragePath());
-        if (!rename($this->path->getTempDirectory() . $picture->getFilename(), $destinationPath . '/' . $newName)) {
-            throw new \RuntimeException("Unable to move file «" . $picture->getFilename() . '»');
-        }
+        $newName = $this->cleanName($picture->getFilename());
+
+        $filesystem->rename($this->path->getTempDirectory() . $picture->getFilename(), $destinationPath . '/' . $newName);
 
         $picture->setFilename($destinationPath . '/' . $newName);
 
@@ -177,19 +180,13 @@ class FileManager
      */
     public function cleanStorage(string $storagePath): void
     {
-        if (is_dir($storagePath)) {
-            $files = scandir($storagePath) ?: [];
+        $filesystem = new Filesystem();
+        if ($filesystem->exists($storagePath)) {
+            $files = array_diff(scandir($storagePath) ?: ['.', '..'], ['.', '..']);
 
-            foreach ($files as $file) {
-                if ($file !== '.' && $file !== '..') {
-                    if (is_dir($storagePath . '/' . $file)) {
-                        $this->cleanStorage($storagePath . '/' . $file);
-                    } else {
-                        unlink($storagePath . '/' . $file);
-                    }
-                }
-            }
-            rmdir($storagePath);
+            $filesystem->remove($files);
+
+            $filesystem->remove($storagePath);
         }
     }
 
@@ -207,28 +204,15 @@ class FileManager
 
     /**
      * Remove all non-alphanumeric characters from a string
-     * @param string $filename
-     * @param string $storagePath
-     * @return string
      */
-    private function cleanName(string $filename, string $storagePath = null): string
+    private function cleanName(string $filename): string
     {
-        $subDir = ($storagePath) ? substr($filename, strlen($storagePath)) : '';
-        $subDir = (strlen($subDir) > 0 && $subDir[0] === '/') ? substr($subDir, 1) : $subDir;
-        // Remove file
-        if (strrpos($subDir, '/') !== false) {
-            $subDir = substr($subDir, 0, strrpos($subDir, '/'));
-        }
-        $prefix = (strlen($subDir) > 1) ? str_replace('/', '_', $subDir) : '';
-        if (strlen($prefix) > 1) {
-            $prefix .= (($prefix[-1] !== '_') ? '_' : '');
-        }
         return preg_replace(
             "/[^.a-zA-Z0-9_-]+/",
             "",
             transliterator_transliterate(
                 'Any-Latin;Latin-ASCII;',
-                str_replace(' ', '_', $prefix . basename($filename))
+                str_replace(' ', '_', basename($filename))
             )
             ?: uniqid('', true)
         )

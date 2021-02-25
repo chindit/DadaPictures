@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Security;
@@ -29,7 +30,7 @@ class UploadManager
         private PackManager $packManager,
         private Path $path,
         private BannedPictureRepository $bannedPictureRepository,
-        private PictureConverter $pictureConverter
+        private PictureConverter $pictureConverter,
     ) {
     }
 
@@ -131,13 +132,13 @@ class UploadManager
      */
     public function validateUpload(Pack $pack): bool
     {
-        $newStoragePath = $this->fileManager->prepareDestinationDir($pack);
-
         if (!$this->checkFiles($pack)) {
-        	$pack->setStatus(Status::ERROR);
-        	$this->entityManager->flush();
-        	return false;
+            $pack->setStatus(Status::ERROR);
+            $this->entityManager->flush();
+            return false;
         }
+
+        $newStoragePath = $this->fileManager->prepareDestinationDir($pack);
 
         foreach ($pack->getPictures() as $picture) {
             /** @var $picture Picture */
@@ -147,8 +148,10 @@ class UploadManager
 
             $picture = $this->fileManager->getPictureHashes($picture);
 
-            if ($this->fileManager->findDuplicates($picture)) {
+            $duplicate = $this->fileManager->findDuplicates($picture);
+            if ($duplicate !== null) {
                 $picture->setStatus(Status::DUPLICATE);
+                $pack->addPicture($duplicate);
                 continue;
             }
 
