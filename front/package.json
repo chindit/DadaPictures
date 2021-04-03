@@ -1,0 +1,40 @@
+{
+  "name": "dadapictures",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@popperjs/core": "^2.9.2",
+    "@vue/composition-api": "^1.0.0-rc.6",
+    "axios": "^0.21.1",
+    "bootstrap": "^5.0.0-beta2",
+    "core-js": "^3.10.0",
+    "register-service-worker": "^1.7.2",
+    "uuid": "^8.3.2",
+    "vue": "^3.0.0",
+    "vue-i18n": "^9.0.0-rc.9",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.0-0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.12",
+    "@vue/cli-plugin-eslint": "~4.5.12",
+    "@vue/cli-plugin-pwa": "~4.5.12",
+    "@vue/cli-plugin-router": "~4.5.12",
+    "@vue/cli-plugin-vuex": "~4.5.12",
+    "@vue/cli-service": "~4.5.12",
+    "@vue/compiler-sfc": "^3.0.11",
+    "@vue/eslint-config-airbnb": "^5.3.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.23.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-vue": "^7.8.0",
+    "sass": "^1.32.8",
+    "sass-loader": "^10.1.1"
+  }
+}

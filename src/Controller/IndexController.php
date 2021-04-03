@@ -8,16 +8,20 @@ use App\Model\Status;
 use App\Repository\PackRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class IndexController extends AbstractController
 {
-    #[Route('/', name:'homepage', methods:['GET'])]
+    #[Route('/api/packs', name:'homepage', methods:['GET'])]
     public function indexAction(
         PackRepository $packRepository,
         PaginatorInterface $paginator,
+        NormalizerInterface $normalizer,
         Request $request
     ): Response {
         $pagination = $paginator->paginate(
@@ -26,9 +30,14 @@ class IndexController extends AbstractController
             25
         );
 
-        return $this->render('default/index.html.twig', array(
-            'packs' => $pagination,
-        ));
+        return new JsonResponse([
+        	'data' => $normalizer->normalize($pagination->getItems(), null, [AbstractNormalizer::IGNORED_ATTRIBUTES => ['creator']]),
+	        'pagination' => [
+	        	'per_page' => $pagination->getItemNumberPerPage(),
+		        'page' => $pagination->getCurrentPageNumber(),
+		        'total' => $pagination->getTotalItemCount(),
+	        ]
+        ]);
     }
 
     #[Route('/terms', name:'terms_and_conditions', methods:['GET'])]

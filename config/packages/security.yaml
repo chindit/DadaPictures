@@ -12,6 +12,20 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        login:
+            pattern: ^/api/(login|register)
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern: ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
         main:
             pattern: ^/
             logout:       true
@@ -29,6 +43,9 @@ security:
         - { path: ^/tag/\d+/edit, role: ROLE_ADMIN }
         - { path: ^/pack/, role: ROLE_USER }
         - { path: ^/picture/tag/, role: ROLE_USER }
+        - { path: ^/api/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -63,6 +64,7 @@ class Pack
     private Collection $tags;
 
     /**
+     * @Ignore()
      * @ORM\ManyToOne(targetEntity="User")
      */
     private ?UserInterface $creator;
@@ -79,6 +81,7 @@ class Pack
     private \DateTime $updated;
 
     /**
+     * @Ignore()
      * @Assert\File(mimeTypes={"application/zip", "application/x-rar-compressed", "application/gzip", "application/x-tar"})
      */
     private ?File $file;

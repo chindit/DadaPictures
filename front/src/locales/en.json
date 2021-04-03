@@ -1,0 +1,40 @@
+{
+    "pack": {
+        "submit": "Send pictures"
+    },
+    "tag": {
+        "name": "Tags",
+        "add": "Add tags to a picture"
+    },
+    "picture": {
+        "random": "View 50 random"
+    },
+    "login": {
+        "title": "Login",
+        "username": "Username",
+        "password": "Password",
+        "remember": "Remember me",
+        "login": "Login",
+        "noAccount": "No account ?",
+        "signUp": "Sign up"
+    },
+    "register": {
+        "title": "Register",
+        "email": "Email address",
+        "repeatPassword": "Repeat password",
+        "language": "Language",
+        "cguAccept": "I have read and I accept the",
+        "cgu": "Terms & Conditions",
+        "register": "Register"
+    },
+    "logout": {
+        "title": "Logout"
+    },
+    "account": {
+        "title": "My account"
+    },
+    "registration": {
+        "passwordMatching": "Your passwords doesn't match or are not long enough",
+        "success": "Your account is successfully created.  You can now login"
+    }
+}

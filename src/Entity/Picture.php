@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * Picture
@@ -91,6 +92,7 @@ class Picture
     private ?string $thumbnail;
 
     /**
+     * @Ignore()
      * @ORM\ManyToOne(targetEntity="User")
      */
     private UserInterface $creator;
