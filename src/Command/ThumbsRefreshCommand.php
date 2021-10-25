@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ThumbsRefreshCommand extends Command
 {
     protected static $defaultName = 'thumbs:refresh';
-    protected static string $defaultDescription = 'Refresh all thumbnails';
+    protected static $defaultDescription = 'Refresh all thumbnails';
 
     public function __construct(string $name = null, private EntityManagerInterface $entityManager, private PictureConverter $pictureConverter)
     {

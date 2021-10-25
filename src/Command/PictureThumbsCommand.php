@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class PictureThumbsCommand extends Command
 {
     protected static $defaultName = 'picture:thumbs';
-    protected static string $defaultDescription = 'Generate missing thumbnails';
+    protected static $defaultDescription = 'Generate missing thumbnails';
 
     public function __construct(
         string $name = null,
