@@ -15,26 +15,22 @@
                     {% form_theme registrationForm 'bootstrap_base_layout.html.twig' %}
                     {{ form_start(registrationForm) }}
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
                             {{ form_widget(registrationForm.username, { 'attr': {'class':'form-control input_user', 'placeholder':'global.username'}}) }}
                             <span class="invalid-feedback">
                                 {{ form_errors(registrationForm.username) }}
                             </span>
                         </div>
                         <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
                             {{ form_widget(registrationForm.plainPassword, { 'attr': {'class':'form-control input_pass', 'placeholder':'global.password'}}) }}
                             <span class="invalid-feedback">
                                 {{ form_errors(registrationForm.plainPassword) }}
                             </span>
                         </div>
                         <div class="form-group">
-                            <div class="custom-control custom-checkbox">
-                                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class':'custom-control-input form-control', 'required':'required'}}) }}
+                            <div class="custom-control custom-checkbox form-control">
+                                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class':'custom-control-input', 'required':'required'}}) }}
                                 <label class="custom-control-label" for="registration_form_agreeTerms"><a href="{{ path('terms_and_conditions') }}">{% trans %}register.terms{% endtrans %}</a></label>
                                 <span class="invalid-feedback">
                                     {{ form_errors(registrationForm.agreeTerms) }}
