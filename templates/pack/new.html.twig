@@ -11,8 +11,13 @@
 
     <div class="card mb-5">
         <div class="card-body">
-            {{ form_start(form) }}
             {{ form_widget(form) }}
+            <div class="dropzone" id="dropzone">
+                <div class="dz-message" data-dz-message>Text you want in the drop area</div>
+                <div class="fallback">
+                    <input name="file" type="file" multiple />
+                </div>
+            </div>
             <input class="btn btn-lg btn-success float-right" type="submit" value="{% trans %}pack.form.create{% endtrans %}"/>
             {{ form_end(form) }}
         </div>
@@ -23,4 +28,8 @@
 <div class="breadcrumb">
     <a href="{{ path('homepage') }}">{% trans %}routes.home{% endtrans %}</a>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('upload') }}
 {% endblock %}
