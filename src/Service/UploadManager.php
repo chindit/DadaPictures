@@ -12,6 +12,7 @@ use App\Repository\BannedPictureRepository;
 use App\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -49,7 +50,9 @@ class UploadManager
             throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
         }
         $newFileName = uniqid('temp_upload_', true) . '.' . $file->guessExtension();
-        file_put_contents($this->path->getTempUploadDirectory() . $newFileName, $stream);
+        if (file_put_contents($this->path->getTempUploadDirectory() . $newFileName, $stream) === false) {
+	        throw new UnableToWriteFile(sprintf('File %s couln\'t be written to temp storage', $this->path->getTempUploadDirectory() . $newFileName));
+        }
         fclose($stream);
 
         return $newFileName;
