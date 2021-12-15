@@ -14,7 +14,7 @@ class ThumbsRefreshCommand extends Command
     protected static $defaultName = 'thumbs:refresh';
     protected static $defaultDescription = 'Refresh all thumbnails';
 
-    public function __construct(string $name = null, private EntityManagerInterface $entityManager, private PictureConverter $pictureConverter)
+    public function __construct(?string $name = null, private EntityManagerInterface $entityManager, private PictureConverter $pictureConverter)
     {
         parent::__construct($name);
     }

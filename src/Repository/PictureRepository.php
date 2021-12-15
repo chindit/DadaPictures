@@ -10,6 +10,9 @@ use App\Model\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Picture>
+ */
 class PictureRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

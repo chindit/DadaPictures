@@ -30,7 +30,6 @@ class UploadManager
         private FileManager $fileManager,
         private PackManager $packManager,
         private Path $path,
-        private BannedPictureRepository $bannedPictureRepository,
         private PictureConverter $pictureConverter,
     ) {
     }
