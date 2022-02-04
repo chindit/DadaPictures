@@ -157,7 +157,12 @@ class UploadManager
                 continue;
             }
 
-            [$width, $height] = getimagesize($this->path->getTempDirectory() . $picture->getFilename());
+            $imagesize = getimagesize($this->path->getTempDirectory() . $picture->getFilename());
+            if ($imagesize === false) {
+                return false;
+            }
+
+            [$width, $height] = $imagesize;
             if ($width === null || $height === null) {
                 $picture->setStatus(Status::ERROR);
                 continue;

@@ -6,6 +6,7 @@ use App\Entity\Picture;
 use App\Repository\PictureRepository;
 use App\Service\PictureConverter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,24 +14,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'picture:thumbs',
+    description: 'Generate missing thumbnails',
+)]
 class PictureThumbsCommand extends Command
 {
-    protected static $defaultName = 'picture:thumbs';
-    protected static $defaultDescription = 'Generate missing thumbnails';
-
     public function __construct(
         private PictureRepository $pictureRepository,
         private PictureConverter $pictureConverter,
         private EntityManagerInterface $entityManager
     ) {
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setDescription(self::$defaultDescription)
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

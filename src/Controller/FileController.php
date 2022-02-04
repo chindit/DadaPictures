@@ -21,7 +21,8 @@ class FileController extends AbstractController
         string $name,
         string $storagePath,
         FlashBagInterface $flashBag,
-        Security $security
+        Security $security,
+        UploadManager $uploadManager
     ): Response {
         $tmpDir = $storagePath . '/pictures/ftp';
         // Read files from first level in temp dir
@@ -35,8 +36,6 @@ class FileController extends AbstractController
                 $pack->setCreator($security->getUser());
                 $pack->setStoragePath($tmpDir . '/');
                 $pack->setName(pathinfo($name)['filename']);
-                /** @var UploadManager $uploadManager */
-                $uploadManager = $this->get(UploadManager::class);
                 try {
                     if (is_dir($tmpDir . '/' . $name)) {
                         $pack = $uploadManager->uploadFileDir($tmpDir . '/' . $name, $pack);

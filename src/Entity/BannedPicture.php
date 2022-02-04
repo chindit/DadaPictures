@@ -42,4 +42,14 @@ class BannedPicture
 
         return $this;
     }
+
+    public function getSha1(): string
+    {
+        return $this->sha1;
+    }
+
+    public function getCreationDate(): \DateTime
+    {
+        return $this->created;
+    }
 }

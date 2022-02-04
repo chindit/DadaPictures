@@ -4,26 +4,21 @@ namespace App\Command;
 
 use App\Service\PictureConverter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'thumbs:refresh',
+    description: 'Refresh all thumbnails',
+)]
 class ThumbsRefreshCommand extends Command
 {
-    protected static $defaultName = 'thumbs:refresh';
-    protected static $defaultDescription = 'Refresh all thumbnails';
-
     public function __construct(?string $name = null, private EntityManagerInterface $entityManager, private PictureConverter $pictureConverter)
     {
         parent::__construct($name);
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setDescription(self::$defaultDescription)
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -36,9 +31,9 @@ class ThumbsRefreshCommand extends Command
 
         $io->progressStart($pictureCount);
 
-        $picureQuery = $this->entityManager->createQuery('SELECT p FROM App\Entity\Picture p WHERE p.status = 1');
+        $pictureQuery = $this->entityManager->createQuery('SELECT p FROM App\Entity\Picture p WHERE p.status = 1');
 
-        foreach ($picureQuery->toIterable() as $picture) {
+        foreach ($pictureQuery->toIterable() as $picture) {
             try {
                 $this->pictureConverter->createThumbnail($picture, true);
             } catch (\Exception $e) {

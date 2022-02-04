@@ -16,7 +16,7 @@ class RegistrationFormType extends AbstractType
 {
     /**
      * @param FormBuilderInterface|FormBuilderInterface[] $builder
-     * @param array<array, mixed> $options
+     * @param array<string, mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

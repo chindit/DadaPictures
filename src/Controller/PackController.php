@@ -21,6 +21,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -34,6 +35,7 @@ class PackController extends AbstractController
         UploadManager $uploadManager,
         TranslatorInterface $translator,
         EntityManagerInterface $entityManager,
+        MessageBusInterface $messageBus,
         Security $security
     ): Response {
         $pack = new Pack();
@@ -48,7 +50,7 @@ class PackController extends AbstractController
                 $entityManager->persist($pack);
                 $entityManager->flush();
 
-                $this->dispatchMessage(new UploadMessage($pack->getId()));
+                $messageBus->dispatch(new UploadMessage($pack->getId()));
 
                 $this->addFlash('success', $translator->trans('pack.created'));
                 $this->addFlash('warning', $translator->trans('pack.validation'));
@@ -69,7 +71,7 @@ class PackController extends AbstractController
         Pack $pack,
         EntityManagerInterface $entityManager,
         FileManager $fileManager,
-        FlashBagInterface $flashBag
+        FlashBagInterface $flashBag,
     ): Response {
         foreach ($pack->getPictures() as $picture) {
             $bannedPicture = new BannedPicture($picture->getSha1sum());
@@ -86,11 +88,11 @@ class PackController extends AbstractController
     }
 
     #[Route('/{id}/confirm', name:'pack_confirm', methods: ['GET'])]
-    public function publishAction(Pack $pack, EntityManagerInterface $entityManager): Response
+    public function publishAction(Pack $pack, EntityManagerInterface $entityManager, MessageBusInterface $messageBus): Response
     {
         $pack->setStatus(Status::PROCESSING_VALIDATION);
         $entityManager->flush();
-        $this->dispatchMessage(new ValidateUploadMessage($pack->getId()));
+        $messageBus->dispatch(new ValidateUploadMessage($pack->getId()));
 
         return $this->redirectToRoute('homepage');
     }
@@ -110,14 +112,14 @@ class PackController extends AbstractController
     }
 
     #[Route('/{id}/edit', name:'pack_edit', methods: ['GET', 'POST'])]
-    public function editAction(Request $request, Pack $pack): Response
+    public function editAction(Request $request, Pack $pack, EntityManagerInterface $entityManager): Response
     {
         $deleteForm = $this->createDeleteForm($pack);
         $editForm = $this->createForm(PackType::class, $pack);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
 
             return $this->redirectToRoute('pack_edit', array('id' => $pack->getId()));
         }
@@ -152,10 +154,6 @@ class PackController extends AbstractController
         );
     }
 
-    /**
-     * @param Pack $pack
-     * @return FormInterface|FormBuilderInterface[]
-     */
     private function createDeleteForm(Pack $pack): FormInterface
     {
         return $this->createFormBuilder()
