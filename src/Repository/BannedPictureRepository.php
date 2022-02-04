@@ -11,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BannedPicture|null findOneBy(array $criteria, array $orderBy = null)
  * @method BannedPicture[]    findAll()
  * @method BannedPicture[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<BannedPicture>
  */
 class BannedPictureRepository extends ServiceEntityRepository
 {

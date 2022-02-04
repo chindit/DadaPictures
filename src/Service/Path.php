@@ -8,8 +8,11 @@ use App\Entity\Picture;
 
 final class Path
 {
-    public function __construct(private string $storagePath)
+    public function __construct(private string $storagePath, string $rootDir)
     {
+        if (!str_starts_with($this->storagePath, $rootDir)) {
+            $this->storagePath = $rootDir . $this->storagePath;
+        }
     }
 
     public function getTempDirectory(): string

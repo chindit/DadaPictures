@@ -30,7 +30,6 @@ class FileManager
     private array $allowedPictureType;
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
         private Security $security,
         private PictureRepository $pictureRepository,
         private BannedPictureRepository $bannedPictureRepository,
