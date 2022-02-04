@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class TagType extends AbstractType
 {
-
     /**
      * @param FormBuilderInterface|FormBuilderInterface[] $builder
      * @param array<string, mixed> $options

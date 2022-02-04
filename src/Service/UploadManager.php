@@ -50,7 +50,7 @@ class UploadManager
         }
         $newFileName = uniqid('temp_upload_', true) . '.' . $file->guessExtension();
         if (file_put_contents($this->path->getTempUploadDirectory() . $newFileName, $stream) === false) {
-	        throw new UnableToWriteFile(sprintf('File %s couln\'t be written to temp storage', $this->path->getTempUploadDirectory() . $newFileName));
+            throw new UnableToWriteFile(sprintf('File %s couln\'t be written to temp storage', $this->path->getTempUploadDirectory() . $newFileName));
         }
         fclose($stream);
 
