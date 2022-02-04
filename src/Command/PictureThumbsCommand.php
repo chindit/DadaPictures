@@ -19,12 +19,11 @@ class PictureThumbsCommand extends Command
     protected static $defaultDescription = 'Generate missing thumbnails';
 
     public function __construct(
-        string $name = null,
         private PictureRepository $pictureRepository,
         private PictureConverter $pictureConverter,
         private EntityManagerInterface $entityManager
     ) {
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void
