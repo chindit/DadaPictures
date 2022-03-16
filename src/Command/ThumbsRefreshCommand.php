@@ -16,9 +16,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class ThumbsRefreshCommand extends Command
 {
-    public function __construct(?string $name = null, private EntityManagerInterface $entityManager, private PictureConverter $pictureConverter)
+    public function __construct(private EntityManagerInterface $entityManager, private PictureConverter $pictureConverter)
     {
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
