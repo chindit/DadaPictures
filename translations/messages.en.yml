@@ -66,5 +66,7 @@ pack:
     validation: 'Your pictures must be validated by an administrator.  This can take a few hours'
     processing: 'Pictures of your gallery are processing.  This can take a few minutes.'
     upload_error: 'An error has occurred while creating your gallery.  Please try again.'
+upload:
+    batch: 'Drag and drop your files here'
 routes:
     home: 'Home'

@@ -67,5 +67,7 @@ pack:
     validation: 'Vos images doivent être validées par un administrateur avant publication.  Ceci peut prendre quelques heures'
     processing: 'Les images de votre galerie sont en cours de traitement.  Cette opération peut prendre plusieurs minutes'
     upload_error: 'Une erreur est survenue durant la création de votre galerie.  Veuillez réessayer'
+upload:
+    batch: 'Glissez-déposez vos fichiers dans cette zone'
 routes:
     home: 'Home'

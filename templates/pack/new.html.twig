@@ -14,12 +14,12 @@
             {{ form_start(form) }}
             {{ form_widget(form) }}
             <div class="dropzone" id="dropzone">
-                <div class="dz-message" data-dz-message>Text you want in the drop area</div>
+                <div class="dz-message" data-dz-message>{% trans %}upload.batch{% endtrans %}</div>
                 <div class="fallback">
                     <input name="file" type="file" multiple />
                 </div>
             </div>
-            <input class="btn btn-lg btn-success float-right" type="submit" value="{% trans %}pack.form.create{% endtrans %}"/>
+            <input class="btn btn-lg btn-success float-right mt-2" type="submit" value="{% trans %}pack.form.create{% endtrans %}"/>
             {{ form_end(form) }}
         </div>
     </div>
