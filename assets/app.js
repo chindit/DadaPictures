@@ -6,8 +6,8 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import '../css/app.sass';
-import '../../node_modules/dropzone/dist/dropzone.css';
+import './css/app.sass';
+import '../node_modules/dropzone/dist/dropzone.css';
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 const $ = require('jquery');
