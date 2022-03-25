@@ -79,7 +79,8 @@
         "sort-packages": true,
         "optimize-autoloader": true,
         "allow-plugins": {
-            "symfony/flex": true
+            "symfony/flex": true,
+            "composer/package-versions-deprecated": true
         }
     },
     "extra": {

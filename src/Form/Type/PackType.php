@@ -32,7 +32,7 @@ class PackType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['required' => true, 'label' => 'pack.form.name'])
-            ->add('file', FileType::class, ['label' => 'pack.form.archive'])
+            ->add('file', FileType::class, ['required' => false, 'label' => 'pack.form.archive'])
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
                 'choice_label' => function (Tag $tag) {
