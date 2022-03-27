@@ -44,13 +44,13 @@ class FileController extends AbstractController
                         $pack = $uploadManager->uploadFileDir($tmpDir . '/' . $name, $pack);
                     } else {
                         $file = new File($tmpDir . '/' . $name);
-                        $pack->setFile($file);
+                        //$pack->setFiles($file);
 
                         $pack = $uploadManager->upload($pack);
-                        if ($pack->getFile() === null) {
+                        /*if ($pack->getFile() === null) {
                             throw new \LogicException('File is missing from pack');
                         }
-                        $uploadManager->deleteFTPFile($pack->getFile());
+                        $uploadManager->deleteFTPFile($pack->getFile());*/
                     }
 
                     return $this->redirectToRoute('pack_pre_show', array('id' => $pack->getId()));

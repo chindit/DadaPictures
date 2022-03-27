@@ -95,6 +95,8 @@ class Pack
      *      }
      *     )
      * })
+     *
+     * @var array|UploadedFile[]
      */
     private array $files;
 
@@ -197,11 +199,17 @@ class Pack
         return $this;
     }
 
+	/**
+	 * @return array|UploadedFile[]
+	 */
     public function getFiles(): array
     {
         return $this->files;
     }
 
+	/**
+	 * @param array|UploadedFile[] $files
+	 */
     public function setFiles(array $files): self
     {
         $this->files = $files;

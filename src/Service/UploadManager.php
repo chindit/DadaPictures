@@ -14,6 +14,7 @@ use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Uid\Uuid;
 
@@ -29,6 +30,9 @@ class UploadManager
     ) {
     }
 
+	/**
+	 * @param array|UploadedFile[] $files
+	 */
     public function moveUploadFilesToTempStorage(array $files): string
     {
         if (empty($files)) {
