@@ -24,11 +24,12 @@ class Picture
     public const STATUS_ERROR = 3;
 
     /**
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="id", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="doctrine.uuid_generator")
      */
-    private int $id;
+    private string $id;
 
     /**
      * @ORM\Column(name="name", type="string", length=150)
@@ -122,7 +123,7 @@ class Picture
         $this->filename = '';
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

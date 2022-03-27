@@ -21,12 +21,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Pack
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private int $id;
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="id", unique=true)
+	 * @ORM\GeneratedValue(strategy="CUSTOM")
+	 * @ORM\CustomIdGenerator(class="doctrine.uuid_generator")
+	 */
+    private string $id;
 
     /**
      * @ORM\Column(name="name", type="string", length=150)
@@ -112,7 +113,7 @@ class Pack
         $this->updated = new \DateTime();
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

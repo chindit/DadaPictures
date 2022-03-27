@@ -10,12 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BannedPicture
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private int $id;
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="id", unique=true)
+	 * @ORM\GeneratedValue(strategy="CUSTOM")
+	 * @ORM\CustomIdGenerator(class="doctrine.uuid_generator")
+	 */
+    private string $id;
     /**
      * @ORM\Column(type="string", unique=true)
      */
@@ -31,7 +32,7 @@ class BannedPicture
         $this->created = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
