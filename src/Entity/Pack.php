@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -79,9 +80,23 @@ class Pack
     private \DateTime $updated;
 
     /**
-     * @Assert\File(mimeTypes={"application/zip", "application/x-rar-compressed", "application/x-rar", "application/gzip", "application/x-tar"})
+     * @Assert\All({
+     *     @Assert\File(
+     *     mimeTypes={
+     *         "application/zip",
+     *         "application/x-rar-compressed",
+     *         "application/x-rar",
+     *         "application/gzip",
+     *         "application/x-tar",
+     *         "image/gif",
+     *         "image/png",
+     *         "image/jpeg",
+     *         "image/webp"
+     *      }
+     *     )
+     * })
      */
-    private ?File $file;
+    private array $files;
 
     /**
      * Constructor
@@ -182,14 +197,14 @@ class Pack
         return $this;
     }
 
-    public function getFile(): ?File
+    public function getFiles(): array
     {
-        return $this->file;
+        return $this->files;
     }
 
-    public function setFile(File $file): self
+    public function setFiles(array $files): self
     {
-        $this->file = $file;
+        $this->files = $files;
 
         return $this;
     }
@@ -238,4 +253,5 @@ class Pack
 
         return $this;
     }
+
 }

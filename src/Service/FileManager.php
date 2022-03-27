@@ -90,8 +90,8 @@ class FileManager
             return $picture;
         }
 
-        if ($banned = $this->bannedPictureRepository->isBanned($picture->getSha1sum())) {
-            $picture->setStatus(Status::ERROR);
+        if ($this->bannedPictureRepository->isBanned($picture->getSha1sum())) {
+            $picture->setStatus(Status::BANNED);
             $picture->setStatusInfo('Picture is banned');
 
             return $picture;
@@ -105,6 +105,7 @@ class FileManager
 
     /**
      * Create a temporary upload directory
+     * @deprecated
      */
     public function createTempUploadDirectory(): string
     {

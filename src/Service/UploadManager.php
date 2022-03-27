@@ -8,22 +8,17 @@ use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Factory\ArchiveFactory;
 use App\Model\Status;
-use App\Repository\BannedPictureRepository;
-use App\Service\ArchiveHandler\ArchiveHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Uid\Uuid;
 
 class UploadManager
 {
-    private ArchiveHandlerInterface $handler;
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -34,27 +29,40 @@ class UploadManager
     ) {
     }
 
-    public function moveUploadFileToTempStorage(?File $file): string
+    public function moveUploadFilesToTempStorage(array $files): string
     {
-        if ($file === null) {
+        if (empty($files)) {
             return '';
         }
 
-        if (!$file->isReadable() || $file->getRealPath() === false) {
-            throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
+        $temporaryDirectory = Uuid::v4();
+        if (!mkdir($concurrentDirectory = $this->path->getTempDirectory() . $temporaryDirectory) && !is_dir($concurrentDirectory)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        $stream = fopen($file->getRealPath(), 'rb+');
-        if ($stream === false) {
-            throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
-        }
-        $newFileName = uniqid('temp_upload_', true) . '.' . $file->guessExtension();
-        if (file_put_contents($this->path->getTempUploadDirectory() . $newFileName, $stream) === false) {
-            throw new UnableToWriteFile(sprintf('File %s couln\'t be written to temp storage', $this->path->getTempUploadDirectory() . $newFileName));
-        }
-        fclose($stream);
+        $concurrentDirectory .= '/';
 
-        return $newFileName;
+        foreach ($files as $file) {
+            if (!$file->isReadable() || $file->getRealPath() === false) {
+                throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
+            }
+
+            $stream = fopen($file->getRealPath(), 'rb+');
+
+            if ($stream === false) {
+                throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
+            }
+
+            $newFileName = uniqid('temp_upload_', true) . '.' . $file->guessExtension();
+
+            if (file_put_contents($concurrentDirectory . $newFileName, $stream) === false) {
+                throw new UnableToWriteFile(sprintf('File %s couln\'t be written to temp storage', $concurrentDirectory . $newFileName));
+            }
+
+            fclose($stream);
+        }
+
+        return (string)$temporaryDirectory;
     }
 
     /**
@@ -62,12 +70,28 @@ class UploadManager
      */
     public function upload(Pack $pack): Pack
     {
-        $file = new File($this->path->getTempUploadDirectory() . $pack->getStoragePath());
-        $this->handler = ArchiveFactory::getHandler($file);
-        $pack->setStoragePath($this->fileManager->createTempUploadDirectory());
-        $this->handler->extractArchive($file, $this->path->getTempDirectory() . $pack->getStoragePath());
-        $pack->setStatus(Status::TEMPORARY);
-        $this->entityManager->persist($pack);
+	    $storageDirectory = $this->path->getTempDirectory() . $pack->getStoragePath();
+
+		$fileList = (new Finder())
+		    ->ignoreDotFiles(true)
+		    ->ignoreUnreadableDirs()
+		    ->followLinks()
+		    ->depth('< 30')
+		    ->ignoreVCS(true)
+		    ->in($storageDirectory)
+		    ->files();
+
+		// Unpack archive(s) if present
+		foreach ($fileList as $file) {
+		    $file = new File($file->getPathname());
+		    $handler = ArchiveFactory::getHandler($file);
+			if ($handler) {
+				$handler->extractArchive($file, $storageDirectory);
+			}
+	    }
+
+	    $pack->setStatus(Status::TEMPORARY);
+	    $this->entityManager->persist($pack);
 
         $this->uploadFiles($pack);
 
@@ -79,6 +103,7 @@ class UploadManager
 
     /**
      * Upload a directory of files
+     * @deprecated
      */
     public function uploadFileDir(string $fileDir, Pack $pack): Pack
     {
@@ -122,6 +147,7 @@ class UploadManager
     }
 
     /**
+     * @deprecated
      * Remove uploaded pack once it is extracted
      */
     public function deleteFTPFile(File $file): bool

@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Model\Languages;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,7 +33,7 @@ class PackType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['required' => true, 'label' => 'pack.form.name'])
-            ->add('file', FileType::class, ['required' => false, 'label' => 'pack.form.archive'])
+            ->add('files', FileType::class, ['required' => false, 'label' => 'pack.form.files', 'multiple' => true])
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
                 'choice_label' => function (Tag $tag) {
@@ -63,6 +64,6 @@ class PackType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'App_pack';
+        return '';
     }
 }

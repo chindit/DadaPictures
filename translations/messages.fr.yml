@@ -60,7 +60,7 @@ pack:
     view: 'Voir les galeries'
     form:
         name: 'Titre de votre galerie'
-        archive: '.zip ou .rar contenant vos images'
+        files: '.zip ou .rar contenant vos images OU vos images directement (.jpg, .png, .gif)'
         tags: 'Tags s''appliquant à votre galerie'
         create: 'Créer'
     created: 'Votre galerie a été créée avec succès'
@@ -68,6 +68,6 @@ pack:
     processing: 'Les images de votre galerie sont en cours de traitement.  Cette opération peut prendre plusieurs minutes'
     upload_error: 'Une erreur est survenue durant la création de votre galerie.  Veuillez réessayer'
 upload:
-    batch: 'Glissez-déposez vos fichiers dans cette zone'
+    batch: 'Sélectionnez le(s) fichier(s) à envoyer'
 routes:
     home: 'Home'

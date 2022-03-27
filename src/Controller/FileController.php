@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\Security;
 #[Route('file')]
 class FileController extends AbstractController
 {
+	/**
+	 * @deprecated
+	 */
     #[Route('/new/{name}', name:'ftp_pack_list', defaults: ['name' => ''], methods:['GET'])]
     public function newAction(
         string $name,

@@ -16,13 +16,13 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class ArchiveFactory
 {
-    public static function getHandler(File $file): ArchiveHandlerInterface
+    public static function getHandler(File $file): ?ArchiveHandlerInterface
     {
         return match ($file->getMimeType()) {
             'application/zip' => new ZipReader(),
             'application/x-rar' => new RarReader(),
             'application/gzip', 'application/x-tar' => new TarGzReader(),
-            default => throw new \InvalidArgumentException("Type «" . $file->getMimeType() . "» is not supported"),
+            default => null,
         };
     }
 }

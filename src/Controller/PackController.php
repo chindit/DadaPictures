@@ -44,7 +44,7 @@ class PackController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $pack->setStoragePath($uploadManager->moveUploadFileToTempStorage($pack->getFile()));
+                $pack->setStoragePath($uploadManager->moveUploadFilesToTempStorage($pack->getFiles()));
                 $pack->setStatus(Status::PROCESSING_UPLOAD);
                 $pack->setCreator($security->getUser());
                 $entityManager->persist($pack);

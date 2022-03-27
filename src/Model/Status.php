@@ -17,6 +17,7 @@ class Status
     public const DUPLICATE = 5;
     public const PROCESSING_UPLOAD = 6;
     public const PROCESSING_VALIDATION = 7;
+	public const BANNED = 8;
 
     /**
      * Return bootstrap equivalent for status const
@@ -30,6 +31,7 @@ class Status
             case Status::WARNING:
                 return 'warning';
             case Status::ERROR:
+	        case Status::BANNED:
                 return 'danger';
             default:
                 return '';
