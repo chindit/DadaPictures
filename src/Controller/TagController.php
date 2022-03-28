@@ -40,9 +40,9 @@ class TagController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
-        if ($request->query->has('tag')) {
+        if ($request->request->has('tag')) {
             /** @var string|string[]|null $tagRequest */
-            $tagRequest = $request->query->get('tag');
+            $tagRequest = $request->get('tag');
             if (!is_countable($tagRequest) || count($tagRequest) !== count(Languages::all())) {
 				$this->addFlash('danger', 'Tag sent is not valid');
 
