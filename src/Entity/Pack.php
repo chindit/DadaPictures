@@ -4,106 +4,83 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\PackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Pack
- *
- * @ORM\Table(name="pack")
- * @ORM\Entity(repositoryClass="App\Repository\PackRepository")
- */
+#[ORM\Table(name: 'pack')]
+#[ORM\Entity(repositoryClass: PackRepository::class)]
 class Pack
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\Column(type="uuid", unique=true)
-	 * @ORM\GeneratedValue(strategy="CUSTOM")
-	 * @ORM\CustomIdGenerator(class="doctrine.uuid_generator")
-	 */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private string $id;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=150)
-     * @Assert\Length(min="2", max="150")
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 150)]
+    #[Assert\Length(min: 2, max: 150)]
     private string $name;
 
-    /**
-     * @ORM\Column(name="storagePath", type="string", length=255)
-     */
+    #[ORM\Column(name: 'storagePath', type: 'string', length: 255)]
     private string $storagePath;
 
-    /**
-     * @ORM\Column(name="status", type="integer")
-     */
+    #[ORM\Column(name: 'status', type: 'integer')]
     private int $status;
 
-    /**
-     * @ORM\Column(name="views", type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Column(name: 'views', type: 'integer', options: ['unsigned' => true])]
     private int $views = 0;
 
     /**
      * @var Collection<int, Picture>
-     *
-     * @ORM\ManyToMany(targetEntity="Picture")
      */
+    #[ORM\ManyToMany(targetEntity: Picture::class)]
     private Collection $pictures;
 
     /**
      * @var Collection<int, Tag>
-     *
-     * @ORM\ManyToMany(targetEntity="Tag")
      */
+    #[ORM\ManyToMany(targetEntity: Tag::class)]
     private Collection $tags;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?UserInterface $creator;
 
-    /**
-     * @ORM\Column(name="created", type="datetime")
-     */
+    #[ORM\Column(name: 'created', type: 'datetime')]
     private \DateTime $created;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime")
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'updated', type: 'datetime')]
     private \DateTime $updated;
 
     /**
-     * @Assert\All({
-     *     @Assert\File(
-     *     mimeTypes={
-     *         "application/zip",
-     *         "application/x-rar-compressed",
-     *         "application/x-rar",
-     *         "application/gzip",
-     *         "application/x-tar",
-     *         "image/gif",
-     *         "image/png",
-     *         "image/jpeg",
-     *         "image/webp"
-     *      }
-     *     )
-     * })
-     *
      * @var array|UploadedFile[]
      */
+    #[Assert\All(
+        [
+            new Assert\File(
+                mimeTypes: [
+                    "application/zip",
+                    "application/x-rar-compressed",
+                    "application/x-rar",
+                    "application/gzip",
+                    "application/x-tar",
+                    "image/gif",
+                    "image/png",
+                    "image/jpeg",
+                    "image/webp"
+                ]
+            )
+        ]
+    )]
     private array $files;
 
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
         $this->name = '';
@@ -200,17 +177,17 @@ class Pack
         return $this;
     }
 
-	/**
-	 * @return array|UploadedFile[]
-	 */
+    /**
+     * @return array|UploadedFile[]
+     */
     public function getFiles(): array
     {
         return $this->files;
     }
 
-	/**
-	 * @param array|UploadedFile[] $files
-	 */
+    /**
+     * @param array|UploadedFile[] $files
+     */
     public function setFiles(array $files): self
     {
         $this->files = $files;
@@ -262,5 +239,4 @@ class Pack
 
         return $this;
     }
-
 }

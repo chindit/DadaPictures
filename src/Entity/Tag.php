@@ -7,41 +7,31 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Tag
- *
- * @ORM\Table(name="tag")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'tag')]
+#[ORM\Entity]
 class Tag
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(name: 'id', type: 'integer', options: ['unsigned' => false])]
     private ?int $id;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=150, unique=true)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 150, unique: true)]
     private string $name = '';
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\TranslatedTag", cascade={"persist", "remove"})
-     *
      * @var Collection<int, TranslatedTag> $translations
      */
+    #[ORM\ManyToMany(targetEntity: TranslatedTag::class, cascade: ['persist', 'remove'])]
     private Collection $translations;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Picture", mappedBy="tags")
-     *
      * @var Collection<int, Picture> $pictures
      */
+    #[ORM\ManyToMany(targetEntity: Picture::class, mappedBy: 'tags')]
     private Collection $pictures;
+
 
     public function __construct()
     {
