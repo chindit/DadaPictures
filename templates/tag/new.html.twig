@@ -3,7 +3,7 @@
 {% block body %}
     <h1 class="h1">Tag creation</h1>
 
-    <form>
+    <form method="post">
         {% for language in languages %}
         <div class="mb-3">
             <label for="tag-{{ language }}" class="form-label">Tag in {{ language|upper }}</label>
