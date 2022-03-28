@@ -18,7 +18,6 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('picture')]
@@ -45,10 +44,10 @@ class PictureController extends AbstractController
     }
 
     #[Route('/tag/random', name: 'picture_tag', methods: ['GET'])]
-    public function pictureAddTagsAction(PictureRepository $pictureRepository, FlashBagInterface $flashBag): Response
+    public function pictureAddTagsAction(PictureRepository $pictureRepository): Response
     {
         if (!$picture = $pictureRepository->getPictureWithoutTags()) {
-            $flashBag->add('info', 'All pictures are tagged');
+            $this->addFlash('info', 'All pictures are tagged');
 
             return $this->redirectToRoute('homepage');
         }
@@ -62,8 +61,7 @@ class PictureController extends AbstractController
     public function addTagsToPictureAction(
         Picture $picture,
         Request $request,
-        EntityManagerInterface $entityManager,
-        FlashBagInterface $flashBag
+        EntityManagerInterface $entityManager
     ): Response {
         $form = $this->createForm(PictureTagType::class, $picture);
 
@@ -72,7 +70,7 @@ class PictureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
         } else {
-            $flashBag->add('warning', 'An error has occurred during form submission');
+            $this->addFlash('warning', 'An error has occurred during form submission');
         }
 
         return $this->redirectToRoute('picture_tag');
@@ -98,8 +96,7 @@ class PictureController extends AbstractController
     public function banAction(
         Picture $picture,
         EntityManagerInterface $entityManager,
-        FileManager $fileManager,
-        FlashBagInterface $flashBag
+        FileManager $fileManager
     ): Response {
         $bannedPicture = new BannedPicture($picture->getSha1sum());
         $entityManager->persist($bannedPicture);
@@ -107,7 +104,7 @@ class PictureController extends AbstractController
         $fileManager->deletePicture($picture);
         $entityManager->flush();
 
-        $flashBag->add('info', 'File «' . $picture->getFilename() . '» has
+        $this->addFlash('info', 'File «' . $picture->getFilename() . '» has
             been correctly banned');
 
         return $this->redirectToRoute('admin_dashboard');
@@ -121,8 +118,7 @@ class PictureController extends AbstractController
         Request $request,
         Picture $picture,
         EntityManagerInterface $entityManager,
-        FileManager $fileManager,
-        FlashBagInterface $flashBag
+        FileManager $fileManager
     ): Response {
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('picture_delete', array('id' => $picture->getId())))
@@ -137,7 +133,7 @@ class PictureController extends AbstractController
             $fileManager->deletePicture($picture);
             $entityManager->flush();
 
-            $flashBag->add('info', 'File «' . $picture->getFilename() . '» has been correctly removed');
+            $this->addFlash('info', 'File «' . $picture->getFilename() . '» has been correctly removed');
 
             return $this->redirectToRoute('homepage');
         }

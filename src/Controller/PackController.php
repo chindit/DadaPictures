@@ -14,13 +14,10 @@ use App\Repository\PackRepository;
 use App\Service\FileManager;
 use App\Service\UploadManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -71,7 +68,6 @@ class PackController extends AbstractController
         Pack $pack,
         EntityManagerInterface $entityManager,
         FileManager $fileManager,
-        FlashBagInterface $flashBag,
     ): Response {
         foreach ($pack->getPictures() as $picture) {
             $bannedPicture = new BannedPicture($picture->getSha1sum());
@@ -81,7 +77,7 @@ class PackController extends AbstractController
             $entityManager->flush();
         }
 
-        $flashBag->add('info', 'Pack «' . $pack->getName() . '» has
+        $this->addFlash('info', 'Pack «' . $pack->getName() . '» has
             been correctly banned');
 
         return $this->redirectToRoute('admin_dashboard');

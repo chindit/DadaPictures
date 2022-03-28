@@ -6,12 +6,12 @@ namespace App\Message;
 
 class ValidateUploadMessage
 {
-    public function __construct(private int $packId)
+    public function __construct(private string $packId)
     {
     }
 
     public function getContents(): string
     {
-        return (string)$this->packId;
+        return $this->packId;
     }
 }
