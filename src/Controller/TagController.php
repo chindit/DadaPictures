@@ -6,14 +6,12 @@ namespace App\Controller;
 
 use App\Entity\Tag;
 use App\Entity\TranslatedTag;
-use App\Form\Type\TagType;
 use App\Model\Languages;
 use App\Repository\TagRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('tag')]
@@ -40,14 +38,13 @@ class TagController extends AbstractController
     #[Route('/new', name: 'tag_new', methods: ['GET', 'POST'])]
     public function newAction(
         Request $request,
-        EntityManagerInterface $entityManager,
-        FlashBagInterface $flashBag
+        EntityManagerInterface $entityManager
     ): Response {
         if ($request->query->has('tag')) {
             /** @var string|string[]|null $tagRequest */
             $tagRequest = $request->query->get('tag');
             if (!is_countable($tagRequest) || count($tagRequest) !== count(Languages::all())) {
-                $flashBag->add('danger', 'Tag sent is not valid');
+				$this->addFlash('danger', 'Tag sent is not valid');
 
                 return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
             }
@@ -66,7 +63,7 @@ class TagController extends AbstractController
             $entityManager->persist($tag);
             $entityManager->flush();
 
-            $flashBag->add('info', 'Tag «' . $tag->getName() . '» successfully added');
+            $this->addFlash('info', 'Tag «' . $tag->getName() . '» successfully added');
         }
 
         return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
