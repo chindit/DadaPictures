@@ -35,7 +35,9 @@ class PictureTagType extends AbstractType
                 'query_builder' => function (EntityRepository $repository) {
                     return $repository->createQueryBuilder('t')
                         ->select('t, SIZE(t.pictures) AS count')
-                        ->orderBy('count', 'DESC');
+                        ->orderBy('count', 'DESC')
+                        ->getQuery()
+                        ->getResult();
                 },
                 'choice_label' => function (Tag $tag) {
                     /** @var ?User $user */
