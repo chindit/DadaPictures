@@ -19,6 +19,10 @@ class TranslatedTag
     #[ORM\Column(type: 'string', length: 255)]
     private string $name = '';
 
+	#[ORM\ManyToOne(targetEntity: Tag::class, inversedBy: 'translations')]
+	#[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+	private Tag $tag;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,4 +51,9 @@ class TranslatedTag
 
         return $this;
     }
+
+	public function getTag(): Tag
+	{
+		return $this->tag;
+	}
 }

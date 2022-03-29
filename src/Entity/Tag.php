@@ -23,7 +23,7 @@ class Tag
     /**
      * @var Collection<int, TranslatedTag> $translations
      */
-    #[ORM\ManyToMany(targetEntity: TranslatedTag::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: TranslatedTag::class, mappedBy: 'tag', cascade: ['persist', 'remove'])]
     private Collection $translations;
 
     /**
