@@ -14,9 +14,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Ulid;
 
 /**
  * Class FileManager
@@ -189,6 +191,14 @@ class FileManager
             $filesystem->remove($storagePath);
         }
     }
+
+	public function getUniqueFileName(UploadedFile $file): string
+	{
+		$extension = $file->guessExtension();
+		$clientName = $this->cleanName($file->getClientOriginalName());
+
+		return $clientName . '_' . (new Ulid()) . '.' . $extension;
+	}
 
     /**
      * Delete physically a picture

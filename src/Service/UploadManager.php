@@ -57,7 +57,7 @@ class UploadManager
                 throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
             }
 
-            $newFileName = uniqid('temp_upload_', true) . '.' . $file->guessExtension();
+            $newFileName = $this->fileManager->getUniqueFileName($file);
 
             if (file_put_contents($concurrentDirectory . $newFileName, $stream) === false) {
                 throw new UnableToWriteFile(sprintf('File %s couln\'t be written to temp storage', $concurrentDirectory . $newFileName));
