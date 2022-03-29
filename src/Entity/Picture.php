@@ -4,113 +4,78 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\PictureRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Picture
- *
- * @ORM\Table(name="picture")
- * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
- *
- */
+
+#[ORM\Table(name: 'picture')]
+#[ORM\Entity(repositoryClass: PictureRepository::class)]
 class Picture
 {
     public const STATUS_OK = 1;
     public const STATUS_TEMP = 2;
     public const STATUS_ERROR = 3;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="doctrine.uuid_generator")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private string $id;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=150)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 150)]
     private string $name;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, unique=true)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, unique: true)]
     private string $filename;
 
-    /**
-     * @ORM\Column(name="height", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'height', type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $height;
 
-    /**
-     * @ORM\Column(name="width", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'width', type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $width;
 
-    /**
-     * @ORM\Column(name="weight", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'weight', type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $weight;
 
-    /**
-     * @ORM\Column(name="mime", type="string", length=50)
-     */
+    #[ORM\Column(name: 'mime', type: 'string', length: 50)]
     private string $mime;
 
-    /**
-     * @ORM\Column(name="sha1", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'sha1', type: 'string', length: 40, nullable: true)]
     private string $sha1sum;
 
-    /**
-     * @ORM\Column(name="properties", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'properties', type: 'text', nullable: true)]
     private string $properties;
 
-    /**
-     * @ORM\Column(name="status", type="integer")
-     */
+    #[ORM\Column(name: 'status', type: 'integer')]
     private int $status;
 
-    /**
-     * @ORM\Column(name="statusInfo", type="string", length=150)
-     */
+    #[ORM\Column(name: 'statusInfo', type: 'string', length: 150)]
     private string $statusInfo;
 
-    /**
-     * @ORM\Column(name="views", type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Column(name: 'views', type: 'integer', options: ['unsigned' => true])]
     private int $views = 0;
 
-    /**
-     * @ORM\Column(name="thumbnail", type="string", unique=true, nullable=true)
-     */
+    #[ORM\Column(name: 'thumbnail', type: 'string', unique: true, nullable: true)]
     private ?string $thumbnail;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private UserInterface $creator;
 
-    /**
-     * @ORM\Column(name="created", type="datetime")
-     */
+    #[ORM\Column(name: 'created', type: 'datetime')]
     private \DateTime $created;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime")
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'updated', type: 'datetime')]
     private \DateTime $updated;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="pictures")
      * @var Collection<int, Tag> $tags
      */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'pictures')]
     private Collection $tags;
 
 

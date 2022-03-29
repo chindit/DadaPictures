@@ -7,6 +7,7 @@ namespace App\Form\Type;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Model\Languages;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,6 +32,10 @@ class PictureTagType extends AbstractType
         $builder
             ->add('tags', EntityTagType::class, [
                 'class' => Tag::class,
+                'query_builder' => function (EntityRepository $repository) {
+                    return $repository->createQueryBuilder('t')
+                        ->orderBy('SIZE(t.pictures)', 'DESC');
+                },
                 'choice_label' => function (Tag $tag) {
                     /** @var ?User $user */
                     $user = $this->security->getUser();

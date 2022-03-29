@@ -5,34 +5,26 @@ namespace App\Entity;
 use App\Repository\TranslatedTagRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=TranslatedTagRepository::class)
- */
+#[ORM\Entity(repositoryClass: TranslatedTagRepository::class)]
 class TranslatedTag
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=2)
-     */
+    #[ORM\Column(type: 'string', length: 2)]
     private string $language;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $name;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $name = '';
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLanguage(): ?string
+    public function getLanguage(): string
     {
         return $this->language;
     }
@@ -44,7 +36,7 @@ class TranslatedTag
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

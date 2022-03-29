@@ -5,25 +5,19 @@ namespace App\Entity;
 use App\Repository\BannedPictureRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=BannedPictureRepository::class)
- */
+#[ORM\Entity(repositoryClass: BannedPictureRepository::class)]
 class BannedPicture
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\Column(type="uuid", unique=true)
-	 * @ORM\GeneratedValue(strategy="CUSTOM")
-	 * @ORM\CustomIdGenerator(class="doctrine.uuid_generator")
-	 */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private string $id;
-    /**
-     * @ORM\Column(type="string", unique=true)
-     */
+
+    #[ORM\Column(type: 'string', unique: true)]
     private string $sha1;
-    /**
-     * @ORM\Column(name="created", type="datetime")
-     */
+
+    #[ORM\Column(name: 'created', type: 'datetime')]
     private \DateTime $created;
 
     public function __construct(string $sha1)
