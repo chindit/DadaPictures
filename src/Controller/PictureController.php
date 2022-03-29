@@ -154,17 +154,17 @@ class PictureController extends AbstractController
         );
     }
 
-    #[Route('/view/thumb/{picture}', name: 'view_thumbnail_picture', methods: ['GET'])]
+    #[Route('/view/thumb/{picture}.jpg', name: 'view_thumbnail_picture', methods: ['GET'])]
     public function viewThumbnail(Picture $picture, Path $path): Response
     {
         if (!$picture->getThumbnail()) {
             return $this->redirectToRoute('view_picture', ['picture' => $picture]);
         }
 
-        return new Response(
+        return (new Response(
             file_get_contents($path->getThumbnailsDirectory() . $picture->getThumbnail()) ?: '',
             Response::HTTP_OK,
-            ['Content-Type' => 'image/jpg']
-        );
+            ['Content-Type' => 'image/jpg', 'Cache-Control' => 'max-age=3600']
+        ));
     }
 }

@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'pack')]
@@ -21,10 +22,12 @@ class Pack
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['overview'])]
     private string $id;
 
     #[ORM\Column(name: 'name', type: 'string', length: 150)]
     #[Assert\Length(min: 2, max: 150)]
+    #[Groups(['overview'])]
     private string $name;
 
     #[ORM\Column(name: 'storagePath', type: 'string', length: 255)]
@@ -238,5 +241,18 @@ class Pack
         $this->pictures->removeElement($picture);
 
         return $this;
+    }
+
+    #[Groups(['overview'])]
+    public function getThumbnail(): string
+    {
+        /** @var Picture|false $firstPicture */
+        $firstPicture = $this->pictures->first();
+
+        if ($firstPicture === false) {
+            return '';
+        }
+
+        return $firstPicture->getId();
     }
 }
