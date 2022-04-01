@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Model\Languages;
 use App\Repository\TranslatedTagRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +23,12 @@ class TranslatedTag
 	#[ORM\ManyToOne(targetEntity: Tag::class, inversedBy: 'translations')]
 	#[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id')]
 	private Tag $tag;
+
+	public function __construct(string $language = Languages::EN, string $name = '')
+	{
+		$this->language = $language;
+		$this->name = $name;
+	}
 
     public function getId(): ?int
     {
@@ -55,5 +62,12 @@ class TranslatedTag
 	public function getTag(): Tag
 	{
 		return $this->tag;
+	}
+
+	public function setTag(Tag $tag): self
+	{
+		$this->tag = $tag;
+
+		return $this;
 	}
 }

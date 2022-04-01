@@ -43,9 +43,6 @@ class TagType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Tag'
-        ));
     }
 
     /**
@@ -53,6 +50,6 @@ class TagType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'App_type';
+        return '';
     }
 }

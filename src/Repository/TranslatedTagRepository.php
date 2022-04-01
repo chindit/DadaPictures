@@ -20,32 +20,16 @@ class TranslatedTagRepository extends ServiceEntityRepository
         parent::__construct($registry, TranslatedTag::class);
     }
 
-    // /**
-    //  * @return TranslatedTag[] Returns an array of TranslatedTag objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?TranslatedTag
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+	public function findAllWithTranslation(string $language)
+	{
+		return $this->createQueryBuilder('tt')
+			->select(['tt.name', 't.id', 'SIZE(t.pictures) AS count'])
+			->join('tt.tag', 't')
+			->where('t.visible = 1')
+			->andWhere('tt.language = :language')
+			->setParameter('language', $language)
+			->orderBy('SIZE(t.pictures)', 'DESC')
+			->getQuery()
+			->getScalarResult();
+	}
 }
