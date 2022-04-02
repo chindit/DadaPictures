@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        $form->submit(json_decode($request->getContent(), true));
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -39,8 +39,9 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // do anything else you need here, like send an email
+	        return new JsonResponse(null, Response::HTTP_CREATED);
         }
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+		return new JsonResponse($form->getErrors(true, true)->current()->getMessage(), Response::HTTP_BAD_REQUEST);
     }
 }
