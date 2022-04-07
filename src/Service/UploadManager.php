@@ -8,10 +8,12 @@ use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Factory\ArchiveFactory;
 use App\Model\Status;
+use Chindit\Archive\Archive;
+use Chindit\Archive\Exception\UnsupportedArchiveType;
 use Doctrine\ORM\EntityManagerInterface;
-use League\Flysystem\UnableToWriteFile;
-use League\Flysystem\UnreadableFileEncountered;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,6 +29,7 @@ class UploadManager
         private PackManager $packManager,
         private Path $path,
         private PictureConverter $pictureConverter,
+        private Filesystem $filesystem,
     ) {
     }
 
@@ -40,30 +43,19 @@ class UploadManager
         }
 
         $temporaryDirectory = Uuid::v4();
-        if (!mkdir($concurrentDirectory = $this->path->getTempDirectory() . $temporaryDirectory) && !is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-        }
 
-        $concurrentDirectory .= '/';
+        // Exception is thrown if directory is not created
+        $this->filesystem->mkdir($this->path->getTempDirectory() . $temporaryDirectory);
+
+        $concurrentDirectory = $this->path->getTempDirectory() . $temporaryDirectory . '/';
 
         foreach ($files as $file) {
             if (!$file->isReadable() || $file->getRealPath() === false) {
-                throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
-            }
-
-            $stream = fopen($file->getRealPath(), 'rb+');
-
-            if ($stream === false) {
-                throw new UnreadableFileEncountered(sprintf('Unable to read %s file', $file->getRealPath()));
+                throw new IOException(sprintf('Unable to read %s file', $file->getRealPath()));
             }
 
             $newFileName = $this->fileManager->getUniqueFileName($file);
-
-            if (file_put_contents($concurrentDirectory . $newFileName, $stream) === false) {
-                throw new UnableToWriteFile(sprintf('File %s couln\'t be written to temp storage', $concurrentDirectory . $newFileName));
-            }
-
-            fclose($stream);
+            $this->filesystem->rename($file->getRealPath(), $concurrentDirectory . $newFileName);
         }
 
         return (string)$temporaryDirectory;
@@ -88,10 +80,14 @@ class UploadManager
 		// Unpack archive(s) if present
 		foreach ($fileList as $file) {
 		    $file = new File($file->getPathname());
-		    $handler = ArchiveFactory::getHandler($file);
-			if ($handler) {
-				$handler->extractArchive($file, $storageDirectory);
-			}
+
+            if (!exif_imagetype($file->getPathname())) {
+                if (Archive::isSupportedArchive($file->getPathname())) {
+                    Archive::extract($file->getPathname(), $storageDirectory);
+                } else {
+                    throw new UnsupportedArchiveType(sprintf("File %s of type %s is not supported", $file->getPathname(), $file->getMimeType()));
+                }
+            }
 	    }
 
 	    $pack->setStatus(Status::TEMPORARY);
