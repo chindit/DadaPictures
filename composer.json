@@ -30,6 +30,8 @@
         "gedmo/doctrine-extensions": "^3.6",
         "intervention/image": "^2.7.1",
         "knplabs/knp-paginator-bundle": "^5.8",
+        "lexik/jwt-authentication-bundle": "^v2.15",
+        "nelmio/cors-bundle": "^2.2.0",
         "sensio/framework-extra-bundle": "^6.2",
         "sentry/sentry-symfony": "^4.2",
         "symfony/asset": "^6.0",
