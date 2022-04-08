@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\Entity\Pack;
 use App\Model\Status;
 use App\Repository\PackRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,4 +62,14 @@ class PackController extends AbstractController
             'data' => $serializer->normalize($pageData->getItems(), context: ['groups' => 'overview'])
         ]);
     }
+
+	#[Route(name: 'gallery', methods: ['GET'], path: '/api/gallery/{id}')]
+	#[ParamConverter('pack', class: Pack::class)]
+	public function getGallery(Pack $pack, NormalizerInterface $normalizer, EntityManagerInterface $entityManager): JsonResponse
+	{
+		$pack->incrementViews();
+		$entityManager->flush();
+		
+		return new JsonResponse($normalizer->normalize($pack, context: ['groups' => 'export']));
+	}
 }

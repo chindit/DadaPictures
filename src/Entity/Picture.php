@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'picture')]
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
@@ -24,21 +24,27 @@ class Picture
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['export'])]
     private string $id;
 
     #[ORM\Column(name: 'name', type: 'string', length: 150)]
+    #[Groups(['export'])]
     private string $name;
 
     #[ORM\Column(name: 'filename', type: 'string', length: 255, unique: true)]
+    #[Groups(['export'])]
     private string $filename;
 
     #[ORM\Column(name: 'height', type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private ?int $height;
 
     #[ORM\Column(name: 'width', type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private ?int $width;
 
     #[ORM\Column(name: 'weight', type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private ?int $weight;
 
     #[ORM\Column(name: 'mime', type: 'string', length: 50)]
@@ -57,6 +63,7 @@ class Picture
     private string $statusInfo;
 
     #[ORM\Column(name: 'views', type: 'integer', options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private int $views = 0;
 
     #[ORM\Column(name: 'thumbnail', type: 'string', unique: true, nullable: true)]
