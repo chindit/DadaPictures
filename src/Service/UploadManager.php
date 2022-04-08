@@ -6,7 +6,6 @@ namespace App\Service;
 
 use App\Entity\Pack;
 use App\Entity\Picture;
-use App\Factory\ArchiveFactory;
 use App\Model\Status;
 use Chindit\Archive\Archive;
 use Chindit\Archive\Exception\UnsupportedArchiveType;

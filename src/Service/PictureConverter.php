@@ -6,7 +6,8 @@ namespace App\Service;
 
 use App\Entity\Picture;
 use Imagick;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Constraint;
+use Intervention\Image\ImageManager;
 
 final class PictureConverter
 {
@@ -40,9 +41,11 @@ final class PictureConverter
         $picturePath = $this->path->getPictureFullpath($picture);
 
         $name = $overwrite ? $picture->getThumbnail() : uniqid('thumb_', true) . '.jpg';
-        Image::make($picturePath)
-            ->fit($this->thumbnailWidth, $this->thumbnailHeight, function($constraint) {
-                $constraint->respectRatio();
+		$imageManager = new ImageManager(['driver' => 'gd']);
+		$imageManager
+			->make($picturePath)
+            ->fit($this->thumbnailWidth, $this->thumbnailHeight, function(Constraint $constraint) {
+                $constraint->aspectRatio();
                 $constraint->upsize();
             })
             ->save($this->path->getThumbnailsDirectory() . $name);
