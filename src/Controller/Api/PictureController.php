@@ -2,9 +2,15 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Picture;
 use App\Repository\PictureRepository;
+use App\Repository\TagRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -16,5 +22,24 @@ class PictureController extends AbstractController
 		$picture = $pictureRepository->getPictureWithoutTags();
 
 		return new JsonResponse($normalizer->normalize($picture, context: ['groups' => ['export']]));
+	}
+
+	#[Route(path: '/api/picture/{id}/tag', name: 'api_tag_picture', methods: ['POST'])]
+	#[ParamConverter('picture', Picture::class)]
+	public function tagPicture(EntityManagerInterface $entityManager, TagRepository $tagRepository, Picture $picture, Request $request): JsonResponse
+	{
+		$tags = $tagRepository->findBy(['id' => json_decode($request->getContent(), true)['tags']]);
+
+		if (empty($tags)) {
+			return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
+		}
+
+		foreach ($tags as $tag) {
+			$picture->addTag($tag);
+		}
+
+		$entityManager->flush();
+
+		return new JsonResponse(null, Response::HTTP_CREATED);
 	}
 }
