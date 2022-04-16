@@ -9,6 +9,7 @@ use App\Form\Type\PackType;
 use App\Message\UploadMessage;
 use App\Model\Status;
 use App\Repository\PackRepository;
+use App\Repository\PictureRepository;
 use App\Service\UploadManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -70,6 +71,18 @@ class PackController extends AbstractController
             'data' => $serializer->normalize($pageData->getItems(), context: ['groups' => 'overview'])
         ]);
     }
+
+	#[Route(name: 'random_pictures', methods: ['GET'], path: '/api/gallery/random')]
+	public function getRandomPictures(Security $security, NormalizerInterface $normalizer, PictureRepository $pictureRepository): JsonResponse
+	{
+		$temporaryPack = new Pack();
+		$temporaryPack->setCreator($security->getUser())
+			->setCreated(new \DateTime())
+			->setName('Random')
+			->setPictures($pictureRepository->findRandom());
+
+		return new JsonResponse($normalizer->normalize($temporaryPack, context: ['groups' => 'export']));
+	}
 
 	#[Route(name: 'gallery', methods: ['GET'], path: '/api/gallery/{id}')]
 	#[ParamConverter('pack', class: Pack::class)]

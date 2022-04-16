@@ -242,6 +242,13 @@ class Pack
         return $this;
     }
 
+	public function setPictures(array $pictures): self
+	{
+		$this->pictures = new ArrayCollection($pictures);
+
+		return $this;
+	}
+
     public function removePicture(Picture $picture): self
     {
         $this->pictures->removeElement($picture);
