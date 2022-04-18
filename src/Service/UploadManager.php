@@ -146,15 +146,6 @@ class UploadManager
     }
 
     /**
-     * @deprecated
-     * Remove uploaded pack once it is extracted
-     */
-    public function deleteFTPFile(File $file): bool
-    {
-        return unlink($file->getFilename());
-    }
-
-    /**
      * Validate upload and transfer files
      */
     public function validateUpload(Pack $pack): bool
@@ -217,12 +208,16 @@ class UploadManager
         }
 
         $this->fileManager->cleanStorage($pack->getStoragePath());
-        // Temporary avoid to remove "obsolete" pictures
-        // $this->packManager->removeObsoletePictures($pack);
+        $this->packManager->removeObsoletePictures($pack);
+
+		$oldStoragePack = $pack->getStoragePath();
 
         $pack->setStatus(Status::OK);
         $pack->setStoragePath($newStoragePath);
         $this->entityManager->flush();
+
+		// Remove temporary files
+	    $this->fileManager->cleanStorage($oldStoragePack);
 
         return true;
     }

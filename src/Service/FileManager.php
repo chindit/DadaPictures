@@ -196,6 +196,7 @@ class FileManager
 	{
 		$extension = $file->guessExtension();
 		$clientName = $this->cleanName($file->getClientOriginalName());
+		$clientName = substr($clientName, 0, strrpos($clientName, '.')-1);
 
 		return $clientName . '_' . (new Ulid()) . '.' . $extension;
 	}
