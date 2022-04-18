@@ -19,7 +19,7 @@ class JwtCreatedSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function __construct(private UserRepository $userRepository)
+	public function __construct(private UserRepository $userRepository, private EntityManagerInterface $entityManager)
 	{
 
 	}
@@ -35,6 +35,10 @@ class JwtCreatedSubscriber implements EventSubscriberInterface
 		$payload = $event->getData();
 		$payload['email'] = $user->getEmail();
 		$payload['language'] = $user->getLanguage();
+
+		// Update connection time
+		$user->updateLastLogin();
+		$this->entityManager->flush();
 
 		$event->setData($payload);
 	}

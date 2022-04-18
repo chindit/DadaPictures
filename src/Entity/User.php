@@ -43,7 +43,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 125, nullable: true)]
     private ?string $email;
 
-    public function getId(): ?int
+	#[ORM\Column(name: 'created', type: 'datetime')]
+	private \DateTime $created;
+
+	#[ORM\Column(name: 'last_login', type: 'datetime')]
+	private \DateTime $lastLogin;
+
+	public function __construct()
+	{
+		$this->created = new \DateTime();
+		$this->lastLogin = new \DateTime();
+	}
+
+	public function getId(): ?int
     {
         return $this->id;
     }
@@ -148,4 +160,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->username;
     }
+
+	public function updateLastLogin(): self
+	{
+		$this->lastLogin = new \DateTime();
+
+		return $this;
+	}
 }

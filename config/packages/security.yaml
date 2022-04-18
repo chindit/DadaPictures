@@ -50,6 +50,7 @@ security:
         - { path: ^/api/register$, role: PUBLIC_ACCESS }
         - { path: ^/api/public/galleries/latest$, role: PUBLIC_ACCESS }
         - { path: ^/api/tag/create$, role: ROLE_EDITOR }
+        - { path: ^/api/picture/\S+/tag, role: ROLE_EDITOR }
         - { path: ^/api/, role: ROLE_USER }
     providers:
         # used to reload user from session & other features (e.g. switch_user)
