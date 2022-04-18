@@ -46,7 +46,7 @@ class PictureRepository extends ServiceEntityRepository
             ->where('p.tags is empty')
             ->andWhere('p.status = :status')
             ->setParameter('status', Status::OK)
-            ->orderBy('RAND()')
+            ->orderBy('RANDOM()')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
