@@ -10,6 +10,7 @@ use App\Message\UploadMessage;
 use App\Model\Status;
 use App\Repository\PackRepository;
 use App\Repository\PictureRepository;
+use App\Repository\TagRepository;
 use App\Service\UploadManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -72,14 +73,67 @@ class PackController extends AbstractController
         ]);
     }
 
-	#[Route(name: 'random_pictures', methods: ['GET'], path: '/api/gallery/random')]
-	public function getRandomPictures(Security $security, NormalizerInterface $normalizer, PictureRepository $pictureRepository): JsonResponse
+	#[Route(name: 'gallery_tag', methods: ['GET'], path: '/api/gallery/tag/{id}')]
+	public function getTaggedGallery(
+		string $id,
+		Request $request,
+		Security $security,
+		PaginatorInterface $paginator,
+		NormalizerInterface $normalizer,
+		PackRepository $packRepository,
+		TagRepository $tagRepository,
+		PictureRepository $pictureRepository
+	):
+	JsonResponse
 	{
+		$tag = $tagRepository->find((int)$id);
+		$page = (int)$request->query->get('page', '1');
+
+		$pageData = $paginator->paginate(
+			$packRepository->getPacksByTag($tag),
+			$page,
+			25
+		);
+
+		$data = $normalizer->normalize($pageData->getItems(), context: ['groups' => 'overview']);
+		if ($page === 1) {
+			$randomPack = (new Pack())
+				->setId('tag-' . $tag->getId() . '-random')
+				->setCreated(new \DateTime())
+				->setCreator($security->getUser())
+				->setName('RANDOM')
+				->setPictures($pictureRepository->findRandomByTag($tag));
+
+			array_unshift($data, $normalizer->normalize($randomPack, context: ['groups' => 'overview']));
+		}
+
+		return new JsonResponse([
+			'pagination' => [
+				'current' => $pageData->getCurrentPageNumber(),
+				'max' => ceil($pageData->getTotalItemCount() / $pageData->getItemNumberPerPage()),
+				'total_items' => $pageData->getTotalItemCount(),
+			],
+			'data' => $data
+		]);
+	}
+
+	#[Route(name: 'random_pictures', methods: ['GET'], path: '/api/gallery/random/{tag}')]
+	public function getRandomPictures(
+		Security $security,
+		NormalizerInterface $normalizer,
+		PictureRepository $pictureRepository,
+		TagRepository $tagRepository,
+		string $tag = null,
+	): JsonResponse
+	{
+		if ($tag) {
+			$tagEntity = $tagRepository->find($tag);
+		}
 		$temporaryPack = new Pack();
 		$temporaryPack->setCreator($security->getUser())
 			->setCreated(new \DateTime())
 			->setName('Random')
-			->setPictures($pictureRepository->findRandom());
+			->setPictures($tagEntity ? $pictureRepository->findRandomByTag($tagEntity) : $pictureRepository->findRandom());
 
 		return new JsonResponse($normalizer->normalize($temporaryPack, context: ['groups' => 'export']));
 	}
