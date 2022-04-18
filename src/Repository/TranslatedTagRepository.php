@@ -25,7 +25,7 @@ class TranslatedTagRepository extends ServiceEntityRepository
 		return $this->createQueryBuilder('tt')
 			->select(['tt.name', 't.id', 'SIZE(t.pictures) AS count'])
 			->join('tt.tag', 't')
-			->where('t.visible = 1')
+			->where('t.visible = true')
 			->andWhere('tt.language = :language')
 			->setParameter('language', $language)
 			->orderBy('SIZE(t.pictures)', 'DESC')
