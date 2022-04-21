@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Model\Languages;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -44,21 +46,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email;
 
 	#[ORM\Column(name: 'created', type: 'datetime')]
-	private \DateTime $created;
+    private \DateTime $created;
 
 	#[ORM\Column(name: 'last_login', type: 'datetime')]
-	private \DateTime $lastLogin;
+    private \DateTime $lastLogin;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: GalleryViewHistory::class, orphanRemoval: true)]
+    private $galleryViewHistory;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: PictureViewHistory::class, orphanRemoval: true)]
+    private $pictureViewHistory;
 
 	public function __construct()
-	{
-		$this->created = new \DateTime();
-		$this->lastLogin = new \DateTime();
-	}
+                                    	{
+                                    		$this->created = new \DateTime();
+                                    		$this->lastLogin = new \DateTime();
+                                      $this->galleryViewHistory = new ArrayCollection();
+                                      $this->pictureViewHistory = new ArrayCollection();
+                                    	}
 
 	public function getId(): ?int
-    {
-        return $this->id;
-    }
+                                        {
+                                            return $this->id;
+                                        }
 
     /**
      * A visual identifier that represents this user.
@@ -162,9 +172,69 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 	public function updateLastLogin(): self
-	{
-		$this->lastLogin = new \DateTime();
+    {
+        $this->lastLogin = new \DateTime();
 
-		return $this;
-	}
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GalleryViewHistory>
+     */
+    public function getGalleryViewHistory(): Collection
+    {
+        return $this->galleryViewHistory;
+    }
+
+    public function addGalleryViewHistory(GalleryViewHistory $galleryViewHistory): self
+    {
+        if (!$this->galleryViewHistory->contains($galleryViewHistory)) {
+            $this->galleryViewHistory[] = $galleryViewHistory;
+            $galleryViewHistory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGalleryViewHistory(GalleryViewHistory $galleryViewHistory): self
+    {
+        if ($this->galleryViewHistory->removeElement($galleryViewHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($galleryViewHistory->getUser() === $this) {
+                $galleryViewHistory->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PictureViewHistory>
+     */
+    public function getPictureViewHistory(): Collection
+    {
+        return $this->pictureViewHistory;
+    }
+
+    public function addPictureViewHistory(PictureViewHistory $pictureViewHistory): self
+    {
+        if (!$this->pictureViewHistory->contains($pictureViewHistory)) {
+            $this->pictureViewHistory[] = $pictureViewHistory;
+            $pictureViewHistory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePictureViewHistory(PictureViewHistory $pictureViewHistory): self
+    {
+        if ($this->pictureViewHistory->removeElement($pictureViewHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($pictureViewHistory->getUser() === $this) {
+                $pictureViewHistory->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

@@ -85,6 +85,9 @@ class Picture
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'pictures')]
     private Collection $tags;
 
+    #[ORM\OneToMany(mappedBy: 'picture', targetEntity: PictureViewHistory::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
+    private $viewHistory;
+
 
     public function __construct()
     {
@@ -93,6 +96,7 @@ class Picture
         $this->updated = new \DateTime();
         $this->mime = 'error';
         $this->filename = '';
+        $this->viewHistory = new ArrayCollection();
     }
 
     public function getId(): string
@@ -177,9 +181,14 @@ class Picture
         return $this->views;
     }
 
-    public function incrementViews(): self
+    public function incrementViews(User $user): self
     {
         $this->views++;
+
+		$this->addViewHistory(
+			(new PictureViewHistory())
+			->setUser($user)
+		);
 
         return $this;
     }
@@ -307,6 +316,36 @@ class Picture
     public function setStatusInfo(string $statusInfo): self
     {
         $this->statusInfo = $statusInfo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PictureViewHistory>
+     */
+    public function getViewHistory(): Collection
+    {
+        return $this->viewHistory;
+    }
+
+    public function addViewHistory(PictureViewHistory $viewHistory): self
+    {
+        if (!$this->viewHistory->contains($viewHistory)) {
+            $this->viewHistory[] = $viewHistory;
+            $viewHistory->setPicture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeViewHistory(PictureViewHistory $viewHistory): self
+    {
+        if ($this->viewHistory->removeElement($viewHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($viewHistory->getPicture() === $this) {
+                $viewHistory->setPicture(null);
+            }
+        }
 
         return $this;
     }

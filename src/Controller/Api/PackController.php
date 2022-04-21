@@ -140,9 +140,9 @@ class PackController extends AbstractController
 
 	#[Route(name: 'gallery', methods: ['GET'], path: '/api/gallery/{id}')]
 	#[ParamConverter('pack', class: Pack::class)]
-	public function getGallery(Pack $pack, NormalizerInterface $normalizer, EntityManagerInterface $entityManager): JsonResponse
+	public function getGallery(Pack $pack, NormalizerInterface $normalizer, EntityManagerInterface $entityManager, Security $security): JsonResponse
 	{
-		$pack->incrementViews();
+		$pack->incrementViews($security->getUser());
 		$entityManager->flush();
 
 		return new JsonResponse($normalizer->normalize($pack, context: ['groups' => 'export']));
@@ -152,7 +152,6 @@ class PackController extends AbstractController
 	public function newAction(
 		Request $request,
 		UploadManager $uploadManager,
-		TranslatorInterface $translator,
 		EntityManagerInterface $entityManager,
 		MessageBusInterface $messageBus,
 		Security $security

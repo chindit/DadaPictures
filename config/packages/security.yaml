@@ -38,6 +38,7 @@ security:
                 path: app_logout
 
     access_control:
+        # LEGACY
         - { path: ^/login$, role: PUBLIC_ACCESS }
         - { path: ^/register, role: PUBLIC_ACCESS }
         - { path: ^/resetting, role: PUBLIC_ACCESS }
@@ -46,11 +47,15 @@ security:
         - { path: ^/tag/\d+/edit, role: ROLE_ADMIN }
         - { path: ^/pack/, role: ROLE_USER }
         - { path: ^/picture/tag/, role: ROLE_USER }
+        # API
+        # Public cals
         - { path: ^/api/login$, role: PUBLIC_ACCESS }
         - { path: ^/api/register$, role: PUBLIC_ACCESS }
         - { path: ^/api/public/galleries/latest$, role: PUBLIC_ACCESS }
+        # Editor's calls
         - { path: ^/api/tag/create$, role: ROLE_EDITOR }
         - { path: ^/api/picture/\S+/tag, role: ROLE_EDITOR }
+        # General calls
         - { path: ^/api/, role: ROLE_USER }
     providers:
         # used to reload user from session & other features (e.g. switch_user)

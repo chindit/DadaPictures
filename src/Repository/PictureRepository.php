@@ -46,7 +46,7 @@ class PictureRepository extends ServiceEntityRepository
             ->where('p.tags is empty')
             ->andWhere('p.status = :status')
             ->setParameter('status', Status::OK)
-            ->orderBy('RANDOM()')
+            ->orderBy('RAND()')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
@@ -77,7 +77,7 @@ class PictureRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('p')
             ->where('p.status = :status')
             ->setParameter('status', Picture::STATUS_OK)
-            ->orderBy('RANDOM()')
+            ->orderBy('RAND()')
             ->setMaxResults(50);
 
         return $query->getQuery()->getResult();

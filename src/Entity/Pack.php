@@ -89,6 +89,9 @@ class Pack
     )]
     private array $files;
 
+    #[ORM\OneToMany(mappedBy: 'gallery', targetEntity: GalleryViewHistory::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
+    private $viewHistory;
+
 
     public function __construct()
     {
@@ -97,14 +100,15 @@ class Pack
         $this->tags = new ArrayCollection();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
+        $this->viewHistory = new ArrayCollection();
     }
 
 	public function setId(string $id): self
-	{
-		$this->id = $id;
+    {
+        $this->id = $id;
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function getId(): string
     {
@@ -128,9 +132,14 @@ class Pack
         return $this->views;
     }
 
-    public function incrementViews(): self
+    public function incrementViews(User $user): self
     {
         $this->views++;
+
+		$this->addViewHistory(
+			(new GalleryViewHistory())
+			->setUser($user)
+		);
 
         return $this;
     }
@@ -250,11 +259,11 @@ class Pack
     }
 
 	public function setPictures(array $pictures): self
-	{
-		$this->pictures = new ArrayCollection($pictures);
+    {
+        $this->pictures = new ArrayCollection($pictures);
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function removePicture(Picture $picture): self
     {
@@ -274,5 +283,35 @@ class Pack
         }
 
         return $firstPicture->getId();
+    }
+
+    /**
+     * @return Collection<int, GalleryViewHistory>
+     */
+    public function getViewHistory(): Collection
+    {
+        return $this->viewHistory;
+    }
+
+    public function addViewHistory(GalleryViewHistory $viewHistory): self
+    {
+        if (!$this->viewHistory->contains($viewHistory)) {
+            $this->viewHistory[] = $viewHistory;
+            $viewHistory->setGallery($this);
+        }
+
+        return $this;
+    }
+
+    public function removeViewHistory(GalleryViewHistory $viewHistory): self
+    {
+        if ($this->viewHistory->removeElement($viewHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($viewHistory->getGallery() === $this) {
+                $viewHistory->setGallery(null);
+            }
+        }
+
+        return $this;
     }
 }
