@@ -83,6 +83,7 @@ class Picture
      * @var Collection<int, Tag> $tags
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'pictures')]
+    #[Groups(['export'])]
     private Collection $tags;
 
     #[ORM\OneToMany(mappedBy: 'picture', targetEntity: PictureViewHistory::class, orphanRemoval: true, cascade: ['persist', 'remove'])]

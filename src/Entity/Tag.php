@@ -7,6 +7,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'tag')]
 #[ORM\Entity]
@@ -15,9 +16,11 @@ class Tag
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(name: 'id', type: 'integer', options: ['unsigned' => false])]
+    #[Groups(['export'])]
     private ?int $id;
 
     #[ORM\Column(name: 'name', type: 'string', length: 150, unique: true)]
+    #[Groups(['export'])]
     private string $name = '';
 
 	#[ORM\Column(name: 'visible', type: 'boolean')]
