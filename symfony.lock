@@ -271,6 +271,9 @@
             "phpcs.xml.dist"
         ]
     },
+    "stella-maris/clock": {
+        "version": "0.1.4"
+    },
     "symfony/asset": {
         "version": "v4.3.2"
     },
@@ -493,6 +496,9 @@
     },
     "symfony/polyfill-uuid": {
         "version": "v1.22.1"
+    },
+    "symfony/process": {
+        "version": "v6.0.7"
     },
     "symfony/property-access": {
         "version": "v4.3.2"
