@@ -39,6 +39,15 @@ class PictureController extends AbstractController
 		);
 	}
 
+	#[Route(path: '/api/picture/{picture}', name: 'api_picture', methods: ['GET'])]
+	public function getPicture(Picture $picture, NormalizerInterface $normalizer, Security $security, EntityManagerInterface $entityManager): JsonResponse
+	{
+		$picture->incrementViews($security->getUser());
+		$entityManager->flush();
+
+		return new JsonResponse($normalizer->normalizer($picture, context: ['groups' => ['export']]));
+	}
+
 	#[Route(path: '/api/picture/{id}/tag', name: 'api_tag_picture', methods: ['POST'])]
 	#[ParamConverter('picture', Picture::class)]
 	public function tagPicture(EntityManagerInterface $entityManager, TagRepository $tagRepository, Picture $picture, Request $request): JsonResponse
