@@ -7,6 +7,7 @@ use App\Entity\TranslatedTag;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AppFixtures extends Fixture
 {
@@ -38,6 +39,7 @@ class AppFixtures extends Fixture
 
         foreach ($tags as $tag) {
             $tagEntity = (new Tag())
+                ->setName((new AsciiSlugger())->slug($tag['en']))
                 ->addTranslation((new TranslatedTag())->setLanguage('en')->setName($tag['en']))
                 ->addTranslation((new TranslatedTag())->setLanguage('fr')->setName($tag['fr']));
 
