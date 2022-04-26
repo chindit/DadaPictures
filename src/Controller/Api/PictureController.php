@@ -45,7 +45,7 @@ class PictureController extends AbstractController
 		$picture->incrementViews($security->getUser());
 		$entityManager->flush();
 
-		return new JsonResponse($normalizer->normalizer($picture, context: ['groups' => ['export']]));
+		return new JsonResponse($normalizer->normalize($picture, context: ['groups' => ['export']]));
 	}
 
 	#[Route(path: '/api/picture/{id}/tag', name: 'api_tag_picture', methods: ['POST'])]
@@ -59,7 +59,17 @@ class PictureController extends AbstractController
 		}
 
 		foreach ($tags as $tag) {
-			$picture->addTag($tag);
+			if (!$picture->getTags()->contains($tag))
+			{
+				$picture->addTag($tag);
+			}
+		}
+
+		// Removing obsolete tags
+		foreach ($picture->getTags() as $tag) {
+			if (!in_array($tag, $tags)) {
+				$picture->removeTag($tag);
+			}
 		}
 
 		$entityManager->flush();
