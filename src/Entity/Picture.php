@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'picture')]
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
@@ -24,21 +24,27 @@ class Picture
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['export'])]
     private string $id;
 
     #[ORM\Column(name: 'name', type: 'string', length: 150)]
+    #[Groups(['export'])]
     private string $name;
 
     #[ORM\Column(name: 'filename', type: 'string', length: 255, unique: true)]
+    #[Groups(['export'])]
     private string $filename;
 
     #[ORM\Column(name: 'height', type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private ?int $height;
 
     #[ORM\Column(name: 'width', type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private ?int $width;
 
     #[ORM\Column(name: 'weight', type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private ?int $weight;
 
     #[ORM\Column(name: 'mime', type: 'string', length: 50)]
@@ -57,6 +63,7 @@ class Picture
     private string $statusInfo;
 
     #[ORM\Column(name: 'views', type: 'integer', options: ['unsigned' => true])]
+    #[Groups(['export'])]
     private int $views = 0;
 
     #[ORM\Column(name: 'thumbnail', type: 'string', unique: true, nullable: true)]
@@ -76,7 +83,14 @@ class Picture
      * @var Collection<int, Tag> $tags
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'pictures')]
+    #[Groups(['export'])]
     private Collection $tags;
+
+    /**
+     * @var Collection<int, PictureViewHistory>
+     */
+    #[ORM\OneToMany(mappedBy: 'picture', targetEntity: PictureViewHistory::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
+    private Collection $viewHistory;
 
 
     public function __construct()
@@ -86,6 +100,7 @@ class Picture
         $this->updated = new \DateTime();
         $this->mime = 'error';
         $this->filename = '';
+        $this->viewHistory = new ArrayCollection();
     }
 
     public function getId(): string
@@ -170,9 +185,14 @@ class Picture
         return $this->views;
     }
 
-    public function incrementViews(): self
+    public function incrementViews(User $user): self
     {
         $this->views++;
+
+        $this->addViewHistory(
+            (new PictureViewHistory())
+            ->setUser($user)
+        );
 
         return $this;
     }
@@ -300,6 +320,31 @@ class Picture
     public function setStatusInfo(string $statusInfo): self
     {
         $this->statusInfo = $statusInfo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PictureViewHistory>
+     */
+    public function getViewHistory(): Collection
+    {
+        return $this->viewHistory;
+    }
+
+    public function addViewHistory(PictureViewHistory $viewHistory): self
+    {
+        if (!$this->viewHistory->contains($viewHistory)) {
+            $this->viewHistory[] = $viewHistory;
+            $viewHistory->setPicture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeViewHistory(PictureViewHistory $viewHistory): self
+    {
+        $this->viewHistory->removeElement($viewHistory);
 
         return $this;
     }

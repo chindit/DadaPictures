@@ -133,9 +133,6 @@
     "jean85/pretty-package-versions": {
         "version": "1.2"
     },
-    "jms/metadata": {
-        "version": "2.0.0"
-    },
     "knplabs/knp-components": {
         "version": "v3.0.0"
     },
@@ -145,8 +142,41 @@
     "laminas/laminas-code": {
         "version": "3.4.1"
     },
+    "lcobucci/clock": {
+        "version": "2.1.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.1.5"
+    },
+    "lexik/jwt-authentication-bundle": {
+        "version": "2.15",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "5b2157bcd5778166a5696e42f552ad36529a07a6"
+        },
+        "files": [
+            "config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
     "monolog/monolog": {
         "version": "1.24.0"
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
+    },
+    "nelmio/cors-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.5",
+            "ref": "6bea22e6c564fba3a1391615cada1437d0bde39c"
+        },
+        "files": [
+            "config/packages/nelmio_cors.yaml"
+        ]
     },
     "nikic/php-parser": {
         "version": "v4.2.2"
@@ -237,6 +267,9 @@
         "files": [
             "phpcs.xml.dist"
         ]
+    },
+    "stella-maris/clock": {
+        "version": "0.1.4"
     },
     "symfony/asset": {
         "version": "v4.3.2"
@@ -446,6 +479,9 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.11.0"
     },
+    "symfony/polyfill-php56": {
+        "version": "v1.20.0"
+    },
     "symfony/polyfill-php72": {
         "version": "v1.11.0"
     },
@@ -457,6 +493,9 @@
     },
     "symfony/polyfill-uuid": {
         "version": "v1.22.1"
+    },
+    "symfony/process": {
+        "version": "v6.0.7"
     },
     "symfony/property-access": {
         "version": "v4.3.2"
@@ -503,6 +542,9 @@
     },
     "symfony/security-http": {
         "version": "v4.3.2"
+    },
+    "symfony/serializer": {
+        "version": "v6.0.7"
     },
     "symfony/service-contracts": {
         "version": "v1.1.5"
@@ -608,17 +650,5 @@
     },
     "twig/twig": {
         "version": "v2.11.3"
-    },
-    "vich/uploader-bundle": {
-        "version": "1.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "1.5",
-            "ref": "c4f5755b37fb65b9c6a3cbdae91205c15a137ed4"
-        },
-        "files": [
-            "config/packages/vich_uploader.yaml"
-        ]
     }
 }

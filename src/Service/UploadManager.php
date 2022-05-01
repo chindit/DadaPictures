@@ -6,7 +6,6 @@ namespace App\Service;
 
 use App\Entity\Pack;
 use App\Entity\Picture;
-use App\Factory\ArchiveFactory;
 use App\Model\Status;
 use Chindit\Archive\Archive;
 use Chindit\Archive\Exception\UnsupportedArchiveType;
@@ -33,9 +32,9 @@ class UploadManager
     ) {
     }
 
-	/**
-	 * @param array|UploadedFile[] $files
-	 */
+    /**
+     * @param array|UploadedFile[] $files
+     */
     public function moveUploadFilesToTempStorage(array $files): string
     {
         if (empty($files)) {
@@ -66,20 +65,20 @@ class UploadManager
      */
     public function upload(Pack $pack): Pack
     {
-	    $storageDirectory = $this->path->getTempDirectory() . $pack->getStoragePath();
+        $storageDirectory = $this->path->getTempDirectory() . $pack->getStoragePath();
 
-		$fileList = (new Finder())
-		    ->ignoreDotFiles(true)
-		    ->ignoreUnreadableDirs()
-		    ->followLinks()
-		    ->depth('< 30')
-		    ->ignoreVCS(true)
-		    ->in($storageDirectory)
-		    ->files();
+        $fileList = (new Finder())
+            ->ignoreDotFiles(true)
+            ->ignoreUnreadableDirs()
+            ->followLinks()
+            ->depth('< 30')
+            ->ignoreVCS(true)
+            ->in($storageDirectory)
+            ->files();
 
-		// Unpack archive(s) if present
-		foreach ($fileList as $file) {
-		    $file = new File($file->getPathname());
+        // Unpack archive(s) if present
+        foreach ($fileList as $file) {
+            $file = new File($file->getPathname());
 
             if (!exif_imagetype($file->getPathname())) {
                 if (Archive::isSupportedArchive($file->getPathname())) {
@@ -88,10 +87,10 @@ class UploadManager
                     throw new UnsupportedArchiveType(sprintf("File %s of type %s is not supported", $file->getPathname(), $file->getMimeType()));
                 }
             }
-	    }
+        }
 
-	    $pack->setStatus(Status::TEMPORARY);
-	    $this->entityManager->persist($pack);
+        $pack->setStatus(Status::TEMPORARY);
+        $this->entityManager->persist($pack);
 
         $this->uploadFiles($pack);
 
@@ -144,15 +143,6 @@ class UploadManager
             $pack->addPicture($picture);
             $this->entityManager->persist($picture);
         }
-    }
-
-    /**
-     * @deprecated
-     * Remove uploaded pack once it is extracted
-     */
-    public function deleteFTPFile(File $file): bool
-    {
-        return unlink($file->getFilename());
     }
 
     /**
@@ -218,12 +208,16 @@ class UploadManager
         }
 
         $this->fileManager->cleanStorage($pack->getStoragePath());
-        // Temporary avoid to remove "obsolete" pictures
-        // $this->packManager->removeObsoletePictures($pack);
+        $this->packManager->removeObsoletePictures($pack);
+
+        $oldStoragePack = $pack->getStoragePath();
 
         $pack->setStatus(Status::OK);
         $pack->setStoragePath($newStoragePath);
         $this->entityManager->flush();
+
+        // Remove temporary files
+        $this->fileManager->cleanStorage($oldStoragePack);
 
         return true;
     }

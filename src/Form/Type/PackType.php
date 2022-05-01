@@ -55,7 +55,8 @@ class PackType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
-            'data_class' => Pack::class
+            'data_class' => Pack::class,
+            'csrf_protection' => false,
         ));
     }
 

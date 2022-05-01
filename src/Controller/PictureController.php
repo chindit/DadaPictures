@@ -8,6 +8,7 @@ use App\Entity\BannedPicture;
 use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Form\Type\PictureTagType;
 use App\Model\Status;
 use App\Repository\PictureRepository;
@@ -19,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('picture')]
 class PictureController extends AbstractController
@@ -142,9 +144,11 @@ class PictureController extends AbstractController
     }
 
     #[Route('/view/{picture}', name:'view_picture', methods: ['GET'])]
-    public function viewPicture(Picture $picture, Path $path, EntityManagerInterface $entityManager): Response
+    public function viewPicture(Picture $picture, Path $path, EntityManagerInterface $entityManager, Security $security): Response
     {
-        $picture->incrementViews();
+        /** @var User $user */
+        $user = $security->getUser();
+        $picture->incrementViews($user);
         $entityManager->flush();
 
         return new Response(
@@ -161,10 +165,10 @@ class PictureController extends AbstractController
             return $this->redirectToRoute('view_picture', ['picture' => $picture]);
         }
 
-        return new Response(
+        return (new Response(
             file_get_contents($path->getThumbnailsDirectory() . $picture->getThumbnail()) ?: '',
             Response::HTTP_OK,
-            ['Content-Type' => 'image/jpg']
-        );
+            ['Content-Type' => 'image/jpg', 'Cache-Control' => 'max-age=3600']
+        ));
     }
 }

@@ -47,13 +47,12 @@
                 <ul class="navbar-nav">
                     {% if is_granted("ROLE_USER") %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('pack_new') }}">{% trans %}pack.submit{% endtrans %}</a>
+                            <a class="nav-link" href="#">DISABLED{% trans %}pack.submit{% endtrans %}</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTags" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {% trans %}tags.name{% endtrans %}
                             </a>
-                            {{ render(controller('App\\Controller\\TagController::tagListAction')) }}
                         </li>
                         <li class="nav-item"><a class="nav-link" href="{{ path('picture_tag') }}">{% trans %}tags.add{% endtrans %}</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ path('pictures_random') }}">{% trans %}pictures.random{% endtrans %}</a></li>
@@ -62,7 +61,7 @@
                 <ul class="navbar-nav">
                     {% if not is_granted("ROLE_USER") %}
                         <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">{% trans %}login.title{% endtrans %}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">{% trans %}register.title{% endtrans %}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">{% trans %}register.title{% endtrans %}</a></li>
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="{{ path('my_account') }}">{% trans %}account.my{% endtrans %}</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">{% trans %}global.logout{% endtrans %}</a></li>

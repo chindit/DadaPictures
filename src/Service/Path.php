@@ -20,9 +20,9 @@ final class Path
         return $this->storagePath . (str_ends_with($this->storagePath, '/') ? '' : '/') . 'pictures/temp/';
     }
 
-	/**
-	 * @deprecated
-	 */
+    /**
+     * @deprecated
+     */
     public function getTempUploadDirectory(): string
     {
         return $this->storagePath . (str_ends_with($this->storagePath, '/') ? '' : '/') . 'tmp/';

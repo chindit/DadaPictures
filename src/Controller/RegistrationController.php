@@ -7,6 +7,8 @@ use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -15,24 +17,22 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    #[Route('/api/register', name: 'api_register')]
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        UserAuthenticator $authenticator,
-        UserAuthenticatorInterface $userAuthenticator,
         EntityManagerInterface $entityManager
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        $form->submit(json_decode((string)$request->getContent(), true));
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
 
@@ -40,20 +40,12 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // do anything else you need here, like send an email
-
-            $response = $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
-
-            if ($response !== null) {
-                return $response;
-            }
+            return new JsonResponse(null, Response::HTTP_CREATED);
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        /** @var FormError $formError */
+        $formError = $form->getErrors(true, true)->current();
+
+        return new JsonResponse($formError->getMessage(), Response::HTTP_BAD_REQUEST);
     }
 }

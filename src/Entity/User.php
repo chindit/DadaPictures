@@ -4,14 +4,17 @@ namespace App\Entity;
 
 use App\Model\Languages;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 #[ORM\Table(name: 'users')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -21,6 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Groups(['export'])]
     private string $username;
 
     /**
@@ -38,8 +42,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $password;
 
-    #[ORM\Column(type: 'string', length: 125, nullable: true)]
+    #[ORM\Column(type: 'string', length: 125, nullable: true, unique: true)]
     private ?string $email;
+
+    #[ORM\Column(name: 'created', type: 'datetime')]
+    private \DateTime $created;
+
+    #[ORM\Column(name: 'last_login', type: 'datetime')]
+    private \DateTime $lastLogin;
+
+    /**
+     * @var Collection<int, GalleryViewHistory>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: GalleryViewHistory::class, orphanRemoval: true)]
+    private Collection $galleryViewHistory;
+
+    /**
+     * @var Collection<int, PictureViewHistory>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: PictureViewHistory::class, orphanRemoval: true)]
+    private Collection $pictureViewHistory;
+
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+        $this->lastLogin = new \DateTime();
+        $this->galleryViewHistory = new ArrayCollection();
+        $this->pictureViewHistory = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -145,5 +175,72 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->username;
+    }
+
+    public function updateLastLogin(): self
+    {
+        $this->lastLogin = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GalleryViewHistory>
+     */
+    public function getGalleryViewHistory(): Collection
+    {
+        return $this->galleryViewHistory;
+    }
+
+    public function addGalleryViewHistory(GalleryViewHistory $galleryViewHistory): self
+    {
+        if (!$this->galleryViewHistory->contains($galleryViewHistory)) {
+            $this->galleryViewHistory[] = $galleryViewHistory;
+            $galleryViewHistory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGalleryViewHistory(GalleryViewHistory $galleryViewHistory): self
+    {
+        $this->galleryViewHistory->removeElement($galleryViewHistory);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PictureViewHistory>
+     */
+    public function getPictureViewHistory(): Collection
+    {
+        return $this->pictureViewHistory;
+    }
+
+    public function addPictureViewHistory(PictureViewHistory $pictureViewHistory): self
+    {
+        if (!$this->pictureViewHistory->contains($pictureViewHistory)) {
+            $this->pictureViewHistory[] = $pictureViewHistory;
+            $pictureViewHistory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePictureViewHistory(PictureViewHistory $pictureViewHistory): self
+    {
+        $this->pictureViewHistory->removeElement($pictureViewHistory);
+
+        return $this;
+    }
+
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    public function getLastLogin(): \DateTime
+    {
+        return $this->lastLogin;
     }
 }
