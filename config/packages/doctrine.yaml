@@ -28,3 +28,7 @@ doctrine:
             numeric_functions:
                 rand: DoctrineExtensions\Query\Mysql\Rand
                 random: DoctrineExtensions\Query\Sqlite\Random
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true

@@ -148,6 +148,18 @@ class PackController extends AbstractController
 		return new JsonResponse($normalizer->normalize($pack, context: ['groups' => 'export']));
 	}
 
+	#[Route(name: 'delete_gallery', methods: ['DELETE'], path: '/api/gallery/{id}')]
+	#[ParamConverter('pack', class: Pack::class)]
+	public function deleteGallery(Pack $pack, EntityManagerInterface $entityManager): JsonResponse
+	{
+		$this->denyAccessUnlessGranted('delete', $pack);
+
+		$entityManager->remove($pack);
+		$entityManager->flush();
+
+		return new JsonResponse(null, Response::HTTP_ACCEPTED);
+	}
+
 	#[Route('/api/gallery/new', methods: ['POST'], priority: 10)]
 	public function newAction(
 		Request $request,

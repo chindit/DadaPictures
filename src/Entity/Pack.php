@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\PackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'pack')]
 #[ORM\Entity(repositoryClass: PackRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Pack
 {
     #[ORM\Id]
@@ -66,6 +68,9 @@ class Pack
     #[ORM\Column(name: 'updated', type: 'datetime')]
     #[Groups(['export'])]
     private \DateTime $updated;
+
+	#[ORM\Column(name: 'deletedAt', type: Types::DATETIME_MUTABLE, nullable: true)]
+	private $deletedAt;
 
     /**
      * @var array|UploadedFile[]
@@ -314,4 +319,16 @@ class Pack
 
         return $this;
     }
+
+	public function getDeletedAt(): ?\DateTime
+	{
+		return $this->deletedAt;
+	}
+
+	public function setDeletedAt(?\DateTime $deletedAt): self
+	{
+		$this->deletedAt = $deletedAt;
+
+		return $this;
+	}
 }
