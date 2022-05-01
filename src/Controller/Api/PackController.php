@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\Entity\BannedPicture;
 use App\Entity\Pack;
 use App\Form\Type\PackType;
 use App\Message\UploadMessage;
+use App\Message\ValidateUploadMessage;
 use App\Model\Status;
 use App\Repository\PackRepository;
 use App\Repository\PictureRepository;
 use App\Repository\TagRepository;
+use App\Service\FileManager;
 use App\Service\UploadManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -142,6 +145,8 @@ class PackController extends AbstractController
 	#[ParamConverter('pack', class: Pack::class)]
 	public function getGallery(Pack $pack, NormalizerInterface $normalizer, EntityManagerInterface $entityManager, Security $security): JsonResponse
 	{
+		$this->denyAccessUnlessGranted('view', $pack);
+
 		$pack->incrementViews($security->getUser());
 		$entityManager->flush();
 
@@ -156,6 +161,33 @@ class PackController extends AbstractController
 
 		$entityManager->remove($pack);
 		$entityManager->flush();
+
+		return new JsonResponse(null, Response::HTTP_ACCEPTED);
+	}
+
+	#[Route('/api/admin/gallery/{pack}/ban', name: 'gallery_ban', methods: ['GET'])]
+	public function banAction(
+		Pack $pack,
+		EntityManagerInterface $entityManager,
+		FileManager $fileManager,
+	): JsonResponse {
+		foreach ($pack->getPictures() as $picture) {
+			$bannedPicture = new BannedPicture($picture->getSha1sum());
+			$entityManager->persist($bannedPicture);
+			$entityManager->remove($picture);
+			$fileManager->deletePicture($picture);
+			$entityManager->flush();
+		}
+
+		return new JsonResponse(null, Response::HTTP_ACCEPTED);
+	}
+
+	#[Route('/api/admin/gallery/{pack}/approve', name:'gallery_confirm', methods: ['GET'])]
+	public function publishAction(Pack $pack, EntityManagerInterface $entityManager, MessageBusInterface $messageBus): JsonResponse
+	{
+		$pack->setStatus(Status::PROCESSING_VALIDATION);
+		$entityManager->flush();
+		$messageBus->dispatch(new ValidateUploadMessage($pack->getId()));
 
 		return new JsonResponse(null, Response::HTTP_ACCEPTED);
 	}

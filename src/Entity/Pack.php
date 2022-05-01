@@ -36,6 +36,7 @@ class Pack
     private string $storagePath;
 
     #[ORM\Column(name: 'status', type: 'integer')]
+    #[Groups(['export'])]
     private int $status;
 
     #[ORM\Column(name: 'views', type: 'integer', options: ['unsigned' => true])]

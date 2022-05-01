@@ -55,6 +55,8 @@ security:
         # Editor's calls
         - { path: ^/api/tag/create$, role: ROLE_EDITOR }
         - { path: ^/api/picture/\S+/tag, role: ROLE_EDITOR }
+        # Admin's calls
+        - { path: ^/api/admin/, role: ROLE_ADMIN }
         # General calls
         - { path: ^/api/, role: ROLE_USER }
     providers:
