@@ -36,7 +36,7 @@ class PackController extends AbstractController
         PaginatorInterface $paginator,
         PackRepository $packRepository,
         NormalizerInterface $serializer
-    ) {
+    ): JsonResponse {
         $pageData = $paginator->paginate(
             $packRepository->findBy(['status' => Status::OK], ['id' => 'desc']),
             1, // BR: For public API, page is forced to 1
@@ -59,7 +59,7 @@ class PackController extends AbstractController
         PaginatorInterface $paginator,
         PackRepository $packRepository,
         NormalizerInterface $serializer
-    ) {
+    ): JsonResponse {
         $pageData = $paginator->paginate(
             $packRepository->findBy(['status' => Status::OK], ['id' => 'desc']),
             (int)$request->query->get('page', '1'),
