@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Picture;
+use App\Entity\User;
 use App\Repository\PictureRepository;
 use App\Repository\TagRepository;
 use App\Service\Path;
@@ -29,7 +30,9 @@ class PictureController extends AbstractController
 	#[Route(path: '/api/picture/view/{picture}', name:'api_view_picture', methods: ['GET'])]
 	public function viewPicture(Picture $picture, Path $path, EntityManagerInterface $entityManager, Security $security): Response
 	{
-		$picture->incrementViews($security->getUser());
+		/** @var User $user */
+		$user = $security->getUser();
+		$picture->incrementViews($user);
 		$entityManager->flush();
 
 		return new Response(
@@ -40,11 +43,8 @@ class PictureController extends AbstractController
 	}
 
 	#[Route(path: '/api/picture/{picture}', name: 'api_picture', methods: ['GET'])]
-	public function getPicture(Picture $picture, NormalizerInterface $normalizer, Security $security, EntityManagerInterface $entityManager): JsonResponse
+	public function getPicture(Picture $picture, NormalizerInterface $normalizer): JsonResponse
 	{
-		$picture->incrementViews($security->getUser());
-		$entityManager->flush();
-
 		return new JsonResponse($normalizer->normalize($picture, context: ['groups' => ['export']]));
 	}
 
@@ -52,7 +52,7 @@ class PictureController extends AbstractController
 	#[ParamConverter('picture', Picture::class)]
 	public function tagPicture(EntityManagerInterface $entityManager, TagRepository $tagRepository, Picture $picture, Request $request): JsonResponse
 	{
-		$tags = $tagRepository->findBy(['id' => json_decode($request->getContent(), true)['tags']]);
+		$tags = $tagRepository->findBy(['id' => json_decode((string)$request->getContent(), true)['tags']]);
 
 		if (empty($tags)) {
 			return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
