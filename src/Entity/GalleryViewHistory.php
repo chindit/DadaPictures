@@ -11,18 +11,18 @@ class GalleryViewHistory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\ManyToOne(targetEntity: Pack::class, inversedBy: 'viewHistory')]
     #[ORM\JoinColumn(nullable: false)]
-    private $gallery;
+    private Pack $gallery;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'galleryViewHistory')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user;
+    private User $user;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $viewedAt;
+    private \DateTimeImmutable $viewedAt;
 
     public function __construct()
     {
@@ -34,31 +34,31 @@ class GalleryViewHistory
         return $this->id;
     }
 
-    public function getGallery(): ?Pack
+    public function getGallery(): Pack
     {
         return $this->gallery;
     }
 
-    public function setGallery(?Pack $gallery): self
+    public function setGallery(Pack $gallery): self
     {
         $this->gallery = $gallery;
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getViewedAt(): ?\DateTimeImmutable
+    public function getViewedAt(): \DateTimeImmutable
     {
         return $this->viewedAt;
     }

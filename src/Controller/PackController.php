@@ -53,9 +53,6 @@ class PackController extends AbstractController
     #[Route('/pack/{id}', name: 'pack_show', methods: ['GET'])]
     public function showAction(Pack $pack, EntityManagerInterface $entityManager): Response
     {
-        $pack->incrementViews();
-        $entityManager->flush();
-
         $deleteForm = $this->createDeleteForm($pack);
 
         return $this->render('pack/show.html.twig', array(

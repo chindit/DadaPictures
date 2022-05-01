@@ -32,19 +32,22 @@ class PackRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-	public function getPacksByTag(Tag $tag, int $page = 1): array
-	{
-		return $this->createQueryBuilder('g')
-			->join('g.pictures', 'p')
-			->join('p.tags', 't')
-			->where('t.id = :id')
-			->andWhere('g.status = :ok')
-			->setParameter('id', $tag->getId())
-			->setParameter('ok', Status::OK)
-			->orderBy('g.created', 'DESC')
-			->setFirstResult(($page-1)*25)
-			->setMaxResults(25)
-			->getQuery()
-			->getResult();
-	}
+    /**
+     * @return array<int, Pack>
+     */
+    public function getPacksByTag(Tag $tag, int $page = 1): array
+    {
+        return $this->createQueryBuilder('g')
+            ->join('g.pictures', 'p')
+            ->join('p.tags', 't')
+            ->where('t.id = :id')
+            ->andWhere('g.status = :ok')
+            ->setParameter('id', $tag->getId())
+            ->setParameter('ok', Status::OK)
+            ->orderBy('g.created', 'DESC')
+            ->setFirstResult(($page - 1) * 25)
+            ->setMaxResults(25)
+            ->getQuery()
+            ->getResult();
+    }
 }

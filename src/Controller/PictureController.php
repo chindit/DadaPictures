@@ -8,6 +8,7 @@ use App\Entity\BannedPicture;
 use App\Entity\Pack;
 use App\Entity\Picture;
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Form\Type\PictureTagType;
 use App\Model\Status;
 use App\Repository\PictureRepository;
@@ -145,7 +146,9 @@ class PictureController extends AbstractController
     #[Route('/view/{picture}', name:'view_picture', methods: ['GET'])]
     public function viewPicture(Picture $picture, Path $path, EntityManagerInterface $entityManager, Security $security): Response
     {
-        $picture->incrementViews($security->getUser());
+        /** @var User $user */
+        $user = $security->getUser();
+        $picture->incrementViews($user);
         $entityManager->flush();
 
         return new Response(

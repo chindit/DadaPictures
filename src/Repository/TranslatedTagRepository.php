@@ -20,16 +20,21 @@ class TranslatedTagRepository extends ServiceEntityRepository
         parent::__construct($registry, TranslatedTag::class);
     }
 
-	public function findAllWithTranslation(string $language)
-	{
-		return $this->createQueryBuilder('tt')
-			->select(['tt.name', 't.id', 'SIZE(t.pictures) AS count'])
-			->join('tt.tag', 't')
-			->where('t.visible = true')
-			->andWhere('tt.language = :language')
-			->setParameter('language', $language)
-			->orderBy('SIZE(t.pictures)', 'DESC')
-			->getQuery()
-			->getScalarResult();
-	}
+    /**
+     * @param string $language
+     *
+     * @return array<int, mixed>
+     */
+    public function findAllWithTranslation(string $language): array
+    {
+        return $this->createQueryBuilder('tt')
+            ->select(['tt.name', 't.id', 'SIZE(t.pictures) AS count'])
+            ->join('tt.tag', 't')
+            ->where('t.visible = true')
+            ->andWhere('tt.language = :language')
+            ->setParameter('language', $language)
+            ->orderBy('SIZE(t.pictures)', 'DESC')
+            ->getQuery()
+            ->getScalarResult();
+    }
 }

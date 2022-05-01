@@ -192,14 +192,14 @@ class FileManager
         }
     }
 
-	public function getUniqueFileName(UploadedFile $file): string
-	{
-		$extension = $file->guessExtension();
-		$clientName = $this->cleanName($file->getClientOriginalName());
-		$clientName = substr($clientName, 0, strrpos($clientName, '.')-1);
+    public function getUniqueFileName(UploadedFile $file): string
+    {
+        $extension = $file->guessExtension();
+        $clientName = $this->cleanName($file->getClientOriginalName());
+        $clientName = substr($clientName, 0, strrpos($clientName, '.') - 1);
 
-		return $clientName . '_' . (new Ulid()) . '.' . $extension;
-	}
+        return $clientName . '_' . (new Ulid()) . '.' . $extension;
+    }
 
     /**
      * Delete physically a picture

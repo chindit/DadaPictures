@@ -9,10 +9,7 @@ use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method GalleryViewHistory|null find($id, $lockMode = null, $lockVersion = null)
- * @method GalleryViewHistory|null findOneBy(array $criteria, array $orderBy = null)
- * @method GalleryViewHistory[]    findAll()
- * @method GalleryViewHistory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<GalleryViewHistory>
  */
 class GalleryViewHistoryRepository extends ServiceEntityRepository
 {

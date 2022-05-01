@@ -10,9 +10,9 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class AdminController extends AbstractController
 {
-	#[Route(name: 'admin_packs_validation', methods: ['GET'], path: '/api/admin/validation/galleries')]
-	public function getPacksInValidation(PackRepository $packRepository, NormalizerInterface $normalizer): JsonResponse
-	{
-		return new JsonResponse($normalizer->normalize($packRepository->getPacksInValidation(), context: ['groups' => ['export']]));
-	}
+    #[Route(name: 'admin_packs_validation', methods: ['GET'], path: '/api/admin/validation/galleries')]
+    public function getPacksInValidation(PackRepository $packRepository, NormalizerInterface $normalizer): JsonResponse
+    {
+        return new JsonResponse($normalizer->normalize($packRepository->getPacksInValidation(), context: ['groups' => ['export']]));
+    }
 }

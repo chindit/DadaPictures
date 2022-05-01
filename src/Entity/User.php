@@ -45,30 +45,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 125, nullable: true, unique: true)]
     private ?string $email;
 
-	#[ORM\Column(name: 'created', type: 'datetime')]
+    #[ORM\Column(name: 'created', type: 'datetime')]
     private \DateTime $created;
 
-	#[ORM\Column(name: 'last_login', type: 'datetime')]
+    #[ORM\Column(name: 'last_login', type: 'datetime')]
     private \DateTime $lastLogin;
 
+    /**
+     * @var Collection<int, GalleryViewHistory>
+     */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: GalleryViewHistory::class, orphanRemoval: true)]
-    private $galleryViewHistory;
+    private Collection $galleryViewHistory;
 
+    /**
+     * @var Collection<int, PictureViewHistory>
+     */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: PictureViewHistory::class, orphanRemoval: true)]
-    private $pictureViewHistory;
+    private Collection $pictureViewHistory;
 
-	public function __construct()
-                                    	{
-                                    		$this->created = new \DateTime();
-                                    		$this->lastLogin = new \DateTime();
-                                      $this->galleryViewHistory = new ArrayCollection();
-                                      $this->pictureViewHistory = new ArrayCollection();
-                                    	}
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+        $this->lastLogin = new \DateTime();
+        $this->galleryViewHistory = new ArrayCollection();
+        $this->pictureViewHistory = new ArrayCollection();
+    }
 
-	public function getId(): ?int
-                                        {
-                                            return $this->id;
-                                        }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     /**
      * A visual identifier that represents this user.
@@ -171,7 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
-	public function updateLastLogin(): self
+    public function updateLastLogin(): self
     {
         $this->lastLogin = new \DateTime();
 
@@ -198,12 +204,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeGalleryViewHistory(GalleryViewHistory $galleryViewHistory): self
     {
-        if ($this->galleryViewHistory->removeElement($galleryViewHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($galleryViewHistory->getUser() === $this) {
-                $galleryViewHistory->setUser(null);
-            }
-        }
+        $this->galleryViewHistory->removeElement($galleryViewHistory);
 
         return $this;
     }
@@ -228,13 +229,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removePictureViewHistory(PictureViewHistory $pictureViewHistory): self
     {
-        if ($this->pictureViewHistory->removeElement($pictureViewHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($pictureViewHistory->getUser() === $this) {
-                $pictureViewHistory->setUser(null);
-            }
-        }
+        $this->pictureViewHistory->removeElement($pictureViewHistory);
 
         return $this;
+    }
+
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    public function getLastLogin(): \DateTime
+    {
+        return $this->lastLogin;
     }
 }

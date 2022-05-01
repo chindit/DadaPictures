@@ -70,8 +70,8 @@ class Pack
     #[Groups(['export'])]
     private \DateTime $updated;
 
-	#[ORM\Column(name: 'deletedAt', type: Types::DATETIME_MUTABLE, nullable: true)]
-	private $deletedAt;
+    #[ORM\Column(name: 'deletedAt', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $deletedAt;
 
     /**
      * @var array|UploadedFile[]
@@ -95,8 +95,11 @@ class Pack
     )]
     private array $files;
 
+    /**
+     * @var Collection<int, GalleryViewHistory>
+     */
     #[ORM\OneToMany(mappedBy: 'gallery', targetEntity: GalleryViewHistory::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
-    private $viewHistory;
+    private Collection $viewHistory;
 
 
     public function __construct()
@@ -109,7 +112,7 @@ class Pack
         $this->viewHistory = new ArrayCollection();
     }
 
-	public function setId(string $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 
@@ -142,10 +145,10 @@ class Pack
     {
         $this->views++;
 
-		$this->addViewHistory(
-			(new GalleryViewHistory())
-			->setUser($user)
-		);
+        $this->addViewHistory(
+            (new GalleryViewHistory())
+            ->setUser($user)
+        );
 
         return $this;
     }
@@ -264,7 +267,12 @@ class Pack
         return $this;
     }
 
-	public function setPictures(array $pictures): self
+    /**
+     * @param Picture[] $pictures
+     *
+     * @return $this
+     */
+    public function setPictures(array $pictures): self
     {
         $this->pictures = new ArrayCollection($pictures);
 
@@ -311,25 +319,20 @@ class Pack
 
     public function removeViewHistory(GalleryViewHistory $viewHistory): self
     {
-        if ($this->viewHistory->removeElement($viewHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($viewHistory->getGallery() === $this) {
-                $viewHistory->setGallery(null);
-            }
-        }
+        $this->viewHistory->removeElement($viewHistory);
 
         return $this;
     }
 
-	public function getDeletedAt(): ?\DateTime
-	{
-		return $this->deletedAt;
-	}
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
 
-	public function setDeletedAt(?\DateTime $deletedAt): self
-	{
-		$this->deletedAt = $deletedAt;
+    public function setDeletedAt(?\DateTime $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
 
-		return $this;
-	}
+        return $this;
+    }
 }

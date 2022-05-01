@@ -19,7 +19,7 @@ final class Version20220401144737 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-		$this->addSql(<<<'SQL'
+        $this->addSql(<<<'SQL'
             UPDATE tag t
             INNER JOIN translated_tag tt ON t.id = tt.tag_id
             SET t.name =
@@ -29,8 +29,8 @@ final class Version20220401144737 extends AbstractMigration
                 ), ':', ''), ')', ''), '(', ''), ',', ''), '\\', ''), '\/', ''), '\"', ''), '?', ''),
                 '\'', ''), '&', ''), '!', ''), '.', ''), ' ', '-'), '--', '-'), '--', '-'));
             SQL
-		);
-		$this->addSql('UPDATE tag SET visible=1');
+        );
+        $this->addSql('UPDATE tag SET visible=1');
     }
 
     public function down(Schema $schema): void

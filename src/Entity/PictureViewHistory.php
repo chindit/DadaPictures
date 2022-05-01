@@ -11,47 +11,47 @@ class PictureViewHistory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\ManyToOne(targetEntity: Picture::class, inversedBy: 'viewHistory')]
     #[ORM\JoinColumn(nullable: false)]
-    private $picture;
+    private Picture $picture;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'pictureViewHistory')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user;
+    private User $user;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $viewedAt;
+    private \DateTimeImmutable $viewedAt;
 
-	public function __construct()
-	{
-		$this->viewedAt = new \DateTimeImmutable();
-	}
+    public function __construct()
+    {
+        $this->viewedAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPicture(): ?Picture
+    public function getPicture(): Picture
     {
         return $this->picture;
     }
 
-    public function setPicture(?Picture $picture): self
+    public function setPicture(Picture $picture): self
     {
         $this->picture = $picture;
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 

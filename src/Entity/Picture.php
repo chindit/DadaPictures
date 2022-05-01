@@ -86,8 +86,11 @@ class Picture
     #[Groups(['export'])]
     private Collection $tags;
 
+    /**
+     * @var Collection<int, PictureViewHistory>
+     */
     #[ORM\OneToMany(mappedBy: 'picture', targetEntity: PictureViewHistory::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
-    private $viewHistory;
+    private Collection $viewHistory;
 
 
     public function __construct()
@@ -186,10 +189,10 @@ class Picture
     {
         $this->views++;
 
-		$this->addViewHistory(
-			(new PictureViewHistory())
-			->setUser($user)
-		);
+        $this->addViewHistory(
+            (new PictureViewHistory())
+            ->setUser($user)
+        );
 
         return $this;
     }
@@ -341,12 +344,7 @@ class Picture
 
     public function removeViewHistory(PictureViewHistory $viewHistory): self
     {
-        if ($this->viewHistory->removeElement($viewHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($viewHistory->getPicture() === $this) {
-                $viewHistory->setPicture(null);
-            }
-        }
+        $this->viewHistory->removeElement($viewHistory);
 
         return $this;
     }

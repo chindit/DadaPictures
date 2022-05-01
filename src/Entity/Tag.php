@@ -23,8 +23,8 @@ class Tag
     #[Groups(['export'])]
     private string $name = '';
 
-	#[ORM\Column(name: 'visible', type: 'boolean')]
-	private bool $visible = true;
+    #[ORM\Column(name: 'visible', type: 'boolean')]
+    private bool $visible = true;
 
     /**
      * @var Collection<int, TranslatedTag> $translations
@@ -72,7 +72,7 @@ class Tag
 
     public function addTranslation(TranslatedTag $tag): self
     {
-		$tag->setTag($this);
+        $tag->setTag($this);
         $this->translations[] = $tag;
 
         return $this;
@@ -136,15 +136,15 @@ class Tag
         return $this->pictures;
     }
 
-	public function isVisible(): bool
-	{
-		return $this->visible;
-	}
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
 
-	public function setVisible(bool $visibility): self
-	{
-		$this->visible = $visibility;
+    public function setVisible(bool $visibility): self
+    {
+        $this->visible = $visibility;
 
-		return $this;
-	}
+        return $this;
+    }
 }

@@ -44,7 +44,7 @@ class TagController extends AbstractController
             /** @var string|string[]|null $tagRequest */
             $tagRequest = $request->get('tag');
             if (!is_countable($tagRequest) || count($tagRequest) !== count(Languages::all())) {
-				$this->addFlash('danger', 'Tag sent is not valid');
+                $this->addFlash('danger', 'Tag sent is not valid');
 
                 return $this->render('tag/new.html.twig', ['languages' => Languages::all(),]);
             }

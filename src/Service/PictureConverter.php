@@ -41,17 +41,18 @@ final class PictureConverter
         $picturePath = $this->path->getPictureFullpath($picture);
 
         $name = $overwrite ? $picture->getThumbnail() : uniqid('thumb_', true) . '.jpg';
-		$imageManager = new ImageManager(['driver' => 'gd']);
-		$image = $imageManager
-			->make($picturePath);
-		$isVertical = $image->height() > $image->width();
-		$image->resize(
-			!$isVertical ? null : $this->thumbnailWidth,
-			!$isVertical ? $this->thumbnailHeight : null,
-			function(Constraint $constraint) {
+        $imageManager = new ImageManager(['driver' => 'gd']);
+        $image = $imageManager
+            ->make($picturePath);
+        $isVertical = $image->height() > $image->width();
+        $image->resize(
+            !$isVertical ? null : $this->thumbnailWidth,
+            !$isVertical ? $this->thumbnailHeight : null,
+            function (Constraint $constraint) {
                 $constraint->aspectRatio();
-            })
-			->crop($this->thumbnailWidth, $this->thumbnailHeight)
+            }
+        )
+            ->crop($this->thumbnailWidth, $this->thumbnailHeight)
             ->save($this->path->getThumbnailsDirectory() . $name);
 
         $picture->setThumbnail($name);

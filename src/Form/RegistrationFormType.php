@@ -27,19 +27,19 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-				'required' => true,
-				'constraints' => [
-					new Length(max: 180),
-					new Required()
-				]
+                'required' => true,
+                'constraints' => [
+                    new Length(max: 180),
+                    new Required()
+                ]
             ])
-	        ->add('email', EmailType::class, [
-				'required' => true,
-				'constraints' => [
-					new Required(),
-					new Length(max: 150)
-				]
-	        ])
+            ->add('email', EmailType::class, [
+                'required' => true,
+                'constraints' => [
+                    new Required(),
+                    new Length(max: 150)
+                ]
+            ])
             ->add('terms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -49,25 +49,25 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label' => 'register.terms'
             ])
-	        ->add('password', RepeatedType::class, [
-				'mapped' => false,
-				'first_name' => 'password',
-				'second_name' => 'passwordConfirm',
-				'constraints' => [
-					new NotBlank([
-						'message' => 'Please enter a password',
-					]),
-					new Length([
-						'min' => 6,
-						'minMessage' => 'Your password should be at least {{ limit }} characters',
-						// max length allowed by Symfony for security reasons
-						'max' => 4096,
-					]),
-				],
-				'type' => PasswordType::class,
-				'invalid_message' => 'The password fields must match.',
-				'required' => true,
-	        ])
+            ->add('password', RepeatedType::class, [
+                'mapped' => false,
+                'first_name' => 'password',
+                'second_name' => 'passwordConfirm',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a password',
+                    ]),
+                    new Length([
+                        'min' => 6,
+                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 4096,
+                    ]),
+                ],
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'required' => true,
+            ])
         ;
     }
 

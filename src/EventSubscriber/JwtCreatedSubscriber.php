@@ -10,36 +10,35 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class JwtCreatedSubscriber implements EventSubscriberInterface
 {
-	public static function getSubscribedEvents()
-	{
-		return [
-			Events::JWT_CREATED => [
-				['addUserToToken', 0]
-			]
-		];
-	}
+    public static function getSubscribedEvents()
+    {
+        return [
+            Events::JWT_CREATED => [
+                ['addUserToToken', 0]
+            ]
+        ];
+    }
 
-	public function __construct(private UserRepository $userRepository, private EntityManagerInterface $entityManager)
-	{
+    public function __construct(private UserRepository $userRepository, private EntityManagerInterface $entityManager)
+    {
+    }
 
-	}
+    public function addUserToToken(JWTCreatedEvent $event): void
+    {
+        $user = $this->userRepository->findOneBy(['username' => $event->getData()['username']]);
 
-	public function addUserToToken(JWTCreatedEvent $event)
-	{
-		$user = $this->userRepository->findOneBy(['username' => $event->getData()['username']]);
+        if ($user === null) {
+            return;
+        }
 
-		if ($user === null) {
-			return;
-		}
+        $payload = $event->getData();
+        $payload['email'] = $user->getEmail();
+        $payload['language'] = $user->getLanguage();
 
-		$payload = $event->getData();
-		$payload['email'] = $user->getEmail();
-		$payload['language'] = $user->getLanguage();
+        // Update connection time
+        $user->updateLastLogin();
+        $this->entityManager->flush();
 
-		// Update connection time
-		$user->updateLastLogin();
-		$this->entityManager->flush();
-
-		$event->setData($payload);
-	}
+        $event->setData($payload);
+    }
 }
