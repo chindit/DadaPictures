@@ -6,6 +6,8 @@ namespace App\Controller\Api;
 
 use App\Entity\BannedPicture;
 use App\Entity\Pack;
+use App\Entity\Tag;
+use App\Entity\User;
 use App\Form\Type\PackType;
 use App\Message\UploadMessage;
 use App\Message\ValidateUploadMessage;
@@ -76,9 +78,9 @@ class PackController extends AbstractController
         ]);
     }
 
-	#[Route(name: 'gallery_tag', methods: ['GET'], path: '/api/gallery/tag/{id}')]
+	#[Route(name: 'gallery_tag', methods: ['GET'], path: '/api/gallery/tag/{tag}')]
 	public function getTaggedGallery(
-		string $id,
+		Tag $tag,
 		Request $request,
 		Security $security,
 		PaginatorInterface $paginator,
@@ -89,7 +91,6 @@ class PackController extends AbstractController
 	):
 	JsonResponse
 	{
-		$tag = $tagRepository->find((int)$id);
 		$page = (int)$request->query->get('page', '1');
 
 		$pageData = $paginator->paginate(
@@ -106,6 +107,10 @@ class PackController extends AbstractController
 				->setCreator($security->getUser())
 				->setName('RANDOM')
 				->setPictures($pictureRepository->findRandomByTag($tag));
+
+			if (!is_array($data)) {
+				throw new \UnexpectedValueException(sprintf('Expected array got %s', gettype($data)));
+			}
 
 			array_unshift($data, $normalizer->normalize($randomPack, context: ['groups' => 'overview']));
 		}
@@ -131,6 +136,8 @@ class PackController extends AbstractController
 	{
 		if ($tag) {
 			$tagEntity = $tagRepository->find($tag);
+		} else {
+			$tagEntity = null;
 		}
 		$temporaryPack = new Pack();
 		$temporaryPack->setCreator($security->getUser())
@@ -147,7 +154,10 @@ class PackController extends AbstractController
 	{
 		$this->denyAccessUnlessGranted('view', $pack);
 
-		$pack->incrementViews($security->getUser());
+		/** @var User $user */
+		$user = $security->getUser();
+
+		$pack->incrementViews($user);
 		$entityManager->flush();
 
 		return new JsonResponse($normalizer->normalize($pack, context: ['groups' => 'export']));
@@ -222,5 +232,7 @@ class PackController extends AbstractController
 				return new JsonResponse(['An unexpected error has occured'], Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
 		}
+
+		return new JsonResponse(['No data found'], Response::HTTP_BAD_REQUEST);
 	}
 }
