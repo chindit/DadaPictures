@@ -42,6 +42,20 @@ class PictureController extends AbstractController
         );
     }
 
+	#[Route('/api/picture/view/thumb/{picture}', name: 'view_thumbnail_picture', methods: ['GET'])]
+	public function viewThumbnail(Picture $picture, Path $path): Response
+	{
+		if (!$picture->getThumbnail()) {
+			return $this->redirectToRoute('view_picture', ['picture' => $picture]);
+		}
+
+		return (new Response(
+			file_get_contents($path->getThumbnailsDirectory() . $picture->getThumbnail()) ?: '',
+			Response::HTTP_OK,
+			['Content-Type' => 'image/jpg', 'Cache-Control' => 'max-age=3600']
+		));
+	}
+
     #[Route(path: '/api/picture/{picture}', name: 'api_picture', methods: ['GET'], priority: 5)]
     public function getPicture(Picture $picture, NormalizerInterface $normalizer): JsonResponse
     {
