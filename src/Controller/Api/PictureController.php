@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class PictureController extends AbstractController
 {
-    #[Route(path: '/api/picture/untagged', name: 'api_untagged_picture', methods: ['GET'])]
+    #[Route(path: '/api/picture/untagged', name: 'api_untagged_picture', methods: ['GET'], priority: 10)]
     public function viewUntaggedAction(PictureRepository $pictureRepository, NormalizerInterface $normalizer): JsonResponse
     {
         $picture = $pictureRepository->getPictureWithoutTags();
@@ -27,7 +27,7 @@ class PictureController extends AbstractController
         return new JsonResponse($normalizer->normalize($picture, context: ['groups' => ['export']]));
     }
 
-    #[Route(path: '/api/picture/view/{picture}', name:'api_view_picture', methods: ['GET'])]
+    #[Route(path: '/api/picture/view/{picture}', name:'api_view_picture', methods: ['GET'], priority: 10)]
     public function viewPicture(Picture $picture, Path $path, EntityManagerInterface $entityManager, Security $security): Response
     {
         /** @var User $user */
@@ -42,7 +42,7 @@ class PictureController extends AbstractController
         );
     }
 
-    #[Route(path: '/api/picture/{picture}', name: 'api_picture', methods: ['GET'])]
+    #[Route(path: '/api/picture/{picture}', name: 'api_picture', methods: ['GET'], priority: 5)]
     public function getPicture(Picture $picture, NormalizerInterface $normalizer): JsonResponse
     {
         return new JsonResponse($normalizer->normalize($picture, context: ['groups' => ['export']]));
