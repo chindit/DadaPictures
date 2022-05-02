@@ -43,6 +43,7 @@ security:
         - { path: ^/api/login$, role: PUBLIC_ACCESS }
         - { path: ^/api/register$, role: PUBLIC_ACCESS }
         - { path: ^/api/public/galleries/latest$, role: PUBLIC_ACCESS }
+        - { path: ^/api/picture/view/thumb/\S+$, role: PUBLIC_ACCESS }
         # Editor's calls
         - { path: ^/api/tag/create$, role: ROLE_EDITOR }
         - { path: ^/api/picture/\S+/tag, role: ROLE_EDITOR }
