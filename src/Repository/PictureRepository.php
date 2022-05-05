@@ -43,7 +43,8 @@ class PictureRepository extends ServiceEntityRepository
     public function getPictureWithoutTags(): ?Picture
     {
         return $this->createQueryBuilder('p')
-            ->where('p.tags is empty')
+            ->where('p.deletedAt is null')
+            ->andWhere('p.tags is empty')
             ->andWhere('p.status = :status')
             ->setParameter('status', Status::OK)
             ->orderBy('RANDOM()')
@@ -60,6 +61,7 @@ class PictureRepository extends ServiceEntityRepository
     public function findRandomByTag(Tag $tag): array
     {
         return $this->createQueryBuilder('p')
+            ->where('p.deletedAt is null')
             ->innerJoin('p.tags', 't')
             ->where('t.id = :id')
             ->setParameter('id', $tag->getId())
@@ -77,6 +79,7 @@ class PictureRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('p')
             ->where('p.status = :status')
             ->setParameter('status', Picture::STATUS_OK)
+            ->andWhere('p.deletedAt is null')
             ->orderBy('RANDOM()')
             ->setMaxResults(50);
 

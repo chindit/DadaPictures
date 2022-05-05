@@ -27,6 +27,7 @@ class PackRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->where('c.status = :status')
+            ->andWhere('c.deletedAt is null')
             ->setParameter('status', Status::TEMPORARY)
             ->getQuery()
             ->getResult();
@@ -41,6 +42,7 @@ class PackRepository extends ServiceEntityRepository
             ->join('g.pictures', 'p')
             ->join('p.tags', 't')
             ->where('t.id = :id')
+            ->andWhere('g.deletedAt is null')
             ->andWhere('g.status = :ok')
             ->setParameter('id', $tag->getId())
             ->setParameter('ok', Status::OK)

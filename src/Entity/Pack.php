@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'pack')]
 #[ORM\Entity(repositoryClass: PackRepository::class)]
-#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Pack
 {
     #[ORM\Id]

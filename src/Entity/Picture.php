@@ -15,7 +15,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'picture')]
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
-#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class Picture
 {
     public const STATUS_OK = 1;
