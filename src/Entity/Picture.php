@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\PictureRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -14,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'picture')]
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class Picture
 {
     public const STATUS_OK = 1;
@@ -78,6 +80,9 @@ class Picture
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(name: 'updated', type: 'datetime')]
     private \DateTime $updated;
+
+    #[ORM\Column(name: 'deletedAt', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $deletedAt;
 
     /**
      * @var Collection<int, Tag> $tags
@@ -345,6 +350,18 @@ class Picture
     public function removeViewHistory(PictureViewHistory $viewHistory): self
     {
         $this->viewHistory->removeElement($viewHistory);
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }
