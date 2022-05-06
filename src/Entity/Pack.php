@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\Status;
 use App\Repository\PackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'pack')]
@@ -35,7 +37,6 @@ class Pack
     private string $storagePath;
 
     #[ORM\Column(name: 'status', type: 'integer')]
-    #[Groups(['export'])]
     private int $status;
 
     #[ORM\Column(name: 'views', type: 'integer', options: ['unsigned' => true])]
@@ -250,6 +251,13 @@ class Pack
 
         return $this;
     }
+
+	#[Groups(['export'])]
+	#[SerializedName('status')]
+	public function getStatusName(): string
+	{
+		return Status::toName($this->status);
+	}
 
     /**
      * @return Collection<int, Picture>

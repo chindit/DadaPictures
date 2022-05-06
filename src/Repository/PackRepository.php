@@ -26,9 +26,9 @@ class PackRepository extends ServiceEntityRepository
     public function getPacksInValidation(): array
     {
         return $this->createQueryBuilder('c')
-            ->where('c.status = :status')
+            ->where('c.status <> :status')
             ->andWhere('c.deletedAt is null')
-            ->setParameter('status', Status::TEMPORARY)
+            ->setParameter('status', Status::OK)
             ->getQuery()
             ->getResult();
     }

@@ -37,4 +37,19 @@ class Status
                 return '';
         }
     }
+
+	public static function toName(int $const): string
+	{
+		return match($const) {
+			1 => 'OK',
+			2 => 'Temporary',
+			3 => 'Warning',
+			4 => 'Error',
+			5 => 'Duplicate',
+			6 => 'Processing upload',
+			7 => 'Processing validation',
+			8 => 'Banned',
+			default => throw new \UnexpectedValueException(sprintf('Value %d is not in Status enum', $const))
+		};
+	}
 }

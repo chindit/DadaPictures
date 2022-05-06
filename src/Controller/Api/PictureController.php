@@ -46,7 +46,7 @@ class PictureController extends AbstractController
 	public function viewThumbnail(Picture $picture, Path $path): Response
 	{
 		if (!$picture->getThumbnail()) {
-			return $this->redirectToRoute('view_picture', ['picture' => $picture]);
+			return $this->redirectToRoute('api_picture', ['picture' => $picture]);
 		}
 
 		return (new Response(

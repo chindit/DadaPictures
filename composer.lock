@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5afa6b27d92e17316fddf80b563c9f79",
+    "content-hash": "fab69e4c2a095f5f8b385fb7803c0316",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -159,6 +159,49 @@
                 "source": "https://github.com/chindit/archive/tree/0.1.1"
             },
             "time": "2022-04-24T15:03:57+00:00"
+        },
+        {
+            "name": "chindit/collection",
+            "version": "1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chindit/collection.git",
+                "reference": "387d1cd2ab19ae55f5a31c4d1a227269af183692"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chindit/collection/zipball/387d1cd2ab19ae55f5a31c4d1a227269af183692",
+                "reference": "387d1cd2ab19ae55f5a31c4d1a227269af183692",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Chindit\\Collection\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "David Lumaye",
+                    "email": "littletiger58@gmail.com"
+                }
+            ],
+            "description": "Small array wrapper to ease array handling",
+            "support": {
+                "issues": "https://github.com/chindit/collection/issues",
+                "source": "https://github.com/chindit/collection/tree/1.0.8"
+            },
+            "time": "2022-01-14T15:56:28+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -1520,16 +1563,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "2.5.2",
+            "version": "2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "4276c6cbc0ca692c190f650a2678623bf04af2d2"
+                "reference": "d7edf274b6d35ad82328e223439cc2bb2f92bd9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/4276c6cbc0ca692c190f650a2678623bf04af2d2",
-                "reference": "4276c6cbc0ca692c190f650a2678623bf04af2d2",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/d7edf274b6d35ad82328e223439cc2bb2f92bd9e",
+                "reference": "d7edf274b6d35ad82328e223439cc2bb2f92bd9e",
                 "shasum": ""
             },
             "require": {
@@ -1602,7 +1645,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/persistence/issues",
-                "source": "https://github.com/doctrine/persistence/tree/2.5.2"
+                "source": "https://github.com/doctrine/persistence/tree/2.5.3"
             },
             "funding": [
                 {
@@ -1618,7 +1661,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-02T17:29:02+00:00"
+            "time": "2022-05-03T09:16:53+00:00"
         },
         {
             "name": "doctrine/sql-formatter",
