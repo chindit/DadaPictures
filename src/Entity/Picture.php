@@ -201,9 +201,9 @@ class Picture
         return $this;
     }
 
-    public function getThumbnail(): string
+    public function getThumbnail(): ?string
     {
-        return $this->thumbnail ?? $this->getFilename();
+        return $this->thumbnail;
     }
 
     public function setThumbnail(string $thumbnail): self
