@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'pack')]
 #[ORM\Entity(repositoryClass: PackRepository::class)]
+#[ORM\Index(columns: ['name'], flags: ['fulltext'])]
 class Pack
 {
     #[ORM\Id]

@@ -65,6 +65,7 @@ class PictureRepository extends ServiceEntityRepository
             ->innerJoin('p.tags', 't')
             ->where('t.id = :id')
             ->setParameter('id', $tag->getId())
+	        ->orderBy('RANDOM()')
             ->setMaxResults(50)
             ->getQuery()
             ->getResult();
@@ -85,4 +86,30 @@ class PictureRepository extends ServiceEntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+	public function searchPictures(array $includedTags, array $excludedTags): array
+	{
+		$query = $this->createQueryBuilder('p')
+			->where('p.deletedAt is null')
+			->innerJoin('p.tags', 't');
+
+		if (!empty($includedTags)) {
+			$query->andWhere('t.id IN (:included)')
+				->setParameter('included', $includedTags);
+		}
+
+		if (!empty($excludedTags)) {
+			$query->andWhere('t.id NOT IN (:excluded)')
+				->setParameter('excluded', $excludedTags);
+		}
+
+		$query
+			->groupBy('p.id')
+			->orderBy('RANDOM()')
+			->setMaxResults(50);
+
+		return $query
+			->getQuery()
+			->getResult();
+	}
 }

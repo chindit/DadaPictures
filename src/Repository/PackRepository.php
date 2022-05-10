@@ -52,4 +52,47 @@ class PackRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+	/**
+	 * @param int[] $includedTags
+	 * @param int[] $excludedTags
+	 * @param ?string $galleryName
+	 *
+	 * @return array<int, Pack>
+	 */
+	public function searchPacks(array $includedTags = [], array $excludedTags = [], ?string $galleryName = null, int $page = 1): array
+	{
+		$query = $this->createQueryBuilder('g')
+			->join('g.pictures', 'p')
+			->join('p.tags', 't')
+			->where('g.deletedAt is null')
+			->andWhere('p.deletedAt is null')
+			->andWhere('g.status = :ok')
+			->andWhere('p.status = :ok')
+			->setParameter('ok', Status::OK);
+
+		if (!empty($includedTags)) {
+			$query->andWhere('t.id IN (:included)')
+				->setParameter('included', $includedTags);
+		}
+
+		if (!empty($excludedTags)) {
+			$query->andWhere('t.id NOT IN (:excluded)')
+				->setParameter('excluded', $excludedTags);
+		}
+
+		if ($galleryName) {
+			$query->andWhere('g.name LIKE :name')
+				->setParameter('name', '%' . $galleryName . '%');
+		}
+		$query
+			->groupBy('g.id')
+			->orderBy('g.id', 'DESC')
+			->setFirstResult(($page - 1) * 25)
+			->setMaxResults(25);
+
+		return $query
+			->getQuery()
+			->getResult();
+	}
 }

@@ -232,4 +232,46 @@ class PackController extends AbstractController
 
         return new JsonResponse(['No data found'], Response::HTTP_BAD_REQUEST);
     }
+
+	#[Route('/api/gallery/search', methods: ['POST'])]
+	public function searchGalleries(
+		Request $request,
+		PackRepository $packRepository,
+		NormalizerInterface $normalizer,
+		PaginatorInterface $paginator,
+		Security $security,
+		PictureRepository $pictureRepository
+	): JsonResponse
+	{
+		$search = json_decode($request->getContent(), true);
+
+		$page = (int)$request->query->get('page', '1');
+
+		$pageData = $paginator->paginate(
+			$packRepository->searchPacks(
+				$search['includedTags'],
+				$search['excludedTags'],
+				$search['galleryName'],
+				$page
+			),
+		);
+
+		$data = $normalizer->normalize($pageData->getItems(), context: ['groups' => 'overview']);
+
+		if ($page === 1 && !$search['galleryName']) {
+			$randomPack = (new Pack())
+				->setId('search-' . base64_encode($request->getContent()))
+				->setCreated(new \DateTime())
+				->setCreator($security->getUser())
+				->setName('RANDOM')
+				->setPictures($pictureRepository->searchPictures($search['includedTags'], $search['excludedTags'],));
+
+			if (!is_array($data)) {
+				throw new \UnexpectedValueException(sprintf('Expected array got %s', gettype($data)));
+			}
+
+			array_unshift($data, $normalizer->normalize($randomPack, context: ['groups' => 'overview']));
+		}
+		return new JsonResponse($data);
+	}
 }
