@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Picture;
+use App\Model\Status;
 use App\Repository\PictureRepository;
 use App\Service\PictureConverter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +33,7 @@ class PictureThumbsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $pictures = $this->pictureRepository->findBy(['thumbnail' => null, 'status' => Picture::STATUS_OK]);
+        $pictures = $this->pictureRepository->findBy(['thumbnail' => null, 'status' => Status::OK]);
 
         $io->note(sprintf('%d pictures need a thumbnail', count($pictures)));
 

@@ -17,10 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
 class Picture
 {
-    public const STATUS_OK = 1;
-    public const STATUS_TEMP = 2;
-    public const STATUS_ERROR = 3;
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -58,6 +54,7 @@ class Picture
     private string $properties;
 
     #[ORM\Column(name: 'status', type: 'integer')]
+    #[Groups(['export'])]
     private int $status;
 
     #[ORM\Column(name: 'statusInfo', type: 'string', length: 150)]

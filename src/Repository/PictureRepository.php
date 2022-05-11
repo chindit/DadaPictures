@@ -79,7 +79,7 @@ class PictureRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('p')
             ->where('p.status = :status')
-            ->setParameter('status', Picture::STATUS_OK)
+            ->setParameter('status', Status::OK)
             ->andWhere('p.deletedAt is null')
             ->orderBy('RANDOM()')
             ->setMaxResults(50);
