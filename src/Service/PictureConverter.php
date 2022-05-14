@@ -63,7 +63,7 @@ final class PictureConverter
 		$imageManager = new ImageManager(['driver' => 'gd']);
 		$image = $imageManager
 			->make($this->path->getPictureFullpath($picture));
-		$image->rotate(90.0)
+		$image->rotate(-90.0)
 			->save();
 	}
 }
