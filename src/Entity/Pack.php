@@ -47,7 +47,7 @@ class Pack
     /**
      * @var Collection<int, Picture>
      */
-    #[ORM\ManyToMany(targetEntity: Picture::class)]
+    #[ORM\ManyToMany(targetEntity: Picture::class, inversedBy: 'packs')]
     #[Groups(['export'])]
     private Collection $pictures;
 

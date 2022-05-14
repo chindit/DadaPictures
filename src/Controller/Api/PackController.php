@@ -147,7 +147,13 @@ class PackController extends AbstractController
 
     #[Route(name: 'gallery', methods: ['GET'], path: '/api/gallery/{id}')]
     #[ParamConverter('pack', class: Pack::class)]
-    public function getGallery(Pack $pack, NormalizerInterface $normalizer, EntityManagerInterface $entityManager, Security $security): JsonResponse
+    public function getGallery(
+		Pack $pack,
+		NormalizerInterface $normalizer,
+		EntityManagerInterface $entityManager,
+		Security $security,
+	    TagRepository $tagRepository
+    ): JsonResponse
     {
         $this->denyAccessUnlessGranted('view', $pack);
 
@@ -157,7 +163,10 @@ class PackController extends AbstractController
         $pack->incrementViews($user);
         $entityManager->flush();
 
-        return new JsonResponse($normalizer->normalize($pack, context: ['groups' => 'export']));
+		$normalizedPack = $normalizer->normalize($pack, context: ['groups' => 'export']);
+		$normalizedPack['tags'] = $normalizer->normalize($tagRepository->findDistinctForPack($pack), context: ['groups' => 'export']);
+
+        return new JsonResponse($normalizedPack);
     }
 
     #[Route(name: 'delete_gallery', methods: ['DELETE'], path: '/api/gallery/{id}')]

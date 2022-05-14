@@ -87,6 +87,12 @@ class Picture
     #[Groups(['export'])]
     private Collection $tags;
 
+	/**
+	 * @var Collection<int, Pack> $tags
+	 */
+	#[ORM\ManyToMany(targetEntity: Pack::class, mappedBy: 'pictures')]
+	private Collection $packs;
+
     /**
      * @var Collection<int, PictureViewHistory>
      */
