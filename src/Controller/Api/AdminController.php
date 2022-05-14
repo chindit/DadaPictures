@@ -45,7 +45,7 @@ class AdminController extends AbstractController
 		return new JsonResponse(null, Response::HTTP_ACCEPTED);
 	}
 
-	#[Route(path: '/api/admin/picture/{picture}/rotate', name: 'api_rotate_picture', methods: ['DELETE'])]
+	#[Route(path: '/api/admin/picture/{picture}/rotate', name: 'api_rotate_picture', methods: ['GET'])]
 	public function rotatePicture(Picture $picture, PictureConverter $pictureConverter): JsonResponse
 	{
 		$pictureConverter->rotate($picture);

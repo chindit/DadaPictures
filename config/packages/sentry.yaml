@@ -1,2 +1,5 @@
 sentry:
     dsn: '%env(SENTRY_DSN)%'
+    options:
+        # Specify a fixed sample rate:
+        traces_sample_rate: 1.0
