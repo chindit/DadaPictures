@@ -57,4 +57,13 @@ final class PictureConverter
 
         $picture->setThumbnail($name);
     }
+
+	public function rotate(Picture $picture): void
+	{
+		$imageManager = new ImageManager(['driver' => 'gd']);
+		$image = $imageManager
+			->make($this->path->getPictureFullpath($picture));
+		$image->rotate(90.0)
+			->save();
+	}
 }

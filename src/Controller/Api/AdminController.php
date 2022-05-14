@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Picture;
 use App\Repository\PackRepository;
 use App\Service\BanService;
+use App\Service\PictureConverter;
 use Chindit\Collection\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -40,6 +41,14 @@ class AdminController extends AbstractController
 	{
 		$entityManager->remove($picture);
 		$entityManager->flush();
+
+		return new JsonResponse(null, Response::HTTP_ACCEPTED);
+	}
+
+	#[Route(path: '/api/admin/picture/{picture}/rotate', name: 'api_rotate_picture', methods: ['DELETE'])]
+	public function rotatePicture(Picture $picture, PictureConverter $pictureConverter): JsonResponse
+	{
+		$pictureConverter->rotate($picture);
 
 		return new JsonResponse(null, Response::HTTP_ACCEPTED);
 	}
