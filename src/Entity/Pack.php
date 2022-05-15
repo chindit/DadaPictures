@@ -38,7 +38,7 @@ class Pack
     private string $storagePath;
 
     #[ORM\Column(name: 'status', type: 'integer')]
-    private int $status;
+    private int $status = 1;
 
     #[ORM\Column(name: 'views', type: 'integer', options: ['unsigned' => true])]
     #[Groups(['export'])]
