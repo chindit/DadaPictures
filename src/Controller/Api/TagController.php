@@ -33,7 +33,7 @@ class TagController extends AbstractController
             $constraints[$language] = [new Assert\Length(['min' => 3]), new Assert\NotBlank()];
         }
 
-        $errors = $validator->validate($request->request->all(), new Assert\Collection($constraints));
+        $errors = $validator->validate(json_decode($request->getContent(), true, JSON_THROW_ON_ERROR), new Assert\Collection($constraints));
 
         if ($errors->count() > 0) {
             return new JsonResponse($errors->get(0)->getMessage());
