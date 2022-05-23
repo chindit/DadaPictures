@@ -65,5 +65,8 @@ final class PictureConverter
 			->make($this->path->getPictureFullpath($picture));
 		$image->rotate($isCounterClockWise ? 90.0 : -90.0)
 			->save();
+
+        // Update Thumbnail
+        $this->createThumbnail($picture, true);
 	}
 }
