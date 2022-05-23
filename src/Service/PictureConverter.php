@@ -58,12 +58,12 @@ final class PictureConverter
         $picture->setThumbnail($name);
     }
 
-	public function rotate(Picture $picture): void
+	public function rotate(Picture $picture, bool $isCounterClockWise = false): void
 	{
 		$imageManager = new ImageManager(['driver' => 'gd']);
 		$image = $imageManager
 			->make($this->path->getPictureFullpath($picture));
-		$image->rotate(-90.0)
+		$image->rotate($isCounterClockWise ? 90.0 : -90.0)
 			->save();
 	}
 }
