@@ -169,6 +169,30 @@ class PackController extends AbstractController
         return new JsonResponse($normalizedPack);
     }
 
+	#[Route(name: 'gallery_random', methods: ['GET'], path: '/api/gallery/random')]
+	public function getRandomPicturesAsGallery(
+		Request $request,
+		PictureRepository $pictureRepository,
+		Security $security,
+		NormalizerInterface $normalizer,
+		TagRepository $tagRepository
+	): JsonResponse
+	{
+		$search = json_decode(base64_decode($request->get('search', '')), true, 512, JSON_THROW_ON_ERROR);
+
+		$pack = (new Pack())
+			->setId('search/' . base64_encode($request->getContent()))
+			->setCreated(new \DateTime())
+			->setCreator($security->getUser())
+			->setName('RANDOM')
+			->setPictures($pictureRepository->searchPictures($search['includedTags'], $search['excludedTags']));
+
+		$normalizedPack = $normalizer->normalize($pack, context: ['groups' => 'export']);
+		$normalizedPack['tags'] = $normalizer->normalize($tagRepository->findDistinctForPack($pack), context: ['groups' => 'export']);
+
+		return new JsonResponse($normalizedPack);
+	}
+
     #[Route(name: 'delete_gallery', methods: ['DELETE'], path: '/api/gallery/{id}')]
     #[ParamConverter('pack', class: Pack::class)]
     public function deleteGallery(Pack $pack, EntityManagerInterface $entityManager): JsonResponse
@@ -235,7 +259,7 @@ class PackController extends AbstractController
             } catch (\Exception $e) {
                 captureException($e);
 
-                return new JsonResponse(['An unexpected error has occured'], Response::HTTP_INTERNAL_SERVER_ERROR);
+                return new JsonResponse(['An unexpected error has occurred'], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
 
@@ -269,7 +293,7 @@ class PackController extends AbstractController
 
 		if ($page === 1 && !$search['galleryName']) {
 			$randomPack = (new Pack())
-				->setId('search-' . base64_encode($request->getContent()))
+				->setId('search/' . base64_encode($request->getContent()))
 				->setCreated(new \DateTime())
 				->setCreator($security->getUser())
 				->setName('RANDOM')
