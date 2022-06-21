@@ -27,7 +27,7 @@ class TagRepository extends ServiceEntityRepository
 			->join('p.packs', 'g')
 			->where('t.visible = true')
 			->andWhere('g.id = :packId')
-			->setParameter('packId', Uuid::fromString($pack->getId())->toBinary())
+			->setParameter('packId', $pack->getId())
 			->distinct()
 			->getQuery()
 			->getResult();

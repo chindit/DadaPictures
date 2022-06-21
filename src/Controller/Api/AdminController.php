@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -46,9 +47,9 @@ class AdminController extends AbstractController
 	}
 
 	#[Route(path: '/api/admin/picture/{picture}/rotate', name: 'api_rotate_picture', methods: ['GET'])]
-	public function rotatePicture(Picture $picture, PictureConverter $pictureConverter): JsonResponse
+	public function rotatePicture(Request $request, Picture $picture, PictureConverter $pictureConverter): JsonResponse
 	{
-		$pictureConverter->rotate($picture);
+		$pictureConverter->rotate($picture, $request->query->has('counter'));
 
 		return new JsonResponse(null, Response::HTTP_ACCEPTED);
 	}
