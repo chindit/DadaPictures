@@ -169,7 +169,7 @@ class PackController extends AbstractController
         return new JsonResponse($normalizedPack);
     }
 
-	#[Route(name: 'gallery_random', methods: ['GET'], path: '/api/gallery/random')]
+	#[Route(name: 'gallery_random', methods: ['GET'], path: '/api/gallery/search/random')]
 	public function getRandomPicturesAsGallery(
 		Request $request,
 		PictureRepository $pictureRepository,
