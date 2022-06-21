@@ -188,7 +188,6 @@ class PackController extends AbstractController
 			->setPictures($pictureRepository->searchPictures($search['includedTags'], $search['excludedTags']));
 
 		$normalizedPack = $normalizer->normalize($pack, context: ['groups' => 'export']);
-		$normalizedPack['tags'] = $normalizer->normalize($tagRepository->findDistinctForPack($pack), context: ['groups' => 'export']);
 
 		return new JsonResponse($normalizedPack);
 	}
@@ -293,7 +292,7 @@ class PackController extends AbstractController
 
 		if ($page === 1 && !$search['galleryName']) {
 			$randomPack = (new Pack())
-				->setId('search/' . base64_encode($request->getContent()))
+				->setId('search-' . base64_encode($request->getContent()))
 				->setCreated(new \DateTime())
 				->setCreator($security->getUser())
 				->setName('RANDOM')
