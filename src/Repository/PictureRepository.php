@@ -94,7 +94,7 @@ class PictureRepository extends ServiceEntityRepository
 			->innerJoin('p.tags', 't');
 
 		if (!empty($includedTags)) {
-			$query->andWhere('t.id IN (:included)')
+			$query->andWhere(':included MEMBER OF p.tags')
 				->setParameter('included', $includedTags);
 		}
 
