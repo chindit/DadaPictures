@@ -72,9 +72,8 @@ class PackRepository extends ServiceEntityRepository
 			->setParameter('ok', Status::OK);
 
 		if (!empty($includedTags)) {
-            foreach ($includedTags as $includedTag) {
-                $query->andWhere('t.id = ' . $includedTag);
-            }
+            $query->andWhere(':includedTags MEMBER OF t.id')
+                ->setParameter('includedTags', $includedTags);
 		}
 
 		if (!empty($excludedTags)) {
