@@ -8,6 +8,7 @@ use App\Entity\Pack;
 use App\Entity\Tag;
 use App\Model\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -72,8 +73,9 @@ class PackRepository extends ServiceEntityRepository
 			->setParameter('ok', Status::OK);
 
 		if (!empty($includedTags)) {
-			$query->andWhere(':included MEMBER OF p.tags')
-				->setParameter('included', $includedTags);
+            foreach ($includedTags as $index => $includedTag) {
+                $query->innerJoin('p.tags', 'p'.$index, Join::WITH, 'p'.$index.'.id='.$includedTag);
+            }
 		}
 
 		if (!empty($excludedTags)) {
