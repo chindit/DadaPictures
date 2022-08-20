@@ -33,7 +33,8 @@ class TagController extends AbstractController
             $constraints[$language] = [new Assert\Length(['min' => 3]), new Assert\NotBlank()];
         }
 
-        $errors = $validator->validate(json_decode($request->getContent(), true, JSON_THROW_ON_ERROR), new Assert\Collection($constraints));
+        $requestContent = json_decode($request->getContent(), true, JSON_THROW_ON_ERROR);
+        $errors = $validator->validate($requestContent, new Assert\Collection($constraints));
 
         if ($errors->count() > 0) {
             return new JsonResponse($errors->get(0)->getMessage());
@@ -41,7 +42,7 @@ class TagController extends AbstractController
 
         $tag = new Tag();
         foreach (Languages::all() as $language) {
-            $tag->addTranslation(new TranslatedTag($language, (string)$request->request->get($language)));
+            $tag->addTranslation(new TranslatedTag($language, $requestContent[$language]));
         }
         $enTranslation = $tag->getTranslation(Languages::EN);
         if ($enTranslation === null) {
