@@ -40,7 +40,7 @@ final class PictureConverter
     {
         $picturePath = $this->path->getPictureFullpath($picture);
 
-        $name = $overwrite ? $picture->getThumbnail() : uniqid('thumb_', true) . '.jpg';
+        $name = ($overwrite ? $picture->getThumbnail() : null) ?? uniqid('thumb_', true) . '.jpg';
         $imageManager = new ImageManager(['driver' => 'gd']);
         $image = $imageManager
             ->make($picturePath);

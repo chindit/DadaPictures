@@ -26,12 +26,15 @@ class PackRepository extends ServiceEntityRepository
      */
     public function getPacksInValidation(): array
     {
-        return $this->createQueryBuilder('c')
+        /** @var Pack[] $result */
+        $result = $this->createQueryBuilder('c')
             ->where('c.status <> :status')
             ->andWhere('c.deletedAt is null')
             ->setParameter('status', Status::OK)
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -39,7 +42,8 @@ class PackRepository extends ServiceEntityRepository
      */
     public function getPacksByTag(Tag $tag, int $page = 1): array
     {
-        return $this->createQueryBuilder('g')
+        /** @var Pack[] $result */
+        $result = $this->createQueryBuilder('g')
             ->join('g.pictures', 'p')
             ->join('p.tags', 't')
             ->where('t.id = :id')
@@ -52,6 +56,8 @@ class PackRepository extends ServiceEntityRepository
             ->setMaxResults(25)
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
 	/**
@@ -93,8 +99,11 @@ class PackRepository extends ServiceEntityRepository
 			->setFirstResult(($page - 1) * 25)
 			->setMaxResults(25);
 
-		return $query
+        /** @var Pack[] $result */
+		$result = $query
 			->getQuery()
 			->getResult();
+
+        return $result;
 	}
 }

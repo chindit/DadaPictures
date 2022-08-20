@@ -8,7 +8,6 @@ use App\Entity\Pack;
 use App\Entity\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Tag>
@@ -20,9 +19,11 @@ class TagRepository extends ServiceEntityRepository
         parent::__construct($registry, Tag::class);
     }
 
+    /** @return array<int, Tag> */
 	public function findDistinctForPack(Pack $pack): array
 	{
-		return $this->createQueryBuilder('t')
+        /** @var array<int, Tag> $results */
+		$results = $this->createQueryBuilder('t')
 			->join('t.pictures', 'p')
 			->join('p.packs', 'g')
 			->where('t.visible = true')
@@ -31,5 +32,7 @@ class TagRepository extends ServiceEntityRepository
 			->distinct()
 			->getQuery()
 			->getResult();
+
+        return $results;
 	}
 }

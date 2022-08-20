@@ -127,6 +127,11 @@ class Picture
         return $this->name;
     }
 
+    public function getPacks(): Collection
+    {
+        return $this->packs;
+    }
+
     public function setFilename(string $filename): self
     {
         $this->filename = $filename;
