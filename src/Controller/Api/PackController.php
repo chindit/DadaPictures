@@ -262,7 +262,7 @@ class PackController extends AbstractController
             }
         }
 
-        return new JsonResponse(['No data found'], Response::HTTP_BAD_REQUEST);
+        return new JsonResponse(['No data found', 'error' => (string)$form->getErrors(true)], Response::HTTP_BAD_REQUEST);
     }
 
 	#[Route('/api/gallery/search', methods: ['POST'])]
